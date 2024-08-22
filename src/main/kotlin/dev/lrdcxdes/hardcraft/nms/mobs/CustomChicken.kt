@@ -1,30 +1,34 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
 import dev.lrdcxdes.hardcraft.Hardcraft
-import io.papermc.paper.event.entity.EntityKnockbackEvent
 import io.papermc.paper.event.entity.EntityToggleSitEvent
+import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.core.BlockPos
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.stats.Stats
 import net.minecraft.tags.FluidTags
 import net.minecraft.tags.ItemTags
 import net.minecraft.util.Mth
+import net.minecraft.world.DifficultyInstance
 import net.minecraft.world.entity.*
+import net.minecraft.world.entity.ai.attributes.AttributeMap
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier
 import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.entity.ai.control.LookControl
 import net.minecraft.world.entity.ai.goal.*
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.targeting.TargetingConditions
-import net.minecraft.world.entity.animal.Chicken
-import net.minecraft.world.entity.animal.Fox
-import net.minecraft.world.entity.animal.PolarBear
-import net.minecraft.world.entity.animal.Wolf
+import net.minecraft.world.entity.animal.*
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.entity.monster.Monster
 import net.minecraft.world.entity.monster.Silverfish
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.enchantment.EnchantmentHelper
+import net.minecraft.world.level.GameRules
+import net.minecraft.world.level.Level
+import net.minecraft.world.level.ServerLevelAccessor
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.pathfinder.PathType
@@ -32,16 +36,28 @@ import net.minecraft.world.phys.Vec3
 import org.bukkit.Location
 import org.bukkit.NamespacedKey
 import org.bukkit.craftbukkit.CraftWorld
+import org.bukkit.craftbukkit.event.CraftEventFactory
 import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.persistence.PersistentDataType
 import java.util.*
 import java.util.function.Predicate
 import kotlin.math.*
 
-class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as CraftWorld).handle) {
-    //    private val DATA_FLAGS_ID: EntityDataAccessor<Byte> = SynchedEntityData.defineId(
-//        Chicken::class.java, EntityDataSerializers.BYTE
+class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
+//    val DATA_TYPE_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId(
+//        CustomChicken::class.java, EntityDataSerializers.INT
 //    )
+//    val DATA_FLAGS_ID: EntityDataAccessor<Byte> = SynchedEntityData.defineId(
+//        CustomChicken::class.java, EntityDataSerializers.BYTE
+//    )
+    private val FLAG_SITTING: Int = 1
+    val FLAG_CROUCHING: Int = 4
+    val FLAG_INTERESTED: Int = 8
+    val FLAG_POUNCING: Int = 16
+    private val FLAG_SLEEPING: Int = 32
+    private val FLAG_FACEPLANTED: Int = 64
+    private val FLAG_DEFENDING: Int = 128
+
     val STALKABLE_PREY: Predicate<Entity> =
         Predicate { entity: Entity? -> entity is Silverfish }
 
@@ -69,7 +85,7 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
             flags.remove(mask)
         }
     }
-
+//
 //    private fun getFlag(bitmask: Int): Boolean {
 //        return ((entityData.get(DATA_FLAGS_ID) as Byte).toInt() and bitmask) != 0
 //    }
@@ -145,6 +161,14 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
 
     fun isFullyCrouched(): Boolean {
         return this.crouchAmount == 3.0f
+    }
+
+    private fun setSleeping(sleeping: Boolean) {
+        this.setFlag(32, sleeping)
+    }
+
+    override fun isSleeping(): Boolean {
+        return this.getFlag(32)
     }
 
     override fun setTarget(target: LivingEntity?) {
@@ -393,46 +417,6 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
         }
     }
 
-    private val ATTACK_DAMAGE: Float = 1.0f
-
-    override fun doHurtTarget(target: Entity): Boolean {
-        var f = ATTACK_DAMAGE
-        val damagesource = damageSources().mobAttack(this)
-        val world = this.level()
-
-        if (world is ServerLevel) {
-            f = EnchantmentHelper.modifyDamage(world, this.weaponItem, target, damagesource, f)
-        }
-
-        val flag = target.hurt(damagesource, f)
-
-        if (flag) {
-            val f1 = this.getKnockback(target, damagesource)
-
-            if (f1 > 0.0f && target is LivingEntity) {
-                target.knockback(
-                    (f1 * 0.5f).toDouble(),
-                    Mth.sin(this.yRot * 0.017453292f).toDouble(),
-                    (-Mth.cos(this.yRot * 0.017453292f)).toDouble(),
-                    this,
-                    EntityKnockbackEvent.Cause.ENTITY_ATTACK
-                ) // CraftBukkit // Paper - knockback events
-                this.deltaMovement = deltaMovement.multiply(0.6, 1.0, 0.6)
-            }
-
-            val world1 = this.level()
-
-            if (world1 is ServerLevel) {
-                EnchantmentHelper.doPostAttackEffects(world1, target, damagesource)
-            }
-
-            this.setLastHurtMob(target)
-            this.playAttackSound()
-        }
-
-        return flag
-    }
-
     private inner class ChickenMeleeAttackGoal(d0: Double, flag: Boolean) :
         MeleeAttackGoal(this@CustomChicken, d0, flag) {
         override fun checkAndPerformAttack(target: LivingEntity) {
@@ -455,7 +439,7 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
 
     inner class ChickenLookControl : LookControl(this@CustomChicken) {
         override fun tick() {
-            if (!this@CustomChicken.isSleeping) {
+            if (!this@CustomChicken.isSleeping()) {
                 super.tick()
             }
         }
@@ -486,9 +470,9 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
                             else (
                                     if (
                                         entityliving is Player &&
-                                        (entityliving.isSpectator() || entityliving.isCreative)
+                                        (entityliving.isSpectator() || entityliving.isCreative())
                                     ) (false)
-                                    else (!entityliving.isSleeping() && !entityliving.isDiscrete)
+                                    else (!entityliving.isSleeping() && !entityliving.isDiscrete())
                                     )
                             ) else (true)
                     )
@@ -678,6 +662,79 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
         }
     }
 
+    private class ChickenBreedGoal(chance: CustomChicken, chicken: Double) :
+        BreedGoal(chance, chicken) {
+        override fun start() {
+            clearStates(animal)
+            clearStates(partner)
+            super.start()
+        }
+
+        override fun breed() {
+            val worldserver = level as ServerLevel
+            val entityfox = this.partner?.let { animal.getBreedOffspring(worldserver, it) } as Chicken?
+
+            if (entityfox != null) {
+                val entityplayer = animal.getLoveCause()
+                val entityplayer1 = partner!!.getLoveCause()
+
+                // CraftBukkit start - call EntityBreedEvent
+                entityfox.age = -24000
+                entityfox.moveTo(animal.x, animal.y, animal.z, 0.0f, 0.0f)
+                var experience = animal.getRandom().nextInt(7) + 1
+                val entityBreedEvent = CraftEventFactory.callEntityBreedEvent(
+                    entityfox,
+                    this.animal,
+                    this.partner, entityplayer,
+                    animal.breedItem, experience
+                )
+                if (entityBreedEvent.isCancelled) {
+                    return
+                }
+                experience = entityBreedEvent.experience
+
+                // CraftBukkit end
+                if (entityplayer1 != null) {
+                    entityplayer1.awardStat(Stats.ANIMALS_BRED)
+                    this.partner?.let {
+                        CriteriaTriggers.BRED_ANIMALS.trigger(
+                            entityplayer1, this.animal,
+                            it, entityfox
+                        )
+                    }
+                }
+
+                animal.age = 6000
+                partner!!.age = 6000
+                animal.resetLove()
+                partner!!.resetLove()
+                worldserver.addFreshEntityWithPassengers(
+                    entityfox,
+                    CreatureSpawnEvent.SpawnReason.BREEDING
+                ) // CraftBukkit - added SpawnReason
+                level.broadcastEntityEvent(this.animal, 18.toByte())
+                if (level.gameRules.getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                    // CraftBukkit start - use event experience
+                    if (experience > 0) {
+                        level.addFreshEntity(
+                            ExperienceOrb(
+                                this.level,
+                                animal.x,
+                                animal.y,
+                                animal.z,
+                                experience,
+                                org.bukkit.entity.ExperienceOrb.SpawnReason.BREED,
+                                entityplayer,
+                                entityfox
+                            )
+                        ) // Paper
+                    }
+                    // CraftBukkit end
+                }
+            }
+        }
+    }
+
     fun clearStates() {
         this.setIsInterested(false)
         this.setIsCrouching(false)
@@ -686,30 +743,48 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
         this.setFaceplanted(false)
     }
 
-//    override fun finalizeSpawn(
-//        world: ServerLevelAccessor,
-//        difficulty: DifficultyInstance,
-//        spawnReason: MobSpawnType,
-//        entityData: SpawnGroupData?
-//    ): SpawnGroupData? {
-//        val res = super.finalizeSpawn(world, difficulty, spawnReason, entityData)
-//        if (world is ServerLevel) {
-//            this.setTargetGoals()
-//        }
-//        return res
+    override fun finalizeSpawn(
+        world: ServerLevelAccessor,
+        difficulty: DifficultyInstance,
+        spawnReason: MobSpawnType,
+        entityData: SpawnGroupData?
+    ): SpawnGroupData? {
+        val flag = false
+
+        if (flag) {
+            this.setAge(-24000)
+        }
+
+        if (world is ServerLevel) {
+            this.setTargetGoals()
+        }
+
+        this.populateDefaultEquipmentSlots(world.random, difficulty)
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData as SpawnGroupData)
+    }
+
+//    override fun defineSynchedData(builder: SynchedEntityData.Builder) {
+//        super.defineSynchedData(builder)
+//        builder.define(DATA_TYPE_ID, 0)
+//        builder.define(DATA_FLAGS_ID, 0.toByte())
 //    }
+
+    override fun readAdditionalSaveData(nbt: CompoundTag) {
+        super.readAdditionalSaveData(nbt)
+
+        this.setSleeping(nbt.getBoolean("Sleeping"))
+        this.setSitting(nbt.getBoolean("Sitting"), false) // Paper - Add EntityToggleSitEvent
+        this.setIsCrouching(nbt.getBoolean("Crouching"))
+        if (level() is ServerLevel) {
+            this.setTargetGoals()
+        }
+    }
 
     private fun setTargetGoals() {
         targetSelector.addGoal(6, NearestAttackableTargetGoal(
             this,
             Mob::class.java, 10, false, false
         ) { entityliving: LivingEntity? -> entityliving is Silverfish })
-//        targetSelector.addGoal(
-//            6, NearestAttackableTargetGoal(
-//                this,
-//                Silverfish::class.java, true
-//            )
-//        )
         println("Set target goals")
     }
 
@@ -717,7 +792,7 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
         goalSelector.addGoal(0, ChickenFloatGoal())
         goalSelector.addGoal(1, FaceplantGoal())
         goalSelector.addGoal(2, ChickenPanicGoal(1.4))
-        goalSelector.addGoal(3, BreedGoal(this, 1.0))
+        goalSelector.addGoal(3, ChickenBreedGoal(this, 1.0))
         goalSelector.addGoal(4, AvoidEntityGoal(
             this,
             Player::class.java, 16.0f, 1.6, 1.4
@@ -737,7 +812,7 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
         goalSelector.addGoal(4, AvoidEntityGoal(
             this,
             Fox::class.java, 8.0f, 1.6, 1.4
-        ) { entityliving -> !(entityliving as Wolf).isTame && !this.isDefending() })
+        ) { _ -> !this.isDefending() })
         goalSelector.addGoal(4, AvoidEntityGoal(
             this,
             PolarBear::class.java, 8.0f, 1.6, 1.4
@@ -772,7 +847,6 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
 //        )
 
         println("Registered goals")
-        setTargetGoals()
     }
 
     override fun tick() {
@@ -780,7 +854,7 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
         if (this.isEffectiveAi) {
             val flag = this.isInWater
 
-            if (flag || this.isSleeping) {
+            if (flag || this.isSleeping()) {
                 this.setSitting(false)
             }
 
@@ -828,9 +902,33 @@ class CustomChicken(loc: Location) : Chicken(EntityType.CHICKEN, (loc.world as C
 
         this.persist = true
         (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
+
+        this.setSleeping(false)
+        this.setSitting(false, false) // Paper - Add EntityToggleSitEvent
+        this.setIsCrouching(false)
+
+        setTargetGoals()
+    }
+
+    override fun getAttributes(): AttributeMap {
+        return AttributeMap(createAttributes().build())
     }
 
     companion object {
         val KEY: NamespacedKey = NamespacedKey(Hardcraft.instance, "CustomEntity")
+
+        fun createAttributes(): AttributeSupplier.Builder {
+            return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25)
+                .add(Attributes.MAX_HEALTH, 4.0).add(
+                    Attributes.FOLLOW_RANGE, 32.0
+                ).add(Attributes.ATTACK_DAMAGE, 1.0)
+                .add(Attributes.SAFE_FALL_DISTANCE, 5.0)
+        }
+
+        fun clearStates(chicken: Animal?) {
+            if (chicken is CustomChicken) {
+                chicken.clearStates()
+            }
+        }
     }
 }
