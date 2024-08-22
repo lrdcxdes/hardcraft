@@ -1,0 +1,7 @@
+name: hardcraft
+version: '0.01'
+main: dev.lrdcxdes.hardcraft.Hardcraft
+api-version: '1.21'
+load: POSTWORLD
+authors: [ lrdcxdes ]
+description: Hardcraft core plugin
