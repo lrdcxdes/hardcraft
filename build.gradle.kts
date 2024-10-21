@@ -1,11 +1,11 @@
 plugins {
-    kotlin("jvm") version "2.0.10"
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("io.papermc.paperweight.userdev") version "1.7.2"
+    kotlin("jvm") version "2.0.21"
+    id("com.gradleup.shadow") version "8.3.3"
+    id("io.papermc.paperweight.userdev") version "1.7.3"
 }
 
 group = "dev.lrdcxdes"
-version = "0.01"
+version = "0.6.5-alpha"
 
 repositories {
     mavenCentral()
@@ -20,6 +20,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("net.kyori:adventure-api:4.17.0")
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
 

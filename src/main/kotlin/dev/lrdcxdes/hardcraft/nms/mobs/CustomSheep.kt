@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
+import dev.lrdcxdes.hardcraft.nms.mobs.goals.PoopGoal
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.RaidGardenGoal
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.tags.ItemTags
@@ -35,6 +36,7 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
     override fun registerGoals() {
         this.eatBlockGoal = EatBlockGoal(this)
         goalSelector.addGoal(0, FloatGoal(this))
+        goalSelector.addGoal(0, PoopGoal(this, 6000..12000))
 
         if (isFriendly) {
             goalSelector.addGoal(1, PanicGoal(this, 1.25))
@@ -73,8 +75,6 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
         this.setPosRaw(loc.x, loc.y, loc.z)
         this.persist = true
         (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
-
-        println("CustomSheep spawned")
     }
 
     override fun aiStep() {
@@ -113,7 +113,6 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
 
     override fun setRemainingPersistentAngerTime(angerTime: Int) {
         this.remainingAngerTime = angerTime
-        println("Cow anger time: $angerTime")
     }
 
     override fun getPersistentAngerTarget(): UUID? {
@@ -122,7 +121,6 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
 
     override fun setPersistentAngerTarget(angryAt: UUID?) {
         this.persistentAngerTarget = angryAt
-        println("Cow set angry at: $angryAt")
     }
 
     override fun startPersistentAngerTimer() {

@@ -1,5 +1,5 @@
 name: hardcraft
-version: '0.01'
+version: '0.6.5-alpha'
 main: dev.lrdcxdes.hardcraft.Hardcraft
 api-version: '1.21'
 load: POSTWORLD

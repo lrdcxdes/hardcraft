@@ -18,11 +18,9 @@ class MedusaListener : Listener {
         if (player.isInWater && (!player.world.isDayTime || player.world.hasStorm())) {
             // find nearest squid
             val nearbySquids = player.location.world!!.getNearbyEntities(player.location, 2.0, 2.0, 2.0)
-                .filterIsInstance<Squid>()
+                .filterIsInstance<Squid>().filter { it.hasLineOfSight(player) }
             if (nearbySquids.isNotEmpty()) {
-                val squid = nearbySquids.first() as Squid
-                player.addPassenger(squid)
-
+                val squid = nearbySquids.first()
                 squid.startStrangling(player)
             }
         }
@@ -62,5 +60,6 @@ private fun Squid.startStrangling(player: Player) {
     if (player.uniqueId in squidStranglings) {
         return
     }
+    player.addPassenger(this)
     squidStranglings[player.uniqueId] = SquidStrangling(this, player)
 }

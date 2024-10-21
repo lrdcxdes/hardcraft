@@ -16,12 +16,25 @@ import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.scheduler.BukkitRunnable
 
 class GardenListener : Listener {
+    private val allowedGardens: Array<Material> = arrayOf(
+        Material.WHEAT,
+        Material.POTATOES,
+        Material.CARROTS,
+        Material.BEETROOTS,
+        Material.MELON_STEM,
+        Material.PUMPKIN_STEM,
+        Material.SWEET_BERRY_BUSH
+    )
+
     @EventHandler
     fun onGardenGrow(event: BlockGrowEvent) {
         val newState = event.newState
         if (newState.blockData is Ageable) {
             val ageable = newState.blockData as Ageable
-            if (ageable.age == ageable.maximumAge) {
+            if (
+                allowedGardens.contains(newState.type) &&
+                ageable.age == ageable.maximumAge
+            ) {
                 Gardens.addBlock(event.block)
             }
         }
@@ -30,16 +43,38 @@ class GardenListener : Listener {
     @EventHandler
     fun onBlockBreakEvent(event: BlockBreakEvent) {
         val block = event.block
-        if (block.blockData is Ageable) {
+        if (allowedGardens.contains(block.type) &&
+            block.blockData is Ageable
+        ) {
+            val ageable = block.blockData as Ageable
+            if (ageable.age < 1) {
+                return
+            }
             Gardens.removeBlock(block)
             // set underblock to Material.ROOTED_DIRT
-            block.getRelative(0, -1, 0).type = Material.ROOTED_DIRT
+            val underBlock = block.getRelative(0, -1, 0)
+            if (underBlock.type in arrayOf(
+                    Material.DIRT,
+                    Material.GRASS_BLOCK,
+                    Material.PODZOL,
+                    Material.COARSE_DIRT,
+                    Material.FARMLAND
+                )
+            ) {
+                underBlock.type = Material.ROOTED_DIRT
+            }
         }
     }
+
+    private val loadedChunks: MutableSet<Long> = mutableSetOf()
 
     @EventHandler
     fun chunkLoadEvent(event: ChunkLoadEvent) {
         val chunk = event.chunk
+        if (loadedChunks.contains(chunk.chunkKey)) {
+            return
+        }
+        loadedChunks.add(chunk.chunkKey)
         val oldGardensSize = gardens.size
         for (x in 0..15) {
             for (z in 0..15) {
@@ -47,14 +82,16 @@ class GardenListener : Listener {
                     val block = chunk.getBlock(x, y, z)
                     if (block.blockData is Ageable) {
                         val ageable = block.blockData as Ageable
-                        if (ageable.age == ageable.maximumAge) {
+                        if (allowedGardens.contains(block.type) &&
+                            ageable.age == ageable.maximumAge
+                        ) {
                             Gardens.addBlock(block)
                         }
                     }
+                    Hardcraft.instance.fernListener.processInChunk(block)
                 }
             }
         }
-        println("Chunk ${chunk.x},${chunk.z} loaded with ${gardens.size - oldGardensSize} gardens")
     }
 }
 
@@ -79,7 +116,17 @@ class Gardens {
                         if (spawnSilverfish && Math.random() < spawnSilverfishChange) {
                             garden.type = Material.AIR
                             // Set the block below to rooted dirt
-                            garden.getRelative(0, -1, 0).type = Material.ROOTED_DIRT
+                            val underBlock = garden.getRelative(0, -1, 0)
+                            if (underBlock.type in arrayOf(
+                                    Material.DIRT,
+                                    Material.GRASS_BLOCK,
+                                    Material.PODZOL,
+                                    Material.COARSE_DIRT,
+                                    Material.FARMLAND
+                                )
+                            ) {
+                                underBlock.type = Material.ROOTED_DIRT
+                            }
                             val silverfish = CustomSilverfish((world as CraftWorld).handle)
                             silverfish.spawn(garden.location.add(0.5, 0.0, 0.5))
                         }

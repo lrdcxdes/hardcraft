@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.nms.mobs.goals.PoopGoal
 import io.papermc.paper.event.entity.EntityToggleSitEvent
 import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.core.BlockPos
@@ -212,7 +213,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
 
             return entityliving != null && entityliving.isAlive && STALKABLE_PREY.test(entityliving) && this@CustomChicken.distanceToSqr(
                 entityliving as Entity
-            ) > 36.0 && !this@CustomChicken.isCrouching() && !this@CustomChicken.isInterested() && !this@CustomChicken.jumping
+            ) > 36.0 && !this@CustomChicken.isCrouching && !this@CustomChicken.isInterested() && !this@CustomChicken.jumping
         }
 
         override fun start() {
@@ -433,19 +434,19 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         }
 
         override fun canUse(): Boolean {
-            return !this@CustomChicken.isSitting() && !this@CustomChicken.isSleeping() && !this@CustomChicken.isCrouching() && !this@CustomChicken.isFaceplanted() && super.canUse()
+            return !this@CustomChicken.isSitting() && !this@CustomChicken.isSleeping && !this@CustomChicken.isCrouching && !this@CustomChicken.isFaceplanted() && super.canUse()
         }
     }
 
     inner class ChickenLookControl : LookControl(this@CustomChicken) {
         override fun tick() {
-            if (!this@CustomChicken.isSleeping()) {
+            if (!this@CustomChicken.isSleeping) {
                 super.tick()
             }
         }
 
         override fun resetXRotOnTick(): Boolean {
-            return !this@CustomChicken.isPouncing() && !this@CustomChicken.isCrouching() && !this@CustomChicken.isInterested() && !this@CustomChicken.isFaceplanted()
+            return !this@CustomChicken.isPouncing() && !this@CustomChicken.isCrouching && !this@CustomChicken.isInterested() && !this@CustomChicken.isFaceplanted()
         }
     }
 
@@ -470,9 +471,9 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
                             else (
                                     if (
                                         entityliving is Player &&
-                                        (entityliving.isSpectator() || entityliving.isCreative())
+                                        (entityliving.isSpectator() || entityliving.isCreative)
                                     ) (false)
-                                    else (!entityliving.isSleeping() && !entityliving.isDiscrete())
+                                    else (!entityliving.isSleeping && !entityliving.isDiscrete)
                                     )
                             ) else (true)
                     )
@@ -507,7 +508,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
 
         override fun canUse(): Boolean {
             return this@CustomChicken.getLastHurtByMob() == null && this@CustomChicken.getRandom()
-                .nextFloat() < 0.02f && !this@CustomChicken.isSleeping() && this@CustomChicken.target == null && this@CustomChicken.getNavigation()
+                .nextFloat() < 0.02f && !this@CustomChicken.isSleeping && this@CustomChicken.target == null && this@CustomChicken.getNavigation()
                 .isDone && !this.alertable() && !this@CustomChicken.isPouncing() && !this@CustomChicken.isCrouching
         }
 
@@ -567,7 +568,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
                 } else {
                     val list: List<ItemEntity> = this@CustomChicken.level().getEntitiesOfClass<ItemEntity>(
                         ItemEntity::class.java,
-                        this@CustomChicken.getBoundingBox().inflate(8.0, 8.0, 8.0),
+                        this@CustomChicken.boundingBox.inflate(8.0, 8.0, 8.0),
                         ALLOWED_ITEMS
                     )
 
@@ -591,7 +592,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
 
         override fun start() {
             val list: List<ItemEntity> = this@CustomChicken.level().getEntitiesOfClass<ItemEntity>(
-                ItemEntity::class.java, this@CustomChicken.getBoundingBox().inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS
+                ItemEntity::class.java, this@CustomChicken.boundingBox.inflate(8.0, 8.0, 8.0), ALLOWED_ITEMS
             )
 
             if (!list.isEmpty()) {
@@ -785,11 +786,11 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
             this,
             Mob::class.java, 10, false, false
         ) { entityliving: LivingEntity? -> entityliving is Silverfish })
-        println("Set target goals")
     }
 
     override fun registerGoals() {
         goalSelector.addGoal(0, ChickenFloatGoal())
+        goalSelector.addGoal(0, PoopGoal(this, 6000..12000))
         goalSelector.addGoal(1, FaceplantGoal())
         goalSelector.addGoal(2, ChickenPanicGoal(1.4))
         goalSelector.addGoal(3, ChickenBreedGoal(this, 1.0))
@@ -845,8 +846,6 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
 //                TRUSTED_TARGET_SELECTOR.test(entityliving)
 //            }
 //        )
-
-        println("Registered goals")
     }
 
     override fun tick() {
@@ -854,7 +853,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         if (this.isEffectiveAi) {
             val flag = this.isInWater
 
-            if (flag || this.isSleeping()) {
+            if (flag || this.isSleeping) {
                 this.setSitting(false)
             }
 
@@ -885,7 +884,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     }
 
     fun canMove(): Boolean {
-        return !this.isSleeping() && !this.isSitting() && !this.isFaceplanted()
+        return !this.isSleeping && !this.isSitting() && !this.isFaceplanted()
     }
 
     init {

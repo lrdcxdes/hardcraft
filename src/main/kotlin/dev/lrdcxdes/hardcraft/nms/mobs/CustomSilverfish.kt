@@ -211,8 +211,6 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
         this.setPosRaw(loc.x, loc.y, loc.z)
         this.persist = true
         (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
-
-        println("CustomSilverfish spawned")
     }
 
     private var moreFoodTicks = 0

@@ -9,12 +9,11 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.inventory.ItemStack
-import java.util.UUID
 
 class SkeletonListener : Listener {
     private val STEAL_GEAR_CHANCE: Double = 0.1
     private val STEAL_GEAR_ARROW_RANGE: IntRange = 1..8
-    private val STEAL_GEAR_COOLDOWN: Long = 1000
+    private val STEAL_GEAR_COOLDOWN: Int = 1 // seconds
     private val STEAL_GEAR_SUCCESS_SOUND: (Player) -> Unit =
         { _: Player -> }
     private val STEAL_GEAR_FAILED_SOUND: (Player) -> Unit =
@@ -22,20 +21,16 @@ class SkeletonListener : Listener {
     private val STEAL_GEAR_COOLDOWN_SOUND: (Player) -> Unit =
         { player: Player -> player.playSound(player.location, Sound.BLOCK_NOTE_BLOCK_BASS, 1.0f, 1.0f) }
 
-    private val lastStealTime = mutableMapOf<UUID, Long>()
-
     @EventHandler
     fun onSkeletonInteract(event: PlayerInteractAtEntityEvent) {
         val player = event.player
         val entity = event.rightClicked
         if (entity.type == EntityType.SKELETON) {
-            if (lastStealTime.containsKey(player.uniqueId) &&
-                System.currentTimeMillis() - lastStealTime[player.uniqueId]!! < STEAL_GEAR_COOLDOWN
-            ) {
+            if (!InteractEntityUtil.canInteract(player.uniqueId, STEAL_GEAR_COOLDOWN)) {
                 STEAL_GEAR_COOLDOWN_SOUND(player)
                 return
             }
-            lastStealTime[player.uniqueId] = System.currentTimeMillis()
+            InteractEntityUtil.setLastClickTime(player.uniqueId)
             if (Math.random() < STEAL_GEAR_CHANCE) {
                 val skeleton = entity as Skeleton
                 val hand = skeleton.equipment.itemInMainHand

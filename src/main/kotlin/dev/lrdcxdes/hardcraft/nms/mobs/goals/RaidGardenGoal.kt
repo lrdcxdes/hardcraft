@@ -33,7 +33,6 @@ class RaidGardenGoal(
                 val method = animal.javaClass.getMethod("wantsMoreFood")
                 this.wantsToRaid = method.invoke(animal) as Boolean
             } catch (e: NoSuchMethodException) {
-                println("Method wantsMoreFood not found")
                 this.wantsToRaid = false
             }
         }

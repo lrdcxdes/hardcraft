@@ -15,28 +15,27 @@ import net.minecraft.world.entity.ai.goal.*
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.ai.goal.target.ResetUniversalAngerTargetGoal
-import net.minecraft.world.entity.animal.Pig
+import net.minecraft.world.entity.animal.horse.AbstractHorse
+import net.minecraft.world.entity.animal.horse.Horse
 import net.minecraft.world.entity.player.Player
 import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
-import net.minecraft.world.level.block.BeetrootBlock
-import net.minecraft.world.level.block.CarrotBlock
-import net.minecraft.world.level.block.PotatoBlock
+import net.minecraft.world.level.block.CropBlock
 import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.event.entity.CreatureSpawnEvent
 import java.util.*
 
-class CustomPig(world: ServerLevel, private val isFriendly: Boolean = false) : Pig(EntityType.PIG, world), NeutralMob {
+class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
+    Horse(EntityType.HORSE, world),
+    NeutralMob {
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
     private var persistentAngerTarget: UUID? = null
 
     override fun registerGoals() {
-        goalSelector.addGoal(0, FloatGoal(this))
         goalSelector.addGoal(0, PoopGoal(this, 6000..12000))
-
         if (isFriendly) {
-            goalSelector.addGoal(1, PanicGoal(this, 2.0))
+            goalSelector.addGoal(1, PanicGoal(this, 1.2))
+            goalSelector.addGoal(1, RunAroundLikeCrazyGoal(this, 1.2))
         } else {
             this.goalSelector.addGoal(3, MeleeAttackGoal(this, 1.0, true))
             this.targetSelector.addGoal(1, (HurtByTargetGoal(this, *arrayOfNulls(0))).setAlertOthers())
@@ -47,33 +46,32 @@ class CustomPig(world: ServerLevel, private val isFriendly: Boolean = false) : P
             })
             this.targetSelector.addGoal(3, ResetUniversalAngerTargetGoal(this, true))
         }
-
-        goalSelector.addGoal(2, BreedGoal(this, 1.0))
+        goalSelector.addGoal(5, BreedGoal(this, 1.0, AbstractHorse::class.java))
+        goalSelector.addGoal(6, FollowParentGoal(this, 1.0))
+        goalSelector.addGoal(7, RaidGardenGoal(this, listOf(CropBlock::class.java)))
+        goalSelector.addGoal(8, WaterAvoidingRandomStrollGoal(this, 0.7))
         goalSelector.addGoal(
-            4, TemptGoal(
-                this, 1.2,
-                { itemstack: ItemStack -> itemstack.`is`(Items.CARROT_ON_A_STICK) }, false
-            )
-        )
-        goalSelector.addGoal(
-            4, TemptGoal(
-                this, 1.25,
-                { itemstack: ItemStack -> itemstack.`is`(ItemTags.PIG_FOOD) }, false
-            )
-        )
-        goalSelector.addGoal(5, FollowParentGoal(this, 1.25))
-        goalSelector.addGoal(
-            5,
-            RaidGardenGoal(this, listOf(CarrotBlock::class.java, PotatoBlock::class.java, BeetrootBlock::class.java))
-        )
-        goalSelector.addGoal(6, WaterAvoidingRandomStrollGoal(this, 1.0))
-        goalSelector.addGoal(
-            7, LookAtPlayerGoal(
+            9, LookAtPlayerGoal(
                 this,
                 Player::class.java, 6.0f
             )
         )
-        goalSelector.addGoal(8, RandomLookAroundGoal(this))
+        goalSelector.addGoal(10, RandomLookAroundGoal(this))
+        if (this.canPerformRearing()) {
+            goalSelector.addGoal(11, RandomStandGoal(this))
+        }
+
+        this.addBehaviourGoals()
+    }
+
+    override fun addBehaviourGoals() {
+        goalSelector.addGoal(0, FloatGoal(this))
+        goalSelector.addGoal(
+            4, TemptGoal(
+                this, 1.25,
+                { itemstack: ItemStack -> itemstack.`is`(ItemTags.HORSE_TEMPT_ITEMS) }, false
+            )
+        )
     }
 
     fun spawn(loc: org.bukkit.Location) {
@@ -136,10 +134,15 @@ class CustomPig(world: ServerLevel, private val isFriendly: Boolean = false) : P
 
     companion object {
         fun createAttributes(): AttributeSupplier.Builder {
-            return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25)
-                .add(Attributes.MAX_HEALTH, 10.0)
-                .add(Attributes.MOVEMENT_SPEED, 0.25)
-                .add(Attributes.ATTACK_DAMAGE, 1.5)
+            return createMobAttributes()
+                .add(Attributes.JUMP_STRENGTH, 0.7)
+                .add(Attributes.MAX_HEALTH, 53.0)
+                .add(Attributes.MOVEMENT_SPEED, 0.22499999403953552)
+                .add(
+                    Attributes.STEP_HEIGHT, 1.0
+                ).add(Attributes.SAFE_FALL_DISTANCE, 6.0)
+                .add(Attributes.FALL_DAMAGE_MULTIPLIER, 0.5)
+                .add(Attributes.ATTACK_DAMAGE, 5.0)
         }
     }
 }

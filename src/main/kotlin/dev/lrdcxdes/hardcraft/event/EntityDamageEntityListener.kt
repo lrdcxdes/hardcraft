@@ -16,9 +16,7 @@ class EntityDamageEntityListener : Listener {
             // if held item
             if (damager.inventory.itemInMainHand.type == Material.AIR) {
                 val damage = event.damage
-                println("Damage: $damage")
                 event.damage = damage / 2
-                println("New Damage: ${event.damage}")
             }
         }
     }

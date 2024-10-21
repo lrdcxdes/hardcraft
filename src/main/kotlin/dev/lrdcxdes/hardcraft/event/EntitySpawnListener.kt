@@ -16,6 +16,10 @@ class EntitySpawnListener : Listener {
                 CustomZombie.setGoals(entity)
             }
 
+            is Squid -> {
+                CustomSquid.setGoals(entity)
+            }
+
             is Skeleton -> {
                 CustomSkeleton.setGoals(entity)
             }
@@ -64,6 +68,7 @@ class EntitySpawnListener : Listener {
 
                 val sheep = CustomSheep((loc.world as CraftWorld).handle, isFriendly)
                 sheep.spawn(loc)
+                sheep.drops
             }
 
             is Silverfish -> {
@@ -78,6 +83,41 @@ class EntitySpawnListener : Listener {
 
                 val silverfish = CustomSilverfish((loc.world as CraftWorld).handle)
                 silverfish.spawn(loc)
+            }
+
+            is Villager -> {
+                if ((entity as CraftEntity).handle is CustomVillager) {
+                    return
+                }
+                if (event != null) {
+                    event.isCancelled = true
+                } else {
+                    entity.remove()
+                }
+
+                // random friendly
+                val isFriendly = Math.random() < 0.3
+
+                val villager = CustomVillager((loc.world as CraftWorld).handle, isFriendly)
+                villager.spawn(loc)
+                villager.drops
+            }
+
+            is Horse -> {
+                if ((entity as CraftEntity).handle is CustomHorse) {
+                    return
+                }
+                if (event != null) {
+                    event.isCancelled = true
+                } else {
+                    entity.remove()
+                }
+
+                // random friendly
+                val isFriendly = Math.random() < 0.3
+
+                val horse = CustomHorse((loc.world as CraftWorld).handle, isFriendly)
+                horse.spawn(loc)
             }
 
             is Pig -> {
