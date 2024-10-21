@@ -1,7 +1,6 @@
 package dev.lrdcxdes.hardcraft.utils
 
 import dev.lrdcxdes.hardcraft.Hardcraft
-import org.bukkit.block.BlockFace
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
@@ -35,11 +34,11 @@ class Darkphobia {
                 }
 
                 if (state >= 480.0) {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 40, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 100, 0))
                 }
 
                 if (state >= 300.0) {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 40, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 100, 0))
                 }
 
                 if (state >= 180.0) {
@@ -87,7 +86,7 @@ class Darkphobia {
                 }
 
                 if (state >= 120.0) {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 40, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 100, 0))
                 }
 
                 if (state < 180.0) {

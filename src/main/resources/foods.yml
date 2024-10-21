@@ -1,0 +1,155 @@
+apple:
+  spoilTime: 1209600000 # 14 days in milliseconds
+  bestTemperature: 6  # Celsius
+
+baked_potato:
+  spoilTime: 604800000 # 7 days in milliseconds
+  bestTemperature: 4  # Celsius
+
+beetroot:
+  spoilTime: 1209600000 # 14 days in milliseconds
+  bestTemperature: 2  # Celsius
+
+bread:
+  spoilTime: 432000000 # 5 days in milliseconds
+  bestTemperature: 20  # Celsius (room temperature)
+
+carrot:
+  spoilTime: 1209600000 # 14 days in milliseconds
+  bestTemperature: 0  # Celsius
+
+chorus_fruit:
+  spoilTime: 31536000000 # 1 year in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+cooked_beef:
+  spoilTime: 259200000 # 3 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cooked_chicken:
+  spoilTime: 259200000 # 3 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cooked_cod:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cooked_mutton:
+  spoilTime: 259200000 # 3 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cooked_porkchop:
+  spoilTime: 259200000 # 3 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cooked_rabbit:
+  spoilTime: 259200000 # 3 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cooked_salmon:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cookie:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+dried_kelp:
+  spoilTime: 31536000000 # 1 year in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+enchanted_golden_apple:
+  spoilTime: 31536000000 # 1 year in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+glow_berries:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 4  # Celsius
+
+golden_apple:
+  spoilTime: 31536000000 # 1 year in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+golden_carrot:
+  spoilTime: 31536000000 # 1 year in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+honey_bottle:
+  spoilTime: 31536000000 # 1 year in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+melon_slice:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 4  # Celsius
+
+mushroom_stew:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 4  # Celsius
+
+poisonous_potato:
+  spoilTime: 1209600000 # 14 days in milliseconds
+  bestTemperature: 6  # Celsius
+
+potato:
+  spoilTime: 1209600000 # 14 days in milliseconds
+  bestTemperature: 6  # Celsius
+
+pufferfish:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+pumpkin_pie:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 4  # Celsius
+
+rabbit_stew:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 4  # Celsius
+
+beef:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+chicken:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+cod:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+mutton:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+porkchop:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+rabbit:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+salmon:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)
+
+rotten_flesh:
+  spoilTime: 604800000 # 7 days in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+spider_eye:
+  spoilTime: 31536000000 # 1 year in milliseconds
+  bestTemperature: 22  # Celsius (room temperature)
+
+suspicious_stew:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 4  # Celsius
+
+sweet_berries:
+  spoilTime: 86400000 # 1 day in milliseconds
+  bestTemperature: 4  # Celsius
+
+tropical_fish:
+  spoilTime: 172800000 # 2 days in milliseconds
+  bestTemperature: -18  # Celsius (frozen)

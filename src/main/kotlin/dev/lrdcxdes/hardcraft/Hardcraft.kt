@@ -6,6 +6,7 @@ import dev.lrdcxdes.hardcraft.raids.Guardian
 import dev.lrdcxdes.hardcraft.raids.PrivateListener
 import dev.lrdcxdes.hardcraft.seasons.Seasons
 import dev.lrdcxdes.hardcraft.seasons.getTemperature
+import dev.lrdcxdes.hardcraft.seasons.getTemperatureAsync
 import dev.lrdcxdes.hardcraft.utils.Darkphobia
 import dev.lrdcxdes.hardcraft.utils.TorchAndCampfire
 import io.papermc.paper.command.brigadier.Commands
@@ -58,14 +59,14 @@ class Hardcraft : JavaPlugin() {
                     .executes { context ->
                         val player = context.source.sender as? Player ?: return@executes Command.SINGLE_SUCCESS
 
-                        val temp = player.getTemperature()
-                        val seasonTemp = seasons.getTemperature()
-                        val biomeTemp = seasons.getTemperature(player.location.block.biome)
-                        val skyTemp = seasons.getSkyLightTemp(player)
-                        val blockTemp = seasons.getBlockTemp(player.location.block)
-                        player.sendMessage(
-                            minimessage.deserialize(
-                                """
+                        player.getTemperatureAsync { temp ->
+                            val seasonTemp = seasons.getTemperature()
+                            val biomeTemp = seasons.getTemperature(player.location.block.biome)
+                            val skyTemp = seasons.getSkyLightTemp(player)
+                            val blockTemp = seasons.getBlockTemp(player.location.block)
+                            player.sendMessage(
+                                minimessage.deserialize(
+                                    """
                                     --------------------------
                                 <red>Temperature Info</red>
                                 <blue>--------------------------</blue>
@@ -78,8 +79,9 @@ class Hardcraft : JavaPlugin() {
                                 <green>Block temperature: <white>$blockTemp</white></green>
                                 <green>Sky temperature: <white>$skyTemp</white></green>
                             """.trimIndent()
+                                )
                             )
-                        )
+                        }
 
                         Command.SINGLE_SUCCESS
                     }

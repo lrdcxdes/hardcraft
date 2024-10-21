@@ -33,6 +33,9 @@ class Seasons {
 
     var seasonTemperature: Int = 0
 
+    private val playerTemperatureCache: MutableMap<Player, Pair<Int, Long>> = mutableMapOf()
+    private val blockTemperatureCache: MutableMap<Block, Pair<Int, Long>> = mutableMapOf()
+
     init {
         if (world.persistentDataContainer.has(dayKey, PersistentDataType.LONG)) {
             day = world.persistentDataContainer.get(dayKey, PersistentDataType.LONG) ?: 0
@@ -55,7 +58,7 @@ class Seasons {
                 }
                 lastTime = world.time
             }
-        }.runTaskTimer(Hardcraft.instance, 0, 20L)
+        }.runTaskTimer(Hardcraft.instance, 0, 20L * 10)
     }
 
     fun getDay(): Long {
@@ -71,6 +74,14 @@ class Seasons {
     }
 
     fun getTemperature(player: Player): Int {
+        val currentTime = System.currentTimeMillis()
+
+        // Check if temperature is cached for the player and valid within the last 5 seconds
+        val cached = playerTemperatureCache[player]
+        if (cached != null && (currentTime - cached.second) < 5000) {
+            return cached.first
+        }
+
         var envTemp = getTemperature(player.location.block.biome)
         // using player.location.block.lightFromSky / 2 go near to 0
         val lightTemp = (player.location.block.lightFromSky - 15) / 2
@@ -92,8 +103,14 @@ class Seasons {
 
         // calculate smoker and campfire
         // if player is near a campfire or smoker then add 7-10°C to the temperature
-        val campfire = player.findNearBlock(ignoreWalls = false, range = 5) { it.type.name.contains("CAMPFIRE") && it.lightLevel > 0 }
-        val smoker = player.findNearBlock(ignoreWalls = false, range = 5) { it.type.name.contains("SMOKER") && it.lightLevel > 0 }
+        val campfire = player.findNearBlock(
+            ignoreWalls = false,
+            range = 5
+        ) { it.type.name.contains("CAMPFIRE") && it.lightLevel > 0 }
+        val smoker = player.findNearBlock(
+            ignoreWalls = false,
+            range = 5
+        ) { it.type.name.contains("SMOKER") && it.lightLevel > 0 }
 
         if (campfire != null) {
             envTemp += 7
@@ -102,10 +119,20 @@ class Seasons {
             envTemp += 10
         }
 
+        // Cache the temperature for the player
+        playerTemperatureCache[player] = envTemp to currentTime
+
         return envTemp
     }
 
     fun getTemperature(block: Block): Int {
+        val currentTime = System.currentTimeMillis()
+        val cached = blockTemperatureCache[block]
+
+        if (cached != null && (currentTime - cached.second) < 5000) {
+            return cached.first
+        }
+
         var envTemp = getTemperature(block.biome)
         val lightTemp = (block.lightFromSky - 15) / 2
         if (lightTemp < 0) {
@@ -123,6 +150,9 @@ class Seasons {
         }
         val blockTemp = block.lightFromBlocks / 2
         envTemp += blockTemp
+
+        blockTemperatureCache[block] = envTemp to currentTime
+
         return envTemp
     }
 
@@ -285,4 +315,12 @@ private fun Player.findNearBlock(
 
 fun Player.getTemperature(): Int {
     return Hardcraft.instance.seasons.getTemperature(this)
+}
+
+fun Player.getTemperatureAsync(callback: (Int) -> Unit) {
+    object : BukkitRunnable() {
+        override fun run() {
+            callback(this@getTemperatureAsync.getTemperature())
+        }
+    }.runTaskAsynchronously(Hardcraft.instance)
 }

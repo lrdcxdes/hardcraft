@@ -72,10 +72,7 @@ class FernListener : Listener {
     val ferns = mutableListOf<Block>()
 
     fun growFern(fern: Block) {
-        println("Checking x, y, z: ${fern.x}, ${fern.y}, ${fern.z}")
-
         if (fern.type != Material.FERN) {
-            println("not fern")
             fern.removeMetadata("nowTime", Hardcraft.instance)
             fern.removeMetadata("endTime", Hardcraft.instance)
             return
@@ -84,34 +81,22 @@ class FernListener : Listener {
         // check block face up relative
         val up = fern.getRelative(0, 1, 0)
         if (up.isSolid || up.type == Material.BEDROCK) {
-            println("up is not air, up: ${up.type}")
             return
         }
 
         val light = fern.lightLevel
         if (light < 11) {
-            println("light is not enough, light: $light")
             return
         }
 
-        var nowTime = fern.getMetadata("nowTime").firstOrNull()?.asLong()
-        if (nowTime == null) {
-            println("nowTime is null")
-            return
-        }
-        val endTime = fern.getMetadata("endTime").firstOrNull()?.asLong()
-        if (endTime == null) {
-            println("endTime is null")
-            return
-        }
+        var nowTime = fern.getMetadata("nowTime").firstOrNull()?.asLong() ?: return
+        val endTime = fern.getMetadata("endTime").firstOrNull()?.asLong() ?: return
 
-        nowTime += 1
-        println("nowTime: $nowTime, endTime: $endTime")
+        nowTime += 10
 
         val growned = nowTime >= endTime
 
         if (growned) {
-            println("growned")
             fern.removeMetadata("nowTime", Hardcraft.instance)
             fern.removeMetadata("endTime", Hardcraft.instance)
             fern.type = Material.LARGE_FERN
@@ -128,6 +113,6 @@ class FernListener : Listener {
                     growFern(fern)
                 }
             }
-        }.runTaskTimer(Hardcraft.instance, 0, 20L)
+        }.runTaskTimer(Hardcraft.instance, 0, 20L * 10)
     }
 }

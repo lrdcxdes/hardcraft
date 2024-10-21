@@ -1,17 +1,21 @@
 package dev.lrdcxdes.hardcraft.event
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.seasons.getTemperature
 import net.kyori.adventure.text.Component
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.ItemSpawnEvent
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import kotlin.math.abs
 
-data class Food(val material: Material, val spoilTime: Int, val bestTemperature: Int) {
+data class Food(val material: Material, val spoilTime: Long, val bestTemperature: Int) {
     companion object {
         val SPOIL_TIME = Hardcraft.instance.key("spoilTime")
         val FRESHNESS = Hardcraft.instance.key("freshness")
@@ -31,31 +35,45 @@ class FoodListener : Listener {
 
     private val foods: List<Food> = foodsConfig.getKeys(false).map { key ->
         val material = Material.matchMaterial(key) ?: throw IllegalArgumentException("Invalid material: $key")
-        val spoilTime = foodsConfig.getInt("$key.spoilTime")
+        val spoilTime = foodsConfig.getLong("$key.spoilTime")
         val bestTemperature = foodsConfig.getInt("$key.bestTemperature")
         Food(material, spoilTime, bestTemperature)
     }
 
-    private fun checkItem(item: ItemStack, time: Long) {
+    private fun checkItem(item: ItemStack, temperature: Int) {
         val food = foods.find { it.material == item.type } ?: return
         val spoilTime = food.spoilTime
+        val bestTemperature = food.bestTemperature
 
         val meta = item.itemMeta
 
-        val lastCheck = meta.persistentDataContainer.get(Food.SPOIL_TIME, PersistentDataType.LONG)
-        val lastSpoilness =
-            meta.persistentDataContainer.get(Food.FRESHNESS, PersistentDataType.INTEGER)
+        var lastCheck = meta.persistentDataContainer.get(Food.SPOIL_TIME, PersistentDataType.LONG)
+        var freshness =
+            meta.persistentDataContainer.get(Food.FRESHNESS, PersistentDataType.DOUBLE)
 
-        var spoilness: Int = lastSpoilness ?: 100
+        val time = System.currentTimeMillis()
 
-        if (lastCheck == null || lastSpoilness == null) {
+        if (lastCheck == null || freshness == null) {
             meta.persistentDataContainer.set(Food.SPOIL_TIME, PersistentDataType.LONG, time)
-            meta.persistentDataContainer.set(Food.FRESHNESS, PersistentDataType.INTEGER, 100)
+            meta.persistentDataContainer.set(Food.FRESHNESS, PersistentDataType.DOUBLE, 1.0)
+
+            freshness = 1.0
         } else {
             val timeDiff = time - lastCheck
-            // TODO: implement temperature effect
-            spoilness = lastSpoilness - (timeDiff / spoilTime).toInt()
-            if (spoilness <= 0) {
+            val tempDiff = abs(temperature - bestTemperature)
+
+            // Update freshness based on time and temperature, temperature affects freshness more
+            // example
+            // 10 minutes passed / 10 minutes spoil time, 20 temperature difference = 2.0
+            // 10 minutes passed / 10 minutes spoil time, 10 temperature difference = 1.5
+            // 10 minutes passed / 10 minutes spoil time, 0 temperature difference = 1.0
+
+            val x = (((timeDiff / 1000).toDouble() / (spoilTime / 1000).toDouble()) * (1 + tempDiff / 20))
+
+            freshness -= x
+            lastCheck = time
+
+            if (freshness <= 0f) {
                 // Spoiled
                 item.amount = 0
                 return
@@ -63,32 +81,25 @@ class FoodListener : Listener {
                 // Just update the freshness
                 meta.persistentDataContainer.set(
                     Food.FRESHNESS,
-                    PersistentDataType.INTEGER,
-                    spoilness
+                    PersistentDataType.DOUBLE,
+                    freshness
+                )
+                meta.persistentDataContainer.set(
+                    Food.SPOIL_TIME,
+                    PersistentDataType.LONG,
+                    lastCheck
                 )
             }
         }
-
-        println("Material: ${food.material}")
-        println("Spoilness: $spoilness")
-        println("Last Spoilness: $lastSpoilness")
-        println("Best Temperature: ${food.bestTemperature}")
-        println("Time: $time")
-        println("Last Check: $lastCheck")
 
         // update lore with freshness, bestTemperture
         val lore: List<Component> =
             listOf(
                 Hardcraft.minimessage.deserialize(
-                    "<gradient:#ff0000:#00ff00>${
-                        spoilness.toString().padStart(3, ' ')
-                    }%</gradient>"
+                    "<gradient:#ff0000:#00ff00>${(freshness * 100).toInt()}% Fresh</gradient>"
                 ),
                 Hardcraft.minimessage.deserialize(
-                    "<gradient:#ff0000:#00ff00>${food.bestTemperature}</gradient>"
-                ),
-                Hardcraft.minimessage.deserialize(
-                    "<gradient:#ff0000:#00ff00>${lastCheck}</gradient>"
+                    "<gradient:#ff0000:#00ff00>${"Best Temperature: %d".format(bestTemperature)}</gradient>"
                 )
             )
 
@@ -97,32 +108,37 @@ class FoodListener : Listener {
         item.itemMeta = meta
     }
 
-//    @EventHandler
-//    fun onInventoryOpen(event: InventoryOpenEvent) {
-//        val inventory = event.inventory
-//        val time = System.currentTimeMillis()
-//        // val temperature = world.temperature
-//        inventory.contents.forEach { item ->
-//            if (item != null && item.type.isEdible) {
-//                checkItem(item, time)
-//            }
-//        }
-//    }
+    @EventHandler
+    fun onInventoryClick(event: InventoryClickEvent) {
+        val item = event.currentItem
+        if (item != null && item.type.isEdible) {
+            val isPlayerInv = event.view.topInventory == event.inventory
+            val temp =
+                if (isPlayerInv) (event.whoClicked as Player).getTemperature() else event.inventory.location?.block?.let {
+                    Hardcraft.instance.seasons.getTemperature(it)
+                } ?: 0
+            checkItem(
+                item,
+                temp
+            )
+        }
+    }
 
     @EventHandler
     fun onItemSpawn(event: ItemSpawnEvent) {
         val item = event.entity.itemStack
-        val time = System.currentTimeMillis()
-        checkItem(item, time)
+        checkItem(item, 0)
     }
 
     @EventHandler
     fun onInventoryOpen(event: InventoryOpenEvent) {
         val inventory = event.inventory
-        val time = System.currentTimeMillis()
+        val temp = event.inventory.location?.block?.let {
+            Hardcraft.instance.seasons.getTemperature(it)
+        } ?: 0
         inventory.contents.forEach { item ->
             if (item != null && item.type.isEdible) {
-                checkItem(item, time)
+                checkItem(item, temp)
             }
         }
     }
