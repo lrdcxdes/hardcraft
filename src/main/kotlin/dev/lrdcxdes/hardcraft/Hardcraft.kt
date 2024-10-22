@@ -7,6 +7,7 @@ import dev.lrdcxdes.hardcraft.raids.PrivateListener
 import dev.lrdcxdes.hardcraft.seasons.Seasons
 import dev.lrdcxdes.hardcraft.seasons.getTemperature
 import dev.lrdcxdes.hardcraft.seasons.getTemperatureAsync
+import dev.lrdcxdes.hardcraft.utils.CustomCrafts
 import dev.lrdcxdes.hardcraft.utils.Darkphobia
 import dev.lrdcxdes.hardcraft.utils.TorchAndCampfire
 import io.papermc.paper.command.brigadier.Commands
@@ -39,6 +40,11 @@ class Hardcraft : JavaPlugin() {
         for (entity in server.worlds.flatMap(World::getEntities)) {
             entitySpawnListener.setupGoals(null, entity, entity.location)
         }
+
+        // CustomCrafts
+        val cc = CustomCrafts()
+        cc.loadRecipesFromConfig()
+        cc.idk()
 
         val manager = this.lifecycleManager
         manager.registerEventHandler(LifecycleEvents.COMMANDS) { event ->
@@ -87,6 +93,28 @@ class Hardcraft : JavaPlugin() {
                     }
                     .build()
             )
+
+            commands.register(
+                Commands.literal("cc")
+                    .executes { context ->
+                        val player = context.source.sender as? Player ?: return@executes Command.SINGLE_SUCCESS
+
+                        // reload
+                        cc.loadRecipesFromConfig()
+                        cc.idk()
+
+                        player.sendMessage(
+                            minimessage.deserialize(
+                                """
+                                <green>CustomCrafts reloaded</green>
+                            """.trimIndent()
+                            )
+                        )
+
+                        Command.SINGLE_SUCCESS
+                    }
+                    .build()
+            )
         }
 
         // gardens
@@ -129,6 +157,15 @@ class Hardcraft : JavaPlugin() {
 
         // NewFoodListen
         server.pluginManager.registerEvents(NewFoodListen(), this)
+
+        // MilkCowEvent
+        server.pluginManager.registerEvents(MilkCowEvent(), this)
+
+        // CraftEvent
+        server.pluginManager.registerEvents(CraftEvent(), this)
+
+        // StripListener
+        server.pluginManager.registerEvents(StripListener(), this)
 
         // FernListener
         fernListener = FernListener()

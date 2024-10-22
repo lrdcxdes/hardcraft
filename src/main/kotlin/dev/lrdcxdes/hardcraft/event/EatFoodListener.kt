@@ -6,6 +6,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerItemConsumeEvent
+import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
@@ -39,6 +40,17 @@ class EatFoodListener : Listener {
 
             Material.SALMON, Material.COD, Material.MUTTON, Material.CHICKEN, Material.BEEF, Material.PORKCHOP, Material.RABBIT -> {
                 applyRawMeatEffect(player, random)
+            }
+
+            Material.POTION -> {
+                val meta = event.item.itemMeta as PotionMeta
+                if ((meta.color?.asRGB() ?: 0) == 0xe8e8e8) {  // Milk bottle
+                    if (random < 20) {
+                        player.activePotionEffects.forEach {
+                            player.removePotionEffect(it.type)
+                        }
+                    }
+                }
             }
 
             else -> {

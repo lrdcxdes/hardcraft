@@ -48,8 +48,17 @@ class FernListener : Listener {
             // event.player.inventory.addItem(ItemStack(Material.FERN, seedsCount))
 
             // drop item
-            block.world.dropItemNaturally(block.location, ItemStack(Material.FERN, seedsCount))
-            block.world.dropItemNaturally(block.location, ItemStack(Material.LARGE_FERN))
+
+            val zaza = ItemStack(Material.GREEN_DYE, seedsCount)
+            zaza.itemMeta = zaza.itemMeta.apply {
+                itemName(Hardcraft.minimessage.deserialize("<color:#00AA00><lang:bts.zaza>"))
+                setCustomModelData(3)
+            }
+            block.world.dropItemNaturally(block.location, zaza)
+
+            val fernCount = 1 + Hardcraft.instance.random.nextInt(2)
+            val fern = ItemStack(Material.FERN, fernCount)
+            block.world.dropItemNaturally(block.location, fern)
         }
     }
 

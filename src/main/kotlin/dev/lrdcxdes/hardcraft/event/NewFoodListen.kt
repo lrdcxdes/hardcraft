@@ -36,6 +36,29 @@ class NewFoodListen : Listener {
                     event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0))
                 }
             }
+        } else if (event.item?.type == Material.FLOWER_BANNER_PATTERN && event.item?.itemMeta?.customModelData == 3) {
+            event.item!!.amount -= 1
+            // /playsound minecraft:entity.blaze.ambient master lrdcxdes 0.2 2.0
+            // +0.5 block right in front of your eyes
+            event.player.playSound(
+                event.player.eyeLocation.add(event.player.location.direction.multiply(0.1)).block.location,
+                "minecraft:entity.blaze.ambient",
+                0.2f,
+                2.0f
+            )
+
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 0))
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 60 * 20, 0))
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 20, 0))
+
+            // random if 3%
+            if (Hardcraft.instance.random.nextInt(100) < 3) {
+                event.player.playSound(event.player.location, "minecraft:music_disc.stal", 0.6f, 1.5f)
+            }
+
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.STRENGTH, 10 * 20, 0))
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20 * 20, 0))
+            event.player.addPotionEffect(PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 20, 0))
         }
     }
 }

@@ -99,7 +99,7 @@ class PlayerTemperatureListener : Listener {
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L)
+        }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 5)
     }
 
     @EventHandler

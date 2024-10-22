@@ -132,7 +132,7 @@ class Gardens {
                         }
                     }
                 }
-            }.runTaskTimer(Hardcraft.instance, 0, 20)
+            }.runTaskTimer(Hardcraft.instance, 0, 20L * 30)
         }
 
         fun addBlock(block: Block) {

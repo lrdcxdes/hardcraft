@@ -16,9 +16,9 @@ class Darkphobia {
 
                 val lightLevel = player.eyeLocation.block.lightLevel
                 if (lightLevel < 6) {
-                    state += 1.0
+                    state += (1.0) * 5
                 } else {
-                    state -= 4.0
+                    state -= (4.0) * 5
                 }
 
                 // max state is 500.0
@@ -98,5 +98,5 @@ class Darkphobia {
                 players[player.name] = state
             }
         }
-    }.runTaskTimer(Hardcraft.instance, 0, 20L)
+    }.runTaskTimer(Hardcraft.instance, 0, 20L * 5)
 }

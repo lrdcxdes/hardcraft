@@ -96,10 +96,10 @@ class FoodListener : Listener {
         val lore: List<Component> =
             listOf(
                 Hardcraft.minimessage.deserialize(
-                    "<gradient:#ff0000:#00ff00>${(freshness * 100).toInt()}% Fresh</gradient>"
+                    "<gray>${(freshness * 100).toInt()}% Fresh</gray>"
                 ),
                 Hardcraft.minimessage.deserialize(
-                    "<gradient:#ff0000:#00ff00>${"Best Temperature: %d".format(bestTemperature)}</gradient>"
+                    "<gray>${"Best Temperature: %d".format(bestTemperature)}</gray>"
                 )
             )
 

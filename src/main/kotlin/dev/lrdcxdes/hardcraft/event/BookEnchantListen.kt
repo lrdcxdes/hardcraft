@@ -77,7 +77,7 @@ class BookEnchantListen : Listener {
                         val len = Hardcraft.instance.random.nextInt(5) + 4
                         val rndTitle = (1..len).map { ('a'..'z').random() }.joinToString("")
                         book.title(Hardcraft.minimessage.deserialize("<obfuscated>${rndTitle}"))
-                        book.displayName(Hardcraft.minimessage.deserialize("<obfuscated>${rndTitle}"))
+                        book.itemName(Hardcraft.minimessage.deserialize("<obfuscated>${rndTitle}"))
                     } else if (chance < 90) {
                         bookstack = ItemStack(Material.ENCHANTED_BOOK)
                         book = bookstack.itemMeta as EnchantmentStorageMeta

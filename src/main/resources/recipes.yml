@@ -1,0 +1,1616 @@
+add:
+  example:
+    result:
+      displayName: "<red>Iron Sword" # Optional (default: null)
+      type: IRON_SWORD # Required
+      amount: 1 # Optional (default: 1)
+      customModelData: null # Optional (default: null)
+    shape: # Required
+      - " I "
+      - " I "
+      - " S "
+    ingredients:
+      I:
+        type: IRON_INGOT # Required
+        amount: 1 # Optional (default: 1)
+        customModelData: null # Optional (default: null)
+      S:
+        type: STICK # Required
+        amount: 1 # Optional (default: 1)
+        customModelData: null # Optional (default: null)
+  stonecutter:
+    result:
+      type: STONECUTTER
+    shape:
+      - " S "
+      - "SIS"
+      - "CBC"
+    ingredients:
+      S:
+        type: IRON_NUGGET
+      I:
+        type: IRON_INGOT
+      C:
+        type: COBBLESTONE
+      B:
+        type: ANDESITE
+  grindstone:
+    result:
+      type: GRINDSTONE
+    shape:
+      - "   "
+      - "SBS"
+      - "FOF"
+    ingredients:
+      S:
+        type: IRON_NUGGET
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      F:
+        type: ANY_FENCE
+      O:
+        type: ANY_LOG
+  campfire:
+    result:
+      type: CAMPFIRE
+    shape:
+      - "   "
+      - " FS"
+      - " OO"
+    ingredients:
+      F:
+        type: FLINT
+      S:
+        type: STICK
+      O:
+        type: ANY_LOG
+  smithing_table:
+    result:
+      type: SMITHING_TABLE
+    shape:
+      - "LIL"
+      - "BCB"
+      - "LBL"
+    ingredients:
+      L:
+        type: LEATHER
+      I:
+        type: IRON_INGOT
+      B:
+        type: COBBLED_DEEPSLATE
+      C:
+        type: CRAFTING_TABLE
+  smoker:
+    result:
+      type: SMOKER
+    shape:
+      - "BOB"
+      - "OFO"
+      - "BGB"
+    ingredients:
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+      O:
+        type: ANY_LOG
+      F:
+        type: FLINT
+      G:
+        type: GRAVEL
+  blast_furnace:
+    result:
+      type: BLAST_FURNACE
+    shape:
+      - "BIB"
+      - "IFI"
+      - "BGB"
+    ingredients:
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+      I:
+        type: IRON_INGOT
+      F:
+        type: FLINT
+      G:
+        type: GRAVEL
+  furnace:
+    result:
+      type: FURNACE
+    shape:
+      - "BDB"
+      - "DFD"
+      - "BNB"
+    ingredients:
+      B:
+        type: COBBLESTONE
+      D:
+        type: COBBLED_DEEPSLATE
+      F:
+        type: FIRE_CHARGE
+      N:
+        type: NETHERRACK
+  brewing_stand:
+    result:
+      type: BREWING_STAND
+    shape:
+      - " G "
+      - "GRG"
+      - "DDD"
+    ingredients:
+      G:
+        type: GLASS_BOTTLE
+      R:
+        type: BLAZE_ROD
+      D:
+        type: COBBLED_DEEPSLATE
+  cauldron:
+    result:
+      type: CAULDRON
+    shape:
+      - "I I"
+      - "III"
+      - "NIN"
+    ingredients:
+      I:
+        type: IRON_INGOT
+      N:
+        type: IRON_NUGGET
+  fletching_table:
+    result:
+      type: FLETCHING_TABLE
+    shape:
+      - "   "
+      - "FCI"
+      - "WWW"
+    ingredients:
+      F:
+        type: FLINT
+      C:
+        type: CRAFTING_TABLE
+      I:
+        type: IRON_INGOT
+      W:
+        type: ANY_PLANKS
+  cartography_table:
+    result:
+      type: CARTOGRAPHY_TABLE
+    shape:
+      - "   "
+      - "PCO"
+      - "WWW"
+    ingredients:
+      P:
+        type: PAPER
+      C:
+        type: CRAFTING_TABLE
+      O:
+        type: COMPASS
+      W:
+        type: ANY_PLANKS
+  loom:
+    result:
+      type: LOOM
+    shape:
+      - "   "
+      - "OCS"
+      - "WWW"
+    ingredients:
+      O:
+        type: ANY_WOOL
+      C:
+        type: CRAFTING_TABLE
+      S:
+        type: SHEARS
+      W:
+        type: ANY_PLANKS
+  lodestone:
+    result:
+      type: LODESTONE
+    shape:
+      - "DID"
+      - "CRC"
+      - "DID"
+    ingredients:
+      D:
+        type: COBBLED_DEEPSLATE
+      I:
+        type: IRON_INGOT
+      C:
+        type: COPPER_INGOT
+      R:
+        type: REDSTONE_BLOCK
+  enchanting_table:
+    result:
+      type: ENCHANTING_TABLE
+    shape:
+      - " B "
+      - "DCD"
+      - "OAO"
+    ingredients:
+      O:
+        type: OBSIDIAN
+      B:
+        type: BOOK
+      D:
+        type: DIAMOND
+      C:
+        type: CRYING_OBSIDIAN
+      A:
+        type: AMETHYST_SHARD
+  plank:
+    result:
+      type: OAK_PLANKS
+    shape:
+      - "SS"
+      - "SS"
+    ingredients:
+      S:
+        type: STICK
+  sticks:
+    result:
+      type: STICK
+      amount: 3
+      customModelData: 3
+    shape:
+      - "S"
+    ingredients:
+      S:
+        type: ANY_SAPLING
+  gravel:
+    result:
+      type: GRAVEL
+    shape:
+      - "FF"
+      - "FF"
+    ingredients:
+      F:
+        type: FLINT
+  glow_ink_sac:
+    result:
+      type: GLOW_INK_SAC
+    shape:
+      - " P "
+      - "PSP"
+      - " P "
+    ingredients:
+      P:
+        type: BLAZE_POWDER
+      S:
+        type: INK_SAC
+  fermented_spider_eye:
+    result:
+      type: FERMENTED_SPIDER_EYE
+    shape:
+      - "ES"
+    ingredients:
+      S:
+        type: INK_SAC
+      E:
+        type: SPIDER_EYE
+  iron_nugget:
+    result:
+      type: IRON_NUGGET
+      customModelData: 3
+    shape:
+      - "II"
+    ingredients:
+      I:
+        type: RAW_IRON
+  iron_nugget_nether:
+    result:
+      type: IRON_NUGGET
+      customModelData: 3
+    shape:
+      - "IF"
+      - "FI"
+    ingredients:
+      I:
+        type: QUARTZ
+      F:
+        type: FLINT
+  gold_nugget:
+    result:
+      type: GOLD_NUGGET
+      customModelData: 3
+    shape:
+      - "GG"
+    ingredients:
+      G:
+        type: RAW_GOLD
+  redstone:
+    result:
+      type: REDSTONE
+    shape:
+      - "PCG"
+    ingredients:
+      P:
+        type: GUNPOWDER
+      C:
+        type: COPPER_INGOT
+      G:
+        type: GLOWSTONE_DUST
+  flint_and_steel1:
+    result:
+      type: FLINT_AND_STEEL
+      customModelData: 3
+      damage: 61
+    shape:
+      - "I "
+      - " F"
+    ingredients:
+      F:
+        type: FLINT
+      I:
+        type: IRON_NUGGET
+  flint_and_steel2:
+    result:
+      type: FLINT_AND_STEEL
+      damage: 44
+    shape:
+      - "I "
+      - " F"
+    ingredients:
+      F:
+        type: FLINT
+      I:
+        type: IRON_INGOT
+  bone_meal:
+    result:
+      type: BONE_MEAL
+      amount: 1
+    shape:
+      - "B"
+    ingredients:
+      B:
+        type: BONE
+  mace:
+    result:
+      type: MACE
+      damage: 425
+    shape:
+      - " C "
+      - " R "
+      - " D "
+    ingredients:
+      C:
+        type: HEAVY_CORE
+      R:
+        type: BREEZE_ROD
+      D:
+        type: DIAMOND
+  shell_hammer:
+    result:
+      displayName: "<lang:bts.shell_hammer>"
+      type: MACE
+      damage: 499
+      customModelData: 3
+    shape:
+      - " N"
+      - "S "
+    ingredients:
+      N:
+        type: NAUTILUS_SHELL
+      S:
+        type: STICK
+  spyglass:
+    result:
+      type: SPYGLASS
+    shape:
+      - "  G"
+      - "NC "
+      - "C  "
+    ingredients:
+      G:
+        type: GLASS_PANE
+      N:
+        type: IRON_NUGGET
+      C:
+        type: COPPER_INGOT
+  shield:
+    result:
+      type: SHIELD
+    shape:
+      - "NIN"
+      - "NON"
+      - " N "
+    ingredients:
+      N:
+        type: IRON_NUGGET
+      I:
+        type: IRON_INGOT
+      O:
+        type: ANY_LOG
+  end_crystal:
+    result:
+      type: END_CRYSTAL
+    shape:
+      - "GGG"
+      - "GEG"
+      - "GDG"
+    ingredients:
+      E:
+        type: EYE_OF_ENDER
+      D:
+        type: DIAMOND
+      G:
+        type: GLASS
+  shulker_box:
+    result:
+      type: SHULKER_BOX
+    shape:
+      - "SLS"
+      - "ABA"
+      - "SLS"
+    ingredients:
+      S:
+        type: STRING
+      L:
+        type: SHULKER_SHELL
+      A:
+        type: AMETHYST_SHARD
+      B:
+        type: BARREL
+  clock:
+    result:
+      type: CLOCK
+    shape:
+      - " G "
+      - "GRG"
+      - " G "
+    ingredients:
+      G:
+        type: GOLD_NUGGET
+      R:
+        type: REDSTONE
+  compass:
+    result:
+      type: COMPASS
+    shape:
+      - " I "
+      - "IRI"
+      - " I "
+    ingredients:
+      I:
+        type: IRON_NUGGET
+      R:
+        type: REDSTONE
+  shears:
+    result:
+      type: SHEARS
+      customModelData: 3
+      damage: 230
+    shape:
+      - " I"
+      - "I "
+    ingredients:
+      I:
+        type: IRON_NUGGET
+  big_shears:
+    result:
+      type: SHEARS
+    shape:
+      - " I"
+      - "I "
+    ingredients:
+      I:
+        type: IRON_INGOT
+  torch:
+    result:
+      type: TORCH
+    shape:
+      - "C"
+      - "S"
+    ingredients:
+      C:
+        type: COAL
+      S:
+        type: STICK
+  piston:
+    result:
+      type: PISTON
+    shape:
+      - "NSN"
+      - "BCB"
+      - "BRB"
+    ingredients:
+      N:
+        type: IRON_NUGGET
+      S:
+        type: ANY_SLAB
+      C:
+        type: COPPER_INGOT
+      R:
+        type: REDSTONE
+      B: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+  daylight_detector:
+    result:
+      type: DAYLIGHT_DETECTOR
+    shape:
+      - "GGG"
+      - "SCS"
+      - "RIR"
+    ingredients:
+      G:
+        type: GLASS
+      S:
+        type: ANY_SLAB
+      C:
+        type: CLOCK
+      R:
+        type: REDSTONE
+      I:
+        type: COPPER_INGOT
+  crafter:
+    result:
+      type: CRAFTER
+    shape:
+      - "ICI"
+      - "CTC"
+      - "RXR"
+    ingredients:
+        I:
+          type: IRON_INGOT
+        C:
+          type: COPPER_INGOT
+        T:
+          type: CRAFTING_TABLE
+        R:
+          type: REDSTONE
+        X:
+          type: DROPPER
+  hopper:
+    result:
+      type: HOPPER
+    shape:
+      - "I I"
+      - "CHC"
+      - " I "
+    ingredients:
+      I:
+        type: IRON_INGOT
+      C:
+        type: COPPER_INGOT
+      H:
+        type: CHEST
+  observer:
+    result:
+      type: OBSERVER
+    shape:
+      - "BBB"
+      - "RCD"
+      - "BBB"
+    ingredients:
+      R:
+        type: REDSTONE
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+      C:
+        type: COPPER_INGOT
+      D:
+        type: DAYLIGHT_DETECTOR
+  dispenser:
+    result:
+      type: DISPENSER
+    shape:
+      - "BBB"
+      - "R R"
+      - "BIB"
+    ingredients:
+      R:
+        type: REDSTONE
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+      I:
+        type: IRON_INGOT
+  dropper:
+    result:
+      type: DROPPER
+    shape:
+      - "BBB"
+      - "R R"
+      - "BCB"
+    ingredients:
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+      R:
+        type: REDSTONE
+      C:
+        type: COPPER_INGOT
+  repeater:
+    result:
+      type: REPEATER
+    shape:
+      - "   "
+      - "TCT"
+      - "BRB"
+    ingredients:
+        T:
+          type: REDSTONE_TORCH
+        C:
+          type: COPPER_INGOT
+        B:
+          type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+        R:
+          type: REDSTONE
+  comparator:
+    result:
+      type: COMPARATOR
+    shape:
+      - " T "
+      - "TCT"
+      - "BBB"
+    ingredients:
+      T:
+        type: REDSTONE_TORCH
+      C:
+        type: COPPER_INGOT
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+  jukebox:
+    result:
+      type: JUKEBOX
+    shape:
+      - "PPP"
+      - "PCP"
+      - "PPP"
+    ingredients:
+      P:
+        type: ANY_PLANKS
+      C:
+        type: COPPER_INGOT
+  netherite_ingor:
+    result:
+      type: NETHERITE_INGOT
+    shape:
+      - "SGS"
+      - "GHG"
+      - "SGS"
+    ingredients:
+      G:
+        type: GOLD_INGOT
+      S:
+        type: NETHERITE_SCRAP
+      H:
+        type: ECHO_SHARD
+  experience_bottle:
+    result:
+      type: EXPERIENCE_BOTTLE
+    shape:
+      - "BHB"
+      - "PSP"
+      - "BGB"
+    ingredients:
+      G:
+        type: GLASS_BOTTLE
+      B:
+        type: BLAZE_POWDER
+      H:
+        type: ECHO_SHARD
+      P:
+        type: PRISMARINE_SHARD
+      S:
+        type: NETHER_STAR
+  eye_of_ender:
+    result:
+      type: EYE_OF_ENDER
+    shape:
+      - "NEN"
+      - "BPB"
+      - "NON"
+    ingredients:
+      O:
+        type: BLAZE_POWDER
+      P:
+        type: ENDER_PEARL
+      N:
+        type: GHAST_TEAR
+      B:
+        type: EXPERIENCE_BOTTLE
+      E:
+        type: ECHO_SHARD
+  striders_potion:
+    result:
+      displayName: "<dark_purple><lang:bts.striders_potion>"
+      type: POTION
+      color: "#5a32a1"
+      potionEffects:
+        bad_omen:
+          duration: 48000
+          amplifier: 0
+          ambient: false
+          particles: true
+          icon: true
+        night_vision:
+          duration: 48000
+          amplifier: 0
+          ambient: false
+          particles: true
+          icon: true
+    shape:
+      - "PHP"
+      - "ISI"
+      - "PGP"
+    ingredients:
+      G:
+        type: GLASS_BOTTLE
+      P:
+        type: PRISMARINE_CRYSTALS
+      H:
+        type: HEART_OF_THE_SEA
+      I:
+        type: INK_SAC
+      S:
+        type: SPONGE
+  zaza:
+    result:
+      displayName: "<color:#00AA00><lang:bts.zaza>"
+      type: GREEN_DYE
+      customModelData: 3
+      amount: 8
+    shape:
+      - "Z"
+    ingredients:
+      Z:
+        displayName: "<color:#00AA00><lang:bts.large_zaza>"
+        type: GREEN_DYE
+        customModelData: 4
+  large_zaza:
+    result:
+      displayName: "<color:#00AA00><lang:bts.large_zaza>"
+      type: GREEN_DYE
+      customModelData: 4
+    shape:
+      - "CCC"
+      - "CZC"
+      - "CCC"
+    ingredients:
+      Z:
+        type: PAPER
+      C:
+        displayName: "<color:#00AA00><lang:bts.zaza>"
+        type: GREEN_DYE
+        customModelData: 3
+  cigarette:
+    result:
+      displayName: "<lang:bts.cigarette>"
+      type: FLOWER_BANNER_PATTERN
+      customModelData: 3
+    shape:
+      - "ZZ"
+      - "PP"
+    ingredients:
+      Z:
+        displayName: "<color:#00AA00><lang:bts.zaza>"
+        type: GREEN_DYE
+        customModelData: 3
+      P:
+        type: PAPER
+  sugar:
+    result:
+      type: SUGAR
+    shape:
+      - "S"
+    ingredients:
+      S:
+        type: BEETROOT
+  flour:
+    result:
+      displayName: "<lang:bts.flour>"
+      type: WHITE_DYE
+      customModelData: 3
+    shape:
+      - "S"
+    ingredients:
+      S:
+        type: WHEAT
+  dough:
+    result:
+      displayName: "<lang:bts.dough>"
+      type: WHITE_DYE
+      customModelData: 4
+    shape:
+      - "F "
+      - "BB"
+    ingredients:
+      F:
+        type: EGG
+      B:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  cookie:
+    result:
+      type: COOKIE
+    shape:
+      - "W "
+      - "FW"
+    ingredients:
+      W:
+        type: ANY_SEEDS
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  cookie2:
+    result:
+      type: COOKIE
+    shape:
+      - "FW"
+    ingredients:
+      W:
+        type: SUGAR
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  carrot_stew:
+    result:
+      displayName: "<lang:bts.carrot_stew>"
+      type: SUSPICIOUS_STEW
+      customModelData: 3
+    shape:
+      - "WFC"
+      - " B "
+    ingredients:
+        W:
+          type: ANY_SEEDS
+        F:
+          type: WHITE_DYE
+          customModelData: 3
+          displayName: "<lang:bts.flour>"
+        C:
+          type: CARROT
+        B:
+          type: BOWL
+  potato_stew:
+    result:
+      displayName: "<lang:bts.potato_stew>"
+      type: SUSPICIOUS_STEW
+      customModelData: 4
+    shape:
+      - "WFC"
+      - " B "
+    ingredients:
+        W:
+          type: ANY_SEEDS
+        F:
+          type: WHITE_DYE
+          customModelData: 3
+          displayName: "<lang:bts.flour>"
+        C:
+          type: POTATO
+        B:
+          type: BOWL
+  meat_stew:
+    result:
+      displayName: "<lang:bts.meat_stew>"
+      type: RABBIT_STEW
+      customModelData: 3
+    shape:
+      - "WFM"
+      - " B "
+    ingredients:
+        W:
+          type: ANY_SEEDS
+        F:
+          type: WHITE_DYE
+          customModelData: 3
+          displayName: "<lang:bts.flour>"
+        M:
+          type: [ COOKED_BEEF, COOKED_CHICKEN, COOKED_MUTTON, COOKED_PORKCHOP, COOKED_RABBIT ]
+        B:
+          type: BOWL
+  mushroom_stew:
+    result:
+      type: MUSHROOM_STEW
+    shape:
+      - "WWW"
+      - "WWW"
+      - " B "
+    ingredients:
+        W:
+          type: ANY_MUSHROOM
+        B:
+          type: BOWL
+  melon:
+    result:
+      type: MELON_SLICE
+      amount: 9
+    shape:
+      - "M"
+    ingredients:
+      M:
+        type: MELON
+  pumpkin:
+    result:
+      displayName: "<lang:bts.pumpkin_slice>"
+      type: MELON_SLICE
+      amount: 9
+      customModelData: 3
+    shape:
+      - "P"
+    ingredients:
+      P:
+        type: PUMPKIN
+  pumpkin_pie:
+    result:
+      type: PUMPKIN_PIE
+    shape:
+      - "PPP"
+      - "EEE"
+      - "FFF"
+    ingredients:
+      P:
+        displayName: "<lang:bts.pumpkin_slice>"
+        type: MELON_SLICE
+        customModelData: 3
+      E:
+        type: EGG
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  melon_pie:
+    result:
+      displayName: "<lang:bts.melon_pie>"
+      type: PUMPKIN_PIE
+      customModelData: 3
+    shape:
+      - "MMM"
+      - "EEE"
+      - "FFF"
+    ingredients:
+      M:
+        type: MELON_SLICE
+      E:
+        type: EGG
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  apple_pie:
+    result:
+      displayName: "<lang:bts.apple_pie>"
+      type: PUMPKIN_PIE
+      customModelData: 4
+    shape:
+      - "AAA"
+      - "EEE"
+      - "FFF"
+    ingredients:
+      A:
+        type: APPLE
+      E:
+        type: EGG
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  sweet_pie:
+    result:
+      displayName: "<lang:bts.sweet_pie>"
+      type: PUMPKIN_PIE
+      customModelData: 5
+    shape:
+      - "SSS"
+      - "EEE"
+      - "FFF"
+    ingredients:
+      S:
+        type: SWEET_BERRIES
+      E:
+        type: EGG
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  cake:
+    result:
+      type: CAKE
+    shape:
+      - "SSS"
+      - "HEM"
+      - "FFF"
+    ingredients:
+      M:
+        type: POTION
+        color: "#e8e8e8"
+        displayName: "<lang:bts.milk_bottle>"
+      S:
+        type: SUGAR
+      E:
+        type: EGG
+      H:
+        type: HONEY_BOTTLE
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+  cocoa_bottle:
+    result:
+      displayName: "<lang:bts.cocoa_bottle>"
+      type: POTION
+      color: "#823a1e"
+      potionEffects:
+        regeneration:
+          duration: 160
+          amplifier: 0
+          ambient: false
+          particles: false
+          icon: true
+    shape:
+      - "C"
+      - "M"
+    ingredients:
+      M:
+        type: POTION
+        color: "#e8e8e8"
+        displayName: "<lang:bts.milk_bottle>"
+      C:
+        type: COCOA_BEANS
+  wood_sword:
+    result:
+      type: WOODEN_SWORD
+      customModelData: 4
+      damage: 51
+    shape:
+      - " P"
+      - "S "
+    ingredients:
+      P:
+        type: ANY_PLANKS
+      S:
+        type: STICK
+  wood_pickaxe:
+    result:
+      type: WOODEN_PICKAXE
+      customModelData: 3
+      damage: 51
+    shape:
+      - "PP"
+      - "SP"
+    ingredients:
+      P:
+        type: ANY_PLANKS
+      S:
+        type: STICK
+  wood_axe:
+    result:
+      type: WOODEN_AXE
+      customModelData: 3
+      damage: 51
+    shape:
+      - "PP"
+      - "S "
+    ingredients:
+      P:
+        type: ANY_PLANKS
+      S:
+        type: STICK
+  wood_shovel:
+    result:
+      type: WOODEN_SHOVEL
+      customModelData: 3
+      damage: 51
+    shape:
+      - "P"
+      - "S"
+    ingredients:
+      P:
+        type: ANY_PLANKS
+      S:
+        type: STICK
+  wood_hoe:
+    result:
+      type: WOODEN_HOE
+      customModelData: 3
+      damage: 51
+    shape:
+      - "PS"
+      - " S"
+    ingredients:
+      P:
+        type: ANY_PLANKS
+      S:
+        type: STICK
+  bone_sword:
+    result:
+      type: WOODEN_SWORD
+      customModelData: 3
+      displayName: "<lang:bts.bone_sword>"
+      damage: 51
+    shape:
+      - " B"
+      - "B "
+    ingredients:
+      B:
+        type: BONE
+
+  stone_sword:
+    result:
+      type: STONE_SWORD
+      customModelData: 3
+      damage: 119
+    shape:
+      - " P"
+      - "S "
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+  stone_pickaxe:
+    result:
+      type: STONE_PICKAXE
+      customModelData: 3
+      damage: 119
+    shape:
+      - "PP"
+      - "SP"
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+  stone_axe:
+    result:
+      type: STONE_AXE
+      customModelData: 3
+      damage: 119
+    shape:
+      - "PP"
+      - "S "
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+  stone_shovel:
+    result:
+      type: STONE_SHOVEL
+      customModelData: 3
+      damage: 119
+    shape:
+      - "P"
+      - "S"
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+  stone_hoe:
+    result:
+      type: STONE_HOE
+      customModelData: 3
+      damage: 119
+    shape:
+      - "PS"
+      - " S"
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+
+  big_stone_sword:
+    result:
+      type: STONE_SWORD
+      damage: 107
+    shape:
+      - "P"
+      - "P"
+      - "S"
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+  big_stone_pickaxe:
+    result:
+      type: STONE_PICKAXE
+      damage: 107
+    shape:
+      - "PPP"
+      - "TST"
+      - " S "
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+      T:
+        type: STRING
+  big_stone_axe:
+    result:
+      type: STONE_AXE
+      damage: 107
+    shape:
+      - "PT"
+      - "PS"
+      - " S"
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+      T:
+        type: STRING
+  big_stone_shovel:
+    result:
+      type: STONE_SHOVEL
+      damage: 107
+    shape:
+      - "P"
+      - "S"
+      - "S"
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+  big_stone_hoe:
+    result:
+      type: STONE_HOE
+      damage: 107
+    shape:
+      - "PST"
+      - " S "
+      - " S "
+    ingredients:
+      P:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, BLACKSTONE ]
+      S:
+        type: STICK
+      T:
+        type: STRING
+
+  big_iron_sword:
+    result:
+      type: IRON_SWORD
+      damage: 214
+    shape:
+      - "P"
+      - "P"
+      - "S"
+    ingredients:
+      P:
+        type: IRON_INGOT
+      S:
+        type: STICK
+  big_iron_pickaxe:
+    result:
+      type: IRON_PICKAXE
+      damage: 214
+    shape:
+      - "PPP"
+      - "TST"
+      - " S "
+    ingredients:
+      P:
+        type: IRON_INGOT
+      S:
+        type: STICK
+      T:
+        type: IRON_NUGGET
+  big_iron_axe:
+    result:
+      type: IRON_AXE
+      damage: 214
+    shape:
+      - "PT"
+      - "PS"
+      - " S"
+    ingredients:
+      P:
+        type: IRON_INGOT
+      S:
+        type: STICK
+      T:
+        type: IRON_NUGGET
+  big_iron_shovel:
+    result:
+      type: IRON_SHOVEL
+      damage: 214
+    shape:
+      - "P"
+      - "S"
+      - "S"
+    ingredients:
+      P:
+        type: IRON_INGOT
+      S:
+        type: STICK
+  big_iron_hoe:
+    result:
+      type: IRON_HOE
+      damage: 214
+    shape:
+      - "PST"
+      - " S "
+      - " S "
+    ingredients:
+      P:
+        type: IRON_INGOT
+      S:
+        type: STICK
+      T:
+        type: IRON_NUGGET
+
+  big_gold_sword:
+    result:
+      type: GOLDEN_SWORD
+    shape:
+      - "P"
+      - "P"
+      - "S"
+    ingredients:
+      P:
+        type: GOLD_INGOT
+      S:
+        type: STICK
+
+  big_gold_pickaxe:
+    result:
+      type: GOLDEN_PICKAXE
+    shape:
+      - "PPP"
+      - "TST"
+      - " S "
+    ingredients:
+      P:
+        type: GOLD_INGOT
+      S:
+        type: STICK
+      T:
+        type: GOLD_NUGGET
+
+  big_gold_axe:
+    result:
+      type: GOLDEN_AXE
+    shape:
+      - "PT"
+      - "PS"
+      - " S"
+    ingredients:
+      P:
+        type: GOLD_INGOT
+      S:
+        type: STICK
+      T:
+        type: GOLD_NUGGET
+
+  big_gold_shovel:
+    result:
+      type: GOLDEN_SHOVEL
+    shape:
+      - "P"
+      - "S"
+      - "S"
+    ingredients:
+      P:
+        type: GOLD_INGOT
+      S:
+        type: STICK
+
+  big_gold_hoe:
+    result:
+      type: GOLDEN_HOE
+    shape:
+      - "PST"
+      - " S "
+      - " S "
+    ingredients:
+      P:
+        type: GOLD_INGOT
+      S:
+        type: STICK
+      T:
+        type: GOLD_NUGGET
+
+  big_diamond_sword:
+    result:
+      type: DIAMOND_SWORD
+      damage: 1465
+    shape:
+      - "P"
+      - "P"
+      - "S"
+    ingredients:
+      P:
+        type: DIAMOND
+      S:
+        type: STICK
+
+  big_diamond_pickaxe:
+    result:
+      type: DIAMOND_PICKAXE
+      damage: 1465
+    shape:
+      - "PPP"
+      - "TST"
+      - " S "
+    ingredients:
+      P:
+        type: DIAMOND
+      S:
+        type: STICK
+      T:
+        type: GOLD_NUGGET
+
+  big_diamond_axe:
+    result:
+      type: DIAMOND_AXE
+      damage: 1465
+    shape:
+      - "PT"
+      - "PS"
+      - " S"
+    ingredients:
+      P:
+        type: DIAMOND
+      S:
+        type: STICK
+      T:
+        type: GOLD_NUGGET
+
+  big_diamond_shovel:
+    result:
+      type: DIAMOND_SHOVEL
+      damage: 1465
+    shape:
+      - "P"
+      - "S"
+      - "S"
+    ingredients:
+      P:
+        type: DIAMOND
+      S:
+        type: STICK
+
+  big_diamond_hoe:
+    result:
+      type: DIAMOND_HOE
+      damage: 1465
+    shape:
+      - "PST"
+      - " S "
+      - " S "
+    ingredients:
+      P:
+        type: DIAMOND
+      S:
+        type: STICK
+      T:
+        type: GOLD_NUGGET
+
+  diamond:
+    result:
+      type: DIAMOND
+    shape:
+      - "IAI"
+      - "IEI"
+      - "IAI"
+    ingredients:
+      I:
+        type: GLOW_INK_SAC
+      A:
+        type: AMETHYST_SHARD
+      E:
+        type: EMERALD
+
+  leather_horse_armor:
+    result:
+      type: LEATHER_HORSE_ARMOR
+    shape:
+      - "  N"
+      - "LLL"
+      - "LSL"
+    ingredients:
+      L:
+        type: LEATHER
+      N:
+        type: IRON_NUGGET
+      S:
+        type: STRING
+
+  ladders:
+    result:
+      type: LADDER
+      amount: 3
+    shape:
+      - "STS"
+      - "SSS"
+      - "STS"
+    ingredients:
+      S:
+        type: STICK
+      T:
+        type: STRING
+
+  scaffolding:
+    result:
+      type: SCAFFOLDING
+      amount: 4
+    shape:
+      - "STS"
+      - "S S"
+      - "S S"
+    ingredients:
+      S:
+        type: STICK
+      T:
+        type: STRING
+
+remove:
+  - iron_sword
+  - stonecutter
+  - grindstone
+  - campfire
+  - smithing_table
+  - smoker
+  - blast_furnace
+  - furnace
+  - brewing_stand
+  - cauldron
+  - fletching_table
+  - cartography_table
+  - loom
+  - lodestone
+  - enchanting_table
+  - all_planks
+  - stick
+  - flint_and_steel
+  - bone_meal
+  - mace
+  - spyglass
+  - shield
+  - end_crystal
+  - shulker_box
+  - clock
+  - compass
+  - shears
+  - torch
+  - piston
+  - daylight_detector
+  - crafter
+  - hopper
+  - observer
+  - dispenser
+  - dropper
+  - repeater
+  - jukebox
+  - comparator
+  - netherite_ingot
+  - experience_bottle
+  - eye_of_ender
+  - sugar
+  - bread
+  - rabbit_stew
+  - mushroom_stew
+  - pumpkin_pie
+  - wooden_sword
+  - wooden_axe
+  - wooden_pickaxe
+  - wooden_shovel
+  - wooden_hoe
+  - stone_sword
+  - stone_axe
+  - stone_pickaxe
+  - stone_shovel
+  - stone_hoe
+  - iron_sword
+  - iron_axe
+  - iron_pickaxe
+  - iron_shovel
+  - iron_hoe
+  - gold_sword
+  - gold_axe
+  - gold_pickaxe
+  - gold_shovel
+  - gold_hoe
+  - diamond_sword
+  - diamond_axe
+  - diamond_pickaxe
+  - diamond_shovel
+  - diamond_hoe
+  - crafting_table
+  - ladder
