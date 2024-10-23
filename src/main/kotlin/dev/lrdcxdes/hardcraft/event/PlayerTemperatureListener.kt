@@ -33,6 +33,10 @@ class PlayerTemperatureListener : Listener {
         object : BukkitRunnable() {
             override fun run() {
                 for (player in Hardcraft.instance.server.onlinePlayers) {
+                    // ignore players in creative mode or in spectator mode
+                    if (player.gameMode == org.bukkit.GameMode.CREATIVE || player.gameMode == org.bukkit.GameMode.SPECTATOR) {
+                        continue
+                    }
                     player.getTemperatureAsync { temp ->
                         var tempTemp = temp
                         // calculate and also include if player has leather armor on them
@@ -57,7 +61,7 @@ class PlayerTemperatureListener : Listener {
 
                         // if player is in a biome with a temperature that is too high or too low
                         // then player will start taking damage
-                        if (tempTemp < 0) {
+                        if (tempTemp <= -7) {
                             player.freezeTicks = 200
                         }
 
@@ -78,28 +82,45 @@ class PlayerTemperatureListener : Listener {
                             if (lastDamages.containsKey(uuid)) {
                                 val lastDamage = lastDamages[uuid] ?: 0
                                 if (System.currentTimeMillis() - lastDamage > 1000) {
-                                    player.damage(1.0)
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            player.damage(1.0)
+                                        }
+                                    }.runTask(Hardcraft.instance)
                                     lastDamages[uuid] = System.currentTimeMillis()
                                 }
                             } else {
-                                player.damage(1.0)
+                                object : BukkitRunnable() {
+                                    override fun run() {
+                                        player.damage(1.0)
+                                    }
+                                }.runTask(Hardcraft.instance)
                                 lastDamages[uuid] = System.currentTimeMillis()
                             }
                         } else if (tempTemp < -10) {
                             if (lastDamages.containsKey(uuid)) {
                                 val lastDamage = lastDamages[uuid] ?: 0
                                 if (System.currentTimeMillis() - lastDamage > 1000) {
-                                    player.damage(0.5)
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            player.damage(0.5)
+                                        }
+                                    }.runTask(Hardcraft.instance)
                                     lastDamages[uuid] = System.currentTimeMillis()
                                 }
                             } else {
+                                object : BukkitRunnable() {
+                                    override fun run() {
+                                        player.damage(0.5)
+                                    }
+                                }.runTask(Hardcraft.instance)
                                 lastDamages[uuid] = System.currentTimeMillis()
                             }
                         }
                     }
                 }
             }
-        }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 5)
+        }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 2)
     }
 
     @EventHandler

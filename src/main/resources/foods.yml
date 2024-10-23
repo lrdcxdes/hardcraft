@@ -1,155 +1,135 @@
 apple:
-  spoilTime: 1209600000 # 14 days in milliseconds
-  bestTemperature: 6  # Celsius
+  spoilTime: 96000000    # 80 Minecraft days (1600 minutes)
+  bestTemperature: 4
 
 baked_potato:
-  spoilTime: 604800000 # 7 days in milliseconds
-  bestTemperature: 4  # Celsius
-
-beetroot:
-  spoilTime: 1209600000 # 14 days in milliseconds
-  bestTemperature: 2  # Celsius
-
-bread:
-  spoilTime: 432000000 # 5 days in milliseconds
-  bestTemperature: 20  # Celsius (room temperature)
-
-carrot:
-  spoilTime: 1209600000 # 14 days in milliseconds
-  bestTemperature: 0  # Celsius
-
-chorus_fruit:
-  spoilTime: 31536000000 # 1 year in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
-
-cooked_beef:
-  spoilTime: 259200000 # 3 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-cooked_chicken:
-  spoilTime: 259200000 # 3 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-cooked_cod:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-cooked_mutton:
-  spoilTime: 259200000 # 3 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-cooked_porkchop:
-  spoilTime: 259200000 # 3 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-cooked_rabbit:
-  spoilTime: 259200000 # 3 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-cooked_salmon:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-cookie:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
-
-dried_kelp:
-  spoilTime: 31536000000 # 1 year in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
-
-enchanted_golden_apple:
-  spoilTime: 31536000000 # 1 year in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
-
-glow_berries:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 4  # Celsius
-
-golden_apple:
-  spoilTime: 31536000000 # 1 year in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
-
-golden_carrot:
-  spoilTime: 31536000000 # 1 year in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
-
-honey_bottle:
-  spoilTime: 31536000000 # 1 year in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
-
-melon_slice:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 4  # Celsius
-
-mushroom_stew:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 4  # Celsius
-
-poisonous_potato:
-  spoilTime: 1209600000 # 14 days in milliseconds
-  bestTemperature: 6  # Celsius
-
-potato:
-  spoilTime: 1209600000 # 14 days in milliseconds
-  bestTemperature: 6  # Celsius
-
-pufferfish:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-pumpkin_pie:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 4  # Celsius
-
-rabbit_stew:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 4  # Celsius
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: 20
 
 beef:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -18
+
+beetroot:
+  spoilTime: 115200000   # 96 Minecraft days (1920 minutes)
+  bestTemperature: 4
+
+beetroot_soup:
+  spoilTime: 57600000    # 48 Minecraft days (960 minutes)
+  bestTemperature: -12
+
+bread:
+  spoilTime: 134400000   # 112 Minecraft days (2240 minutes)
+  bestTemperature: 20
+
+carrot:
+  spoilTime: 115200000   # 96 Minecraft days (1920 minutes)
+  bestTemperature: 4
 
 chicken:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -18
 
-cod:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
+cooked_beef:
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: -15
+
+cooked_chicken:
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: -15
+
+cooked_cod:
+  spoilTime: 57600000    # 48 Minecraft days (960 minutes)
+  bestTemperature: -15
+
+cooked_mutton:
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: -15
+
+cooked_porkchop:
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: -15
+
+cooked_rabbit:
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: -15
+
+cooked_salmon:
+  spoilTime: 57600000    # 48 Minecraft days (960 minutes)
+  bestTemperature: -15
+
+cookie:
+  spoilTime: 153600000   # 128 Minecraft days (2560 minutes)
+  bestTemperature: -10
+
+dried_kelp:
+  spoilTime: 384000000   # 320 Minecraft days (6400 minutes)
+  bestTemperature: 20
+
+glow_berries:
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: -10
+
+honey_bottle:
+  spoilTime: 576000000   # 480 Minecraft days (9600 minutes)
+  bestTemperature: 20
+
+melon_slice:
+  spoilTime: 57600000    # 48 Minecraft days (960 minutes)
+  bestTemperature: 4
+
+mushroom_stew:
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -12
 
 mutton:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -18
+
+poisonous_potato:
+  spoilTime: 192000000   # 160 Minecraft days (3200 minutes)
+  bestTemperature: -5
 
 porkchop:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -18
+
+potato:
+  spoilTime: 153600000   # 128 Minecraft days (2560 minutes)
+  bestTemperature: 7
+
+pufferfish:
+  spoilTime: 19200000    # 16 Minecraft days (320 minutes)
+  bestTemperature: -20
 
 rabbit:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -18
+
+rabbit_stew:
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -12
+
+cod:
+  spoilTime: 19200000    # 16 Minecraft days (320 minutes)
+  bestTemperature: -20
 
 salmon:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
-
-rotten_flesh:
-  spoilTime: 604800000 # 7 days in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
+  spoilTime: 19200000    # 16 Minecraft days (320 minutes)
+  bestTemperature: -20
 
 spider_eye:
-  spoilTime: 31536000000 # 1 year in milliseconds
-  bestTemperature: 22  # Celsius (room temperature)
+  spoilTime: 192000000   # 160 Minecraft days (3200 minutes)
+  bestTemperature: -15
 
 suspicious_stew:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 4  # Celsius
+  spoilTime: 38400000    # 32 Minecraft days (640 minutes)
+  bestTemperature: -12
 
 sweet_berries:
-  spoilTime: 86400000 # 1 day in milliseconds
-  bestTemperature: 4  # Celsius
+  spoilTime: 76800000    # 64 Minecraft days (1280 minutes)
+  bestTemperature: -10
 
 tropical_fish:
-  spoilTime: 172800000 # 2 days in milliseconds
-  bestTemperature: -18  # Celsius (frozen)
+  spoilTime: 19200000    # 16 Minecraft days (320 minutes)
+  bestTemperature: -20

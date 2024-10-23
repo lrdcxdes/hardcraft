@@ -1,0 +1,165 @@
+add:
+  chain_chestplate:
+    base:
+      type: LEATHER_CHESTPLATE
+    addition:
+      type: IRON_INGOT
+    result:
+      type: CHAINMAIL_CHESTPLATE
+      damage: 220
+  chain_leggings:
+    base:
+      type: LEATHER_LEGGINGS
+    addition:
+      type: IRON_INGOT
+    result:
+      type: CHAINMAIL_LEGGINGS
+      damage: 205
+  chain_boots:
+    base:
+      type: LEATHER_BOOTS
+    addition:
+      type: IRON_INGOT
+    result:
+      type: CHAINMAIL_BOOTS
+      damage: 175
+  chain_helmet:
+    base:
+      type: LEATHER_HELMET
+    addition:
+      type: IRON_INGOT
+    result:
+      type: CHAINMAIL_HELMET
+      damage: 145
+  iron_chestplate:
+    base:
+      type: CHAINMAIL_CHESTPLATE
+    addition:
+      type: IRON_BLOCK
+    result:
+      type: IRON_CHESTPLATE
+      damage: 200
+  iron_leggings:
+    base:
+      type: CHAINMAIL_LEGGINGS
+    addition:
+      type: IRON_BLOCK
+    result:
+      type: IRON_LEGGINGS
+      damage: 185
+  iron_boots:
+    base:
+      type: CHAINMAIL_BOOTS
+    addition:
+      type: IRON_BLOCK
+    result:
+      type: IRON_BOOTS
+      damage: 155
+  iron_helmet:
+    base:
+      type: CHAINMAIL_HELMET
+    addition:
+      type: IRON_BLOCK
+    result:
+      type: IRON_HELMET
+      damage: 124
+  gold_chestplate:
+    base:
+      type: CHAINMAIL_CHESTPLATE
+    addition:
+      type: GOLD_BLOCK
+    result:
+      type: GOLD_CHESTPLATE
+  gold_leggings:
+    base:
+      type: CHAINMAIL_LEGGINGS
+    addition:
+      type: GOLD_BLOCK
+    result:
+      type: GOLD_LEGGINGS
+  gold_boots:
+    base:
+      type: CHAINMAIL_BOOTS
+    addition:
+      type: GOLD_BLOCK
+    result:
+      type: GOLD_BOOTS
+  gold_helmet:
+    base:
+      type: CHAINMAIL_HELMET
+    addition:
+      type: GOLD_BLOCK
+    result:
+      type: GOLD_HELMET
+  diamond_chestplate:
+    base:
+      type: CHAINMAIL_CHESTPLATE
+    addition:
+      type: DIAMOND_BLOCK
+    result:
+      type: DIAMOND_CHESTPLATE
+      damage: 398
+  diamond_leggings:
+    base:
+      type: CHAINMAIL_LEGGINGS
+    addition:
+      type: DIAMOND_BLOCK
+    result:
+      type: DIAMOND_LEGGINGS
+      damage: 365
+  diamond_boots:
+    base:
+      type: CHAINMAIL_BOOTS
+    addition:
+      type: DIAMOND_BLOCK
+    result:
+      type: DIAMOND_BOOTS
+      damage: 299
+  diamond_helmet:
+    base:
+      type: CHAINMAIL_HELMET
+    addition:
+      type: DIAMOND_BLOCK
+    result:
+      type: DIAMOND_HELMET
+      damage: 233
+  netherite_chestplate:
+    base:
+      type: DIAMOND_CHESTPLATE
+    addition:
+      type: NETHERITE_BLOCK
+    result:
+      type: NETHERITE_CHESTPLATE
+      damage: 392
+  netherite_leggings:
+    base:
+      type: DIAMOND_LEGGINGS
+    addition:
+      type: NETHERITE_BLOCK
+    result:
+      type: NETHERITE_LEGGINGS
+      damage: 355
+  netherite_boots:
+    base:
+      type: DIAMOND_BOOTS
+    addition:
+      type: NETHERITE_BLOCK
+    result:
+      type: NETHERITE_BOOTS
+      damage: 281
+  netherite_helmet:
+    base:
+      type: DIAMOND_HELMET
+    addition:
+      type: NETHERITE_BLOCK
+    result:
+      type: NETHERITE_HELMET
+      damage: 207
+  turtle_helmet:
+    base:
+      type: CHAINMAIL_HELMET
+    addition:
+      type: SCUTE
+    result:
+      type: TURTLE_HELMET
+      damage: 245

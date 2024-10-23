@@ -1,0 +1,33 @@
+add:
+  brick:
+    source:
+      type: CLAY_BALL
+    result:
+      type: BRICK
+    cookingTime: 300
+    experience: 0.0
+
+  nether_brick:
+    source:
+      type: BRICK
+    result:
+      type: NETHER_BRICK
+    cookingTime: 300
+    experience: 0.0
+  cooked_carrot:
+    source:
+      type: CARROT
+    result:
+      displayName: "<lang:bts.cooked_carrot>"
+      type: BAKED_POTATO
+      customModelData: 3
+    cookingTime: 240
+    experience: 0.0
+
+  glass:
+    source:
+      type: [ SAND, RED_SAND ]
+    result:
+      type: GLASS
+    cookingTime: 320
+    experience: 0.0

@@ -1,25 +1,42 @@
 package dev.lrdcxdes.hardcraft.utils
 
-import com.google.common.base.Preconditions
 import dev.lrdcxdes.hardcraft.Hardcraft
-import org.bukkit.*
+import net.minecraft.world.item.SmithingTemplateItem
+import org.bukkit.Color
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
+import org.bukkit.Registry
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.RecipeChoice
-import org.bukkit.inventory.ShapedRecipe
+import org.bukkit.inventory.*
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import java.io.File
-import java.util.*
 
 
 class CustomCrafts {
     private val configFile: File = Hardcraft.instance.dataFolder.resolve("recipes.yml")
+    private val furnaceFile: File = Hardcraft.instance.dataFolder.resolve("furnace.yml")
+    private val smokerFile: File = Hardcraft.instance.dataFolder.resolve("smoker.yml")
+    private val blastfurnaceFile: File = Hardcraft.instance.dataFolder.resolve("blastfurnace.yml")
+    private val campfireFile: File = Hardcraft.instance.dataFolder.resolve("campfire.yml")
+    private val stonecutterFile: File = Hardcraft.instance.dataFolder.resolve("stonecutter.yml")
+    private val smithingFile: File = Hardcraft.instance.dataFolder.resolve("smithing.yml")
 
-    fun loadRecipesFromConfig() {
+    fun loadAll() {
+        this.loadRecipesFromConfig()
+        this.loadFurnaceRecipes()
+        this.loadSmokingRecipes()
+        this.loadCampfireRecipes()
+        this.loadBlastFurnaceRecipes()
+        this.loadStonecutterRecipes()
+        this.loadSmithingRecipes()
+        this.idk()
+    }
+
+    private fun loadRecipesFromConfig() {
         // reset crafts
         Hardcraft.instance.server.resetRecipes()
 
@@ -215,7 +232,7 @@ class CustomCrafts {
         Material.CHERRY_PLANKS
     )
 
-    fun idk() {
+    private fun idk() {
         // remove all beds vanilla recipes
         val bedKeys = arrayOf(
             "white_bed",
@@ -273,4 +290,982 @@ class CustomCrafts {
         }
     }
 
+    private fun loadFurnaceRecipes() {
+        try {
+            if (!furnaceFile.exists()) {
+                Hardcraft.instance.saveResource("furnace.yml", false)
+            }
+            val config: YamlConfiguration = YamlConfiguration.loadConfiguration(furnaceFile)
+
+            val addSection = config.getConfigurationSection("add") ?: return
+            for (recipeName in addSection.getKeys(false)) {
+                println("Loading recipe $recipeName")
+                val resultSection = addSection.getConfigurationSection("$recipeName.result")
+                if (resultSection == null) {
+                    println("Result section is null for $recipeName")
+                    continue
+                }
+
+                var source: Any
+
+                val d = addSection.getConfigurationSection("$recipeName.source") ?: continue
+                var k: String
+                val kTemp = d.getStringList("type")
+                if (kTemp.size > 1) {
+                    val choice = RecipeChoice.MaterialChoice(kTemp.mapNotNull { Material.matchMaterial(it) })
+                    source = choice
+                } else {
+                    k = d.getString("type") ?: continue
+
+                    if (k.startsWith("ANY_")) {
+                        val matName = k.substring(3)
+                        val choice =
+                            RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+                        source = choice
+                    } else {
+                        val mat = Material.matchMaterial(k) ?: continue
+                        val amount = d.getInt("amount", 1)
+                        val customModelData = d.getInt("customModelData", -1)
+                        val displayName = d.getString("displayName")
+                        val color = d.getString("color")
+                        if (amount > 1 || customModelData != -1 || displayName != null || color != null) {
+                            source = RecipeChoice.ExactChoice(ItemStack(mat, amount).apply {
+                                val meta = itemMeta
+                                if (customModelData != -1) {
+                                    meta.setCustomModelData(customModelData)
+                                }
+                                if (displayName != null) {
+                                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                                }
+                                if (color != null) {
+                                    (meta as PotionMeta)
+                                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                                }
+                                itemMeta = meta
+                            })
+                        } else {
+                            source = mat
+                        }
+                    }
+                }
+
+                // Создаем рецепт
+                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
+                val amount = resultSection.getInt("amount", 1)
+                val customModelData = resultSection.getInt("customModelData", -1)
+                val result = ItemStack(mat, amount)
+                if (customModelData != -1) {
+                    val meta = result.itemMeta
+                    meta.setCustomModelData(customModelData)
+                    result.itemMeta = meta
+                }
+                val displayName = resultSection.getString("displayName")
+                if (displayName != null) {
+                    val meta = result.itemMeta
+                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                    result.itemMeta = meta
+                }
+
+                if (resultSection.getInt("damage", -1) != -1) {
+                    val meta = result.itemMeta as Damageable
+                    meta.damage = resultSection.getInt("damage")
+                    result.itemMeta = meta
+                }
+
+                // check if potion effects
+                val potionEffects = resultSection.getConfigurationSection("potionEffects")
+                if (potionEffects != null) {
+                    for (key in potionEffects.getKeys(false)) {
+                        PotionEffectType.BAD_OMEN
+                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
+                        if (effect == null) {
+                            println("Invalid potion effect: $key")
+                            continue
+                        }
+                        val duration = potionEffects.getInt("$key.duration", 1)
+                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
+                        val ambient = potionEffects.getBoolean("$key.ambient", false)
+                        val particles = potionEffects.getBoolean("$key.particles", true)
+                        val icon = potionEffects.getBoolean("$key.icon", true)
+                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
+
+                        val meta = result.itemMeta as PotionMeta
+                        meta.addCustomEffect(effectInstance, true)
+
+                        result.itemMeta = meta
+                    }
+                }
+
+                val color = resultSection.getString("color")
+                if (color != null) {
+                    val meta = result.itemMeta as PotionMeta
+                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                    result.itemMeta = meta
+                }
+
+                println("Adding recipe $recipeName")
+                println("Result: $result")
+                println("Ingredients: $source")
+
+                val cookingTime = resultSection.getInt("cookingTime", 200)
+                val experience = resultSection.getDouble("experience", 0.1).toFloat()
+
+                val recipeName1 = "furnace_$recipeName"
+
+                val recipe: FurnaceRecipe = when (source) {
+                    is Material -> {
+                        FurnaceRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    is RecipeChoice -> {
+                        FurnaceRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException("Invalid source type")
+                    }
+                }
+
+                Hardcraft.instance.server.addRecipe(recipe)
+            }
+        } catch (e: Exception) {
+            Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadSmokingRecipes() {
+        try {
+            if (!smokerFile.exists()) {
+                Hardcraft.instance.saveResource("smoker.yml", false)
+            }
+            val config: YamlConfiguration = YamlConfiguration.loadConfiguration(furnaceFile)
+
+            val addSection = config.getConfigurationSection("add") ?: return
+            for (recipeName in addSection.getKeys(false)) {
+                println("Loading recipe $recipeName")
+                val resultSection = addSection.getConfigurationSection("$recipeName.result")
+                if (resultSection == null) {
+                    println("Result section is null for $recipeName")
+                    continue
+                }
+
+                var source: Any
+
+                val d = addSection.getConfigurationSection("$recipeName.source") ?: continue
+                var k: String
+                val kTemp = d.getStringList("type")
+                if (kTemp.size > 1) {
+                    val choice = RecipeChoice.MaterialChoice(kTemp.mapNotNull { Material.matchMaterial(it) })
+                    source = choice
+                } else {
+                    k = d.getString("type") ?: continue
+
+                    if (k.startsWith("ANY_")) {
+                        val matName = k.substring(3)
+                        val choice =
+                            RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+                        source = choice
+                    } else {
+                        val mat = Material.matchMaterial(k) ?: continue
+                        val amount = d.getInt("amount", 1)
+                        val customModelData = d.getInt("customModelData", -1)
+                        val displayName = d.getString("displayName")
+                        val color = d.getString("color")
+                        if (amount > 1 || customModelData != -1 || displayName != null || color != null) {
+                            source = RecipeChoice.ExactChoice(ItemStack(mat, amount).apply {
+                                val meta = itemMeta
+                                if (customModelData != -1) {
+                                    meta.setCustomModelData(customModelData)
+                                }
+                                if (displayName != null) {
+                                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                                }
+                                if (color != null) {
+                                    (meta as PotionMeta)
+                                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                                }
+                                itemMeta = meta
+                            })
+                        } else {
+                            source = mat
+                        }
+                    }
+                }
+
+                // Создаем рецепт
+                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
+                val amount = resultSection.getInt("amount", 1)
+                val customModelData = resultSection.getInt("customModelData", -1)
+                val result = ItemStack(mat, amount)
+                if (customModelData != -1) {
+                    val meta = result.itemMeta
+                    meta.setCustomModelData(customModelData)
+                    result.itemMeta = meta
+                }
+                val displayName = resultSection.getString("displayName")
+                if (displayName != null) {
+                    val meta = result.itemMeta
+                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                    result.itemMeta = meta
+                }
+
+                if (resultSection.getInt("damage", -1) != -1) {
+                    val meta = result.itemMeta as Damageable
+                    meta.damage = resultSection.getInt("damage")
+                    result.itemMeta = meta
+                }
+
+                // check if potion effects
+                val potionEffects = resultSection.getConfigurationSection("potionEffects")
+                if (potionEffects != null) {
+                    for (key in potionEffects.getKeys(false)) {
+                        PotionEffectType.BAD_OMEN
+                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
+                        if (effect == null) {
+                            println("Invalid potion effect: $key")
+                            continue
+                        }
+                        val duration = potionEffects.getInt("$key.duration", 1)
+                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
+                        val ambient = potionEffects.getBoolean("$key.ambient", false)
+                        val particles = potionEffects.getBoolean("$key.particles", true)
+                        val icon = potionEffects.getBoolean("$key.icon", true)
+                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
+
+                        val meta = result.itemMeta as PotionMeta
+                        meta.addCustomEffect(effectInstance, true)
+
+                        result.itemMeta = meta
+                    }
+                }
+
+                val color = resultSection.getString("color")
+                if (color != null) {
+                    val meta = result.itemMeta as PotionMeta
+                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                    result.itemMeta = meta
+                }
+
+                println("Adding recipe $recipeName")
+                println("Result: $result")
+                println("Ingredients: $source")
+
+                val cookingTime = resultSection.getInt("cookingTime", 200)
+                val experience = resultSection.getDouble("experience", 0.1).toFloat()
+
+                val recipeName1 = "smoker_$recipeName"
+
+                val recipe: SmokingRecipe = when (source) {
+                    is Material -> {
+                        SmokingRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    is RecipeChoice -> {
+                        SmokingRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException("Invalid source type")
+                    }
+                }
+
+                Hardcraft.instance.server.addRecipe(recipe)
+            }
+        } catch (e: Exception) {
+            Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadCampfireRecipes() {
+        try {
+            if (!campfireFile.exists()) {
+                Hardcraft.instance.saveResource("campfire.yml", false)
+            }
+            val config: YamlConfiguration = YamlConfiguration.loadConfiguration(campfireFile)
+
+            val addSection = config.getConfigurationSection("add") ?: return
+            for (recipeName in addSection.getKeys(false)) {
+                println("Loading recipe $recipeName")
+                val resultSection = addSection.getConfigurationSection("$recipeName.result")
+                if (resultSection == null) {
+                    println("Result section is null for $recipeName")
+                    continue
+                }
+
+                var source: Any
+
+                val d = addSection.getConfigurationSection("$recipeName.source") ?: continue
+                var k: String
+                val kTemp = d.getStringList("type")
+                if (kTemp.size > 1) {
+                    val choice = RecipeChoice.MaterialChoice(kTemp.mapNotNull { Material.matchMaterial(it) })
+                    source = choice
+                } else {
+                    k = d.getString("type") ?: continue
+
+                    if (k.startsWith("ANY_")) {
+                        val matName = k.substring(3)
+                        val choice =
+                            RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+                        source = choice
+                    } else {
+                        val mat = Material.matchMaterial(k) ?: continue
+                        val amount = d.getInt("amount", 1)
+                        val customModelData = d.getInt("customModelData", -1)
+                        val displayName = d.getString("displayName")
+                        val color = d.getString("color")
+                        if (amount > 1 || customModelData != -1 || displayName != null || color != null) {
+                            source = RecipeChoice.ExactChoice(ItemStack(mat, amount).apply {
+                                val meta = itemMeta
+                                if (customModelData != -1) {
+                                    meta.setCustomModelData(customModelData)
+                                }
+                                if (displayName != null) {
+                                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                                }
+                                if (color != null) {
+                                    (meta as PotionMeta)
+                                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                                }
+                                itemMeta = meta
+                            })
+                        } else {
+                            source = mat
+                        }
+                    }
+                }
+
+                // Создаем рецепт
+                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
+                val amount = resultSection.getInt("amount", 1)
+                val customModelData = resultSection.getInt("customModelData", -1)
+                val result = ItemStack(mat, amount)
+                if (customModelData != -1) {
+                    val meta = result.itemMeta
+                    meta.setCustomModelData(customModelData)
+                    result.itemMeta = meta
+                }
+                val displayName = resultSection.getString("displayName")
+                if (displayName != null) {
+                    val meta = result.itemMeta
+                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                    result.itemMeta = meta
+                }
+
+                if (resultSection.getInt("damage", -1) != -1) {
+                    val meta = result.itemMeta as Damageable
+                    meta.damage = resultSection.getInt("damage")
+                    result.itemMeta = meta
+                }
+
+                // check if potion effects
+                val potionEffects = resultSection.getConfigurationSection("potionEffects")
+                if (potionEffects != null) {
+                    for (key in potionEffects.getKeys(false)) {
+                        PotionEffectType.BAD_OMEN
+                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
+                        if (effect == null) {
+                            println("Invalid potion effect: $key")
+                            continue
+                        }
+                        val duration = potionEffects.getInt("$key.duration", 1)
+                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
+                        val ambient = potionEffects.getBoolean("$key.ambient", false)
+                        val particles = potionEffects.getBoolean("$key.particles", true)
+                        val icon = potionEffects.getBoolean("$key.icon", true)
+                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
+
+                        val meta = result.itemMeta as PotionMeta
+                        meta.addCustomEffect(effectInstance, true)
+
+                        result.itemMeta = meta
+                    }
+                }
+
+                val color = resultSection.getString("color")
+                if (color != null) {
+                    val meta = result.itemMeta as PotionMeta
+                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                    result.itemMeta = meta
+                }
+
+                println("Adding recipe $recipeName")
+                println("Result: $result")
+                println("Ingredients: $source")
+
+                val cookingTime = resultSection.getInt("cookingTime", 200)
+                val experience = resultSection.getDouble("experience", 0.1).toFloat()
+
+                val recipeName1 = "campfire_$recipeName"
+
+                val recipe: CampfireRecipe = when (source) {
+                    is Material -> {
+                        CampfireRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    is RecipeChoice -> {
+                        CampfireRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException("Invalid source type")
+                    }
+                }
+
+                Hardcraft.instance.server.addRecipe(recipe)
+            }
+        } catch (e: Exception) {
+            Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadBlastFurnaceRecipes() {
+        try {
+            if (!blastfurnaceFile.exists()) {
+                Hardcraft.instance.saveResource("blastfurnace.yml", false)
+            }
+            val config: YamlConfiguration = YamlConfiguration.loadConfiguration(blastfurnaceFile)
+
+            val addSection = config.getConfigurationSection("add") ?: return
+            for (recipeName in addSection.getKeys(false)) {
+                println("Loading recipe $recipeName")
+                val resultSection = addSection.getConfigurationSection("$recipeName.result")
+                if (resultSection == null) {
+                    println("Result section is null for $recipeName")
+                    continue
+                }
+
+                var source: Any
+
+                val d = addSection.getConfigurationSection("$recipeName.source") ?: continue
+                var k: String
+                val kTemp = d.getStringList("type")
+                if (kTemp.size > 1) {
+                    val choice = RecipeChoice.MaterialChoice(kTemp.mapNotNull { Material.matchMaterial(it) })
+                    source = choice
+                } else {
+                    k = d.getString("type") ?: continue
+
+                    if (k.startsWith("ANY_")) {
+                        val matName = k.substring(3)
+                        val choice =
+                            RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+                        source = choice
+                    } else {
+                        val mat = Material.matchMaterial(k) ?: continue
+                        val amount = d.getInt("amount", 1)
+                        val customModelData = d.getInt("customModelData", -1)
+                        val displayName = d.getString("displayName")
+                        val color = d.getString("color")
+                        if (amount > 1 || customModelData != -1 || displayName != null || color != null) {
+                            source = RecipeChoice.ExactChoice(ItemStack(mat, amount).apply {
+                                val meta = itemMeta
+                                if (customModelData != -1) {
+                                    meta.setCustomModelData(customModelData)
+                                }
+                                if (displayName != null) {
+                                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                                }
+                                if (color != null) {
+                                    (meta as PotionMeta)
+                                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                                }
+                                itemMeta = meta
+                            })
+                        } else {
+                            source = mat
+                        }
+                    }
+                }
+
+                // Создаем рецепт
+                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
+                val amount = resultSection.getInt("amount", 1)
+                val customModelData = resultSection.getInt("customModelData", -1)
+                val result = ItemStack(mat, amount)
+                if (customModelData != -1) {
+                    val meta = result.itemMeta
+                    meta.setCustomModelData(customModelData)
+                    result.itemMeta = meta
+                }
+                val displayName = resultSection.getString("displayName")
+                if (displayName != null) {
+                    val meta = result.itemMeta
+                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                    result.itemMeta = meta
+                }
+
+                if (resultSection.getInt("damage", -1) != -1) {
+                    val meta = result.itemMeta as Damageable
+                    meta.damage = resultSection.getInt("damage")
+                    result.itemMeta = meta
+                }
+
+                // check if potion effects
+                val potionEffects = resultSection.getConfigurationSection("potionEffects")
+                if (potionEffects != null) {
+                    for (key in potionEffects.getKeys(false)) {
+                        PotionEffectType.BAD_OMEN
+                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
+                        if (effect == null) {
+                            println("Invalid potion effect: $key")
+                            continue
+                        }
+                        val duration = potionEffects.getInt("$key.duration", 1)
+                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
+                        val ambient = potionEffects.getBoolean("$key.ambient", false)
+                        val particles = potionEffects.getBoolean("$key.particles", true)
+                        val icon = potionEffects.getBoolean("$key.icon", true)
+                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
+
+                        val meta = result.itemMeta as PotionMeta
+                        meta.addCustomEffect(effectInstance, true)
+
+                        result.itemMeta = meta
+                    }
+                }
+
+                val color = resultSection.getString("color")
+                if (color != null) {
+                    val meta = result.itemMeta as PotionMeta
+                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                    result.itemMeta = meta
+                }
+
+                println("Adding recipe $recipeName")
+                println("Result: $result")
+                println("Ingredients: $source")
+
+                val cookingTime = resultSection.getInt("cookingTime", 200)
+                val experience = resultSection.getDouble("experience", 0.1).toFloat()
+
+                val recipeName1 = "blasting_$recipeName"
+
+                val recipe: BlastingRecipe = when (source) {
+                    is Material -> {
+                        BlastingRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    is RecipeChoice -> {
+                        BlastingRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source,
+                            experience,
+                            cookingTime
+                        )
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException("Invalid source type")
+                    }
+                }
+
+                Hardcraft.instance.server.addRecipe(recipe)
+            }
+        } catch (e: Exception) {
+            Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadStonecutterRecipes() {
+        try {
+            if (!stonecutterFile.exists()) {
+                Hardcraft.instance.saveResource("stonecutter.yml", false)
+            }
+            val config: YamlConfiguration = YamlConfiguration.loadConfiguration(stonecutterFile)
+
+            val addSection = config.getConfigurationSection("add") ?: return
+            for (recipeName in addSection.getKeys(false)) {
+                println("Loading recipe $recipeName")
+                val resultSection = addSection.getConfigurationSection("$recipeName.result")
+                if (resultSection == null) {
+                    println("Result section is null for $recipeName")
+                    continue
+                }
+
+                var source: Any
+
+                val d = addSection.getConfigurationSection("$recipeName.source") ?: continue
+                var k: String
+                val kTemp = d.getStringList("type")
+                if (kTemp.size > 1) {
+                    val choice = RecipeChoice.MaterialChoice(kTemp.mapNotNull { Material.matchMaterial(it) })
+                    source = choice
+                } else {
+                    k = d.getString("type") ?: continue
+
+                    if (k.startsWith("ANY_")) {
+                        val matName = k.substring(3)
+                        val choice =
+                            RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+                        source = choice
+                    } else {
+                        val mat = Material.matchMaterial(k) ?: continue
+                        val amount = d.getInt("amount", 1)
+                        val customModelData = d.getInt("customModelData", -1)
+                        val displayName = d.getString("displayName")
+                        val color = d.getString("color")
+                        if (amount > 1 || customModelData != -1 || displayName != null || color != null) {
+                            source = RecipeChoice.ExactChoice(ItemStack(mat, amount).apply {
+                                val meta = itemMeta
+                                if (customModelData != -1) {
+                                    meta.setCustomModelData(customModelData)
+                                }
+                                if (displayName != null) {
+                                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                                }
+                                if (color != null) {
+                                    (meta as PotionMeta)
+                                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                                }
+                                itemMeta = meta
+                            })
+                        } else {
+                            source = mat
+                        }
+                    }
+                }
+
+                // Создаем рецепт
+                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
+                val amount = resultSection.getInt("amount", 1)
+                val customModelData = resultSection.getInt("customModelData", -1)
+                val result = ItemStack(mat, amount)
+                if (customModelData != -1) {
+                    val meta = result.itemMeta
+                    meta.setCustomModelData(customModelData)
+                    result.itemMeta = meta
+                }
+                val displayName = resultSection.getString("displayName")
+                if (displayName != null) {
+                    val meta = result.itemMeta
+                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                    result.itemMeta = meta
+                }
+
+                if (resultSection.getInt("damage", -1) != -1) {
+                    val meta = result.itemMeta as Damageable
+                    meta.damage = resultSection.getInt("damage")
+                    result.itemMeta = meta
+                }
+
+                // check if potion effects
+                val potionEffects = resultSection.getConfigurationSection("potionEffects")
+                if (potionEffects != null) {
+                    for (key in potionEffects.getKeys(false)) {
+                        PotionEffectType.BAD_OMEN
+                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
+                        if (effect == null) {
+                            println("Invalid potion effect: $key")
+                            continue
+                        }
+                        val duration = potionEffects.getInt("$key.duration", 1)
+                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
+                        val ambient = potionEffects.getBoolean("$key.ambient", false)
+                        val particles = potionEffects.getBoolean("$key.particles", true)
+                        val icon = potionEffects.getBoolean("$key.icon", true)
+                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
+
+                        val meta = result.itemMeta as PotionMeta
+                        meta.addCustomEffect(effectInstance, true)
+
+                        result.itemMeta = meta
+                    }
+                }
+
+                val color = resultSection.getString("color")
+                if (color != null) {
+                    val meta = result.itemMeta as PotionMeta
+                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                    result.itemMeta = meta
+                }
+
+                println("Adding recipe $recipeName")
+                println("Result: $result")
+                println("Ingredients: $source")
+
+                val recipeName1 = "sc_$recipeName"
+
+                val recipe: StonecuttingRecipe = when (source) {
+                    is Material -> {
+                        StonecuttingRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source
+                        )
+                    }
+
+                    is RecipeChoice -> {
+                        StonecuttingRecipe(
+                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            result,
+                            source
+                        )
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException("Invalid source type")
+                    }
+                }
+
+                Hardcraft.instance.server.addRecipe(recipe)
+            }
+        } catch (e: Exception) {
+            Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadSmithingRecipes() {
+        try {
+            if (!smithingFile.exists()) {
+                Hardcraft.instance.saveResource("smithing.yml", false)
+            }
+            val config: YamlConfiguration = YamlConfiguration.loadConfiguration(smithingFile)
+
+            val addSection = config.getConfigurationSection("add") ?: return
+            for (recipeName in addSection.getKeys(false)) {
+                println("Loading recipe $recipeName")
+                val resultSection = addSection.getConfigurationSection("$recipeName.result")
+                if (resultSection == null) {
+                    println("Result section is null for $recipeName")
+                    continue
+                }
+
+                var base: Any
+                var addition: Any
+
+                val d = addSection.getConfigurationSection("$recipeName.base") ?: continue
+                var k: String
+                val kTemp = d.getStringList("type")
+                if (kTemp.size > 1) {
+                    val choice = RecipeChoice.MaterialChoice(kTemp.mapNotNull { Material.matchMaterial(it) })
+                    base = choice
+                } else {
+                    k = d.getString("type") ?: continue
+
+                    if (k.startsWith("ANY_")) {
+                        val matName = k.substring(3)
+                        val choice =
+                            RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+                        base = choice
+                    } else {
+                        val mat = Material.matchMaterial(k) ?: continue
+                        val amount = d.getInt("amount", 1)
+                        val customModelData = d.getInt("customModelData", -1)
+                        val displayName = d.getString("displayName")
+                        val color = d.getString("color")
+                        if (amount > 1 || customModelData != -1 || displayName != null || color != null) {
+                            base = RecipeChoice.ExactChoice(ItemStack(mat, amount).apply {
+                                val meta = itemMeta
+                                if (customModelData != -1) {
+                                    meta.setCustomModelData(customModelData)
+                                }
+                                if (displayName != null) {
+                                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                                }
+                                if (color != null) {
+                                    (meta as PotionMeta)
+                                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                                }
+                                itemMeta = meta
+                            })
+                        } else {
+                            base = mat
+                        }
+                    }
+                }
+
+                val d2 = addSection.getConfigurationSection("$recipeName.addition") ?: continue
+                var k2: String
+                val kTemp2 = d2.getStringList("type")
+                if (kTemp2.size > 1) {
+                    val choice = RecipeChoice.MaterialChoice(kTemp2.mapNotNull { Material.matchMaterial(it) })
+                    addition = choice
+                } else {
+                    k2 = d2.getString("type") ?: continue
+
+                    if (k2.startsWith("ANY_")) {
+                        val matName = k2.substring(3)
+                        val choice =
+                            RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+                        addition = choice
+                    } else {
+                        val mat = Material.matchMaterial(k2) ?: continue
+                        val amount = d2.getInt("amount", 1)
+                        val customModelData = d2.getInt("customModelData", -1)
+                        val displayName = d2.getString("displayName")
+                        val color = d2.getString("color")
+                        if (amount > 1 || customModelData != -1 || displayName != null || color != null) {
+                            addition = RecipeChoice.ExactChoice(ItemStack(mat, amount).apply {
+                                val meta = itemMeta
+                                if (customModelData != -1) {
+                                    meta.setCustomModelData(customModelData)
+                                }
+                                if (displayName != null) {
+                                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                                }
+                                if (color != null) {
+                                    (meta as PotionMeta)
+                                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                                }
+                                itemMeta = meta
+                            })
+                        } else {
+                            addition = mat
+                        }
+                    }
+                }
+
+                // Создаем рецепт
+                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
+                val amount = resultSection.getInt("amount", 1)
+                val customModelData = resultSection.getInt("customModelData", -1)
+                val result = ItemStack(mat, amount)
+                if (customModelData != -1) {
+                    val meta = result.itemMeta
+                    meta.setCustomModelData(customModelData)
+                    result.itemMeta = meta
+                }
+                val displayName = resultSection.getString("displayName")
+                if (displayName != null) {
+                    val meta = result.itemMeta
+                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
+                    result.itemMeta = meta
+                }
+
+                if (resultSection.getInt("damage", -1) != -1) {
+                    val meta = result.itemMeta as Damageable
+                    meta.damage = resultSection.getInt("damage")
+                    result.itemMeta = meta
+                }
+
+                // check if potion effects
+                val potionEffects = resultSection.getConfigurationSection("potionEffects")
+                if (potionEffects != null) {
+                    for (key in potionEffects.getKeys(false)) {
+                        PotionEffectType.BAD_OMEN
+                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
+                        if (effect == null) {
+                            println("Invalid potion effect: $key")
+                            continue
+                        }
+                        val duration = potionEffects.getInt("$key.duration", 1)
+                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
+                        val ambient = potionEffects.getBoolean("$key.ambient", false)
+                        val particles = potionEffects.getBoolean("$key.particles", true)
+                        val icon = potionEffects.getBoolean("$key.icon", true)
+                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
+
+                        val meta = result.itemMeta as PotionMeta
+                        meta.addCustomEffect(effectInstance, true)
+
+                        result.itemMeta = meta
+                    }
+                }
+
+                val color = resultSection.getString("color")
+                if (color != null) {
+                    val meta = result.itemMeta as PotionMeta
+                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
+                    result.itemMeta = meta
+                }
+
+                println("Adding recipe $recipeName")
+                println("Result: $result")
+                println("base: $base")
+                println("addition: $addition")
+
+                val recipeName1 = "smithing_$recipeName"
+
+                val baseChoice: RecipeChoice = when (base) {
+                    is Material -> {
+                        RecipeChoice.MaterialChoice(base)
+                    }
+
+                    is RecipeChoice -> {
+                        base
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException("Invalid source type")
+                    }
+                }
+
+                val base2Choice: RecipeChoice = when (addition) {
+                    is Material -> {
+                        RecipeChoice.MaterialChoice(addition)
+                    }
+
+                    is RecipeChoice -> {
+                        addition
+                    }
+
+                    else -> {
+                        throw IllegalArgumentException("Invalid source type")
+                    }
+                }
+
+                val recipe = SmithingTransformRecipe(
+                    NamespacedKey(Hardcraft.instance, recipeName1),
+                    result,
+                    RecipeChoice.empty(),
+                    baseChoice,
+                    base2Choice
+                )
+
+                Hardcraft.instance.server.addRecipe(recipe)
+            }
+        } catch (e: Exception) {
+            Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
+            e.printStackTrace()
+        }
+    }
 }

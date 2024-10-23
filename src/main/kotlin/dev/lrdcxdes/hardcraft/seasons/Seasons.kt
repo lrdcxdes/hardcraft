@@ -151,6 +151,10 @@ class Seasons {
         val blockTemp = block.lightFromBlocks / 2
         envTemp += blockTemp
 
+        val underName = block.getRelative(0, -1, 0).type.name
+        val haveIceUnder = if (underName.contains("PACKED_ICE")) -15 else if (underName.contains("MAGMA")) 15 else 0
+        envTemp += haveIceUnder
+
         blockTemperatureCache[block] = envTemp to currentTime
 
         return envTemp

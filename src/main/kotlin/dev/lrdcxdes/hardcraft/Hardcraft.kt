@@ -1,12 +1,13 @@
 package dev.lrdcxdes.hardcraft
 
 import com.mojang.brigadier.Command
+import dev.lrdcxdes.hardcraft.customtables.CustomTableListen
 import dev.lrdcxdes.hardcraft.event.*
 import dev.lrdcxdes.hardcraft.raids.Guardian
 import dev.lrdcxdes.hardcraft.raids.PrivateListener
 import dev.lrdcxdes.hardcraft.seasons.Seasons
-import dev.lrdcxdes.hardcraft.seasons.getTemperature
 import dev.lrdcxdes.hardcraft.seasons.getTemperatureAsync
+import dev.lrdcxdes.hardcraft.utils.Chuma
 import dev.lrdcxdes.hardcraft.utils.CustomCrafts
 import dev.lrdcxdes.hardcraft.utils.Darkphobia
 import dev.lrdcxdes.hardcraft.utils.TorchAndCampfire
@@ -28,14 +29,18 @@ import org.bukkit.plugin.java.JavaPlugin
 
 class Hardcraft : JavaPlugin() {
     val random: java.util.Random = java.util.Random()
-    private val entitySpawnListener = EntitySpawnListener()
+    private lateinit var entitySpawnListener: EntitySpawnListener
     private lateinit var privateListener: PrivateListener
     lateinit var fernListener: FernListener
+    lateinit var foodListener: FoodListener
     lateinit var seasons: Seasons
 
     override fun onEnable() {
         // Plugin startup logic
         instance = this
+
+        // CustomEntities
+        entitySpawnListener = EntitySpawnListener()
 
         for (entity in server.worlds.flatMap(World::getEntities)) {
             entitySpawnListener.setupGoals(null, entity, entity.location)
@@ -43,8 +48,7 @@ class Hardcraft : JavaPlugin() {
 
         // CustomCrafts
         val cc = CustomCrafts()
-        cc.loadRecipesFromConfig()
-        cc.idk()
+        cc.loadAll()
 
         val manager = this.lifecycleManager
         manager.registerEventHandler(LifecycleEvents.COMMANDS) { event ->
@@ -66,10 +70,10 @@ class Hardcraft : JavaPlugin() {
                         val player = context.source.sender as? Player ?: return@executes Command.SINGLE_SUCCESS
 
                         player.getTemperatureAsync { temp ->
-                            val seasonTemp = seasons.getTemperature()
-                            val biomeTemp = seasons.getTemperature(player.location.block.biome)
-                            val skyTemp = seasons.getSkyLightTemp(player)
-                            val blockTemp = seasons.getBlockTemp(player.location.block)
+                            val seasonTemp = seasons.getTemperature().toString()
+                            val biomeTemp = seasons.getTemperature(player.location.block.biome).toString()
+                            val skyTemp = seasons.getSkyLightTemp(player).toString()
+                            val blockTemp = seasons.getBlockTemp(player.location.block).toString()
                             player.sendMessage(
                                 minimessage.deserialize(
                                     """
@@ -100,8 +104,7 @@ class Hardcraft : JavaPlugin() {
                         val player = context.source.sender as? Player ?: return@executes Command.SINGLE_SUCCESS
 
                         // reload
-                        cc.loadRecipesFromConfig()
-                        cc.idk()
+                        cc.loadAll()
 
                         player.sendMessage(
                             minimessage.deserialize(
@@ -124,7 +127,8 @@ class Hardcraft : JavaPlugin() {
         }
 
         // food freshness
-        server.pluginManager.registerEvents(FoodListener(), this)
+        foodListener = FoodListener()
+        server.pluginManager.registerEvents(foodListener, this)
         // food grow
         server.pluginManager.registerEvents(FoodGrowListener(), this)
 
@@ -167,10 +171,22 @@ class Hardcraft : JavaPlugin() {
         // StripListener
         server.pluginManager.registerEvents(StripListener(), this)
 
+        // CustomItemsSpawn
+        server.pluginManager.registerEvents(CustomItemsSpawn(), this)
+
+        // Chuma
+        val chuma = Chuma()
+
         // FernListener
         fernListener = FernListener()
         fernListener.init()
         server.pluginManager.registerEvents(fernListener, this)
+
+        // CustomTableListen
+        server.pluginManager.registerEvents(CustomTableListen(), this)
+
+        // JoinListener
+        server.pluginManager.registerEvents(JoinListener(), this)
 
         // Raids
 //        raids()

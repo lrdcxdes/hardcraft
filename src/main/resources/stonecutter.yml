@@ -1,0 +1,1151 @@
+add:
+  stripped_oak_log:
+    source:
+      type: OAK_LOG
+    result:
+      type: STRIPPED_OAK_LOG
+  oak_door:
+    source:
+      type: OAK_LOG
+    result:
+      type: OAK_DOOR
+  oak_boat:
+    source:
+      type: OAK_LOG
+    result:
+      type: OAK_BOAT
+  stripped_spruce_log:
+    source:
+      type: SPRUCE_LOG
+    result:
+      type: STRIPPED_SPRUCE_LOG
+  spruce_door:
+    source:
+      type: SPRUCE_LOG
+    result:
+      type: SPRUCE_DOOR
+  spruce_boat:
+    source:
+      type: SPRUCE_LOG
+    result:
+      type: SPRUCE_BOAT
+  stripped_birch_log:
+    source:
+      type: BIRCH_LOG
+    result:
+      type: STRIPPED_BIRCH_LOG
+  birch_door:
+    source:
+      type: BIRCH_LOG
+    result:
+      type: BIRCH_DOOR
+  birch_boat:
+    source:
+      type: BIRCH_LOG
+    result:
+      type: BIRCH_BOAT
+
+  stripped_jungle_log:
+    source:
+      type: JUNGLE_LOG
+    result:
+      type: STRIPPED_JUNGLE_LOG
+  jungle_door:
+    source:
+      type: JUNGLE_LOG
+    result:
+      type: JUNGLE_DOOR
+  jungle_boat:
+    source:
+      type: JUNGLE_LOG
+    result:
+      type: JUNGLE_BOAT
+
+  stripped_acacia_log:
+    source:
+      type: ACACIA_LOG
+    result:
+      type: STRIPPED_ACACIA_LOG
+  acacia_door:
+    source:
+      type: ACACIA_LOG
+    result:
+      type: ACACIA_DOOR
+  acacia_boat:
+    source:
+      type: ACACIA_LOG
+    result:
+      type: ACACIA_BOAT
+
+  stripped_dark_oak_log:
+    source:
+      type: DARK_OAK_LOG
+    result:
+      type: STRIPPED_DARK_OAK_LOG
+  dark_oak_door:
+    source:
+      type: DARK_OAK_LOG
+    result:
+      type: DARK_OAK_DOOR
+  dark_oak_boat:
+    source:
+      type: DARK_OAK_LOG
+    result:
+      type: DARK_OAK_BOAT
+
+  stripped_crimson_stem:
+    source:
+      type: CRIMSON_STEM
+    result:
+      type: STRIPPED_CRIMSON_STEM
+  crimson_door:
+    source:
+      type: CRIMSON_STEM
+    result:
+      type: CRIMSON_DOOR
+
+  stripped_warped_stem:
+    source:
+      type: WARPED_STEM
+    result:
+      type: STRIPPED_WARPED_STEM
+  warped_door:
+    source:
+      type: WARPED_STEM
+    result:
+      type: WARPED_DOOR
+
+  stripped_mangrove_log:
+    source:
+      type: MANGROVE_LOG
+    result:
+      type: STRIPPED_MANGROVE_LOG
+  mangrove_door:
+    source:
+      type: MANGROVE_LOG
+    result:
+      type: MANGROVE_DOOR
+  mangrove_boat:
+    source:
+      type: MANGROVE_LOG
+    result:
+      type: MANGROVE_BOAT
+
+  stripped_cherry_log:
+    source:
+      type: CHERRY_LOG
+    result:
+      type: STRIPPED_CHERRY_LOG
+  cherry_door:
+    source:
+      type: CHERRY_LOG
+    result:
+      type: CHERRY_DOOR
+  cherry_boat:
+    source:
+      type: CHERRY_LOG
+    result:
+      type: CHERRY_BOAT
+
+  stripped_bamboo:
+    source:
+      type: BAMBOO_BLOCK
+    result:
+      type: STRIPPED_BAMBOO_BLOCK
+
+  bamboo_door:
+    source:
+      type: BAMBOO_BLOCK
+    result:
+      type: BAMBOO_DOOR
+
+  bamboo_raft:
+    source:
+      type: BAMBOO_BLOCK
+    result:
+      type: BAMBOO_RAFT
+
+  oak_planks:
+    source:
+      type: STRIPPED_OAK_LOG
+    result:
+      type: OAK_PLANKS
+
+  oak_stairs:
+    source:
+      type: STRIPPED_OAK_LOG
+    result:
+      type: OAK_STAIRS
+
+  oak_crafting_table:
+    source:
+      type: STRIPPED_OAK_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  oak_chest:
+    source:
+      type: STRIPPED_OAK_LOG
+    result:
+      type: CHEST
+
+  oak_slab:
+    source:
+      type: STRIPPED_OAK_LOG
+    result:
+      type: OAK_SLAB
+      amount: 2
+
+  birch_planks:
+    source:
+      type: STRIPPED_BIRCH_LOG
+    result:
+      type: BIRCH_PLANKS
+
+  birch_stairs:
+    source:
+      type: STRIPPED_BIRCH_LOG
+    result:
+      type: BIRCH_STAIRS
+
+  birch_crafting_table:
+    source:
+      type: STRIPPED_BIRCH_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  birch_chest:
+    source:
+      type: STRIPPED_BIRCH_LOG
+    result:
+      type: CHEST
+
+  birch_slab:
+    source:
+      type: STRIPPED_BIRCH_LOG
+    result:
+      type: BIRCH_SLAB
+      amount: 2
+
+  jungle_planks:
+    source:
+      type: STRIPPED_JUNGLE_LOG
+    result:
+      type: JUNGLE_PLANKS
+
+  jungle_stairs:
+    source:
+      type: STRIPPED_JUNGLE_LOG
+    result:
+      type: JUNGLE_STAIRS
+
+  jungle_crafting_table:
+    source:
+      type: STRIPPED_JUNGLE_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  jungle_chest:
+    source:
+      type: STRIPPED_JUNGLE_LOG
+    result:
+      type: CHEST
+
+  jungle_slab:
+    source:
+      type: STRIPPED_JUNGLE_LOG
+    result:
+      type: JUNGLE_SLAB
+      amount: 2
+
+  acacia_planks:
+    source:
+      type: STRIPPED_ACACIA_LOG
+    result:
+      type: ACACIA_PLANKS
+
+  acacia_stairs:
+    source:
+      type: STRIPPED_ACACIA_LOG
+    result:
+      type: ACACIA_STAIRS
+
+  acacia_crafting_table:
+    source:
+      type: STRIPPED_ACACIA_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  acacia_chest:
+    source:
+      type: STRIPPED_ACACIA_LOG
+    result:
+      type: CHEST
+
+  acacia_slab:
+    source:
+      type: STRIPPED_ACACIA_LOG
+    result:
+      type: ACACIA_SLAB
+      amount: 2
+
+  dark_oak_planks:
+    source:
+      type: STRIPPED_DARK_OAK_LOG
+    result:
+      type: DARK_OAK_PLANKS
+
+  dark_oak_stairs:
+    source:
+      type: STRIPPED_DARK_OAK_LOG
+    result:
+      type: DARK_OAK_STAIRS
+
+  dark_oak_crafting_table:
+    source:
+      type: STRIPPED_DARK_OAK_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  dark_oak_chest:
+    source:
+      type: STRIPPED_DARK_OAK_LOG
+    result:
+      type: CHEST
+
+  dark_oak_slab:
+    source:
+      type: STRIPPED_DARK_OAK_LOG
+    result:
+      type: DARK_OAK_SLAB
+      amount: 2
+
+  crimson_planks:
+    source:
+      type: STRIPPED_CRIMSON_STEM
+    result:
+      type: CRIMSON_PLANKS
+
+  crimson_stairs:
+    source:
+      type: STRIPPED_CRIMSON_STEM
+    result:
+      type: CRIMSON_STAIRS
+
+  crimson_crafting_table:
+    source:
+      type: STRIPPED_CRIMSON_STEM
+    result:
+      type: CRAFTING_TABLE
+
+  crimson_chest:
+    source:
+      type: STRIPPED_CRIMSON_STEM
+    result:
+      type: CHEST
+
+  crimson_slab:
+    source:
+      type: STRIPPED_CRIMSON_STEM
+    result:
+      type: CRIMSON_SLAB
+      amount: 2
+
+  warped_planks:
+    source:
+      type: STRIPPED_WARPED_STEM
+    result:
+      type: WARPED_PLANKS
+
+  warped_stairs:
+    source:
+      type: STRIPPED_WARPED_STEM
+    result:
+      type: WARPED_STAIRS
+
+  warped_crafting_table:
+    source:
+      type: STRIPPED_WARPED_STEM
+    result:
+      type: CRAFTING_TABLE
+
+  warped_chest:
+    source:
+      type: STRIPPED_WARPED_STEM
+    result:
+      type: CHEST
+
+  warped_slab:
+    source:
+      type: STRIPPED_WARPED_STEM
+    result:
+      type: WARPED_SLAB
+      amount: 2
+
+  mangrove_planks:
+    source:
+      type: STRIPPED_MANGROVE_LOG
+    result:
+      type: MANGROVE_PLANKS
+
+  mangrove_stairs:
+    source:
+      type: STRIPPED_MANGROVE_LOG
+    result:
+      type: MANGROVE_STAIRS
+
+  mangrove_crafting_table:
+    source:
+      type: STRIPPED_MANGROVE_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  mangrove_chest:
+    source:
+      type: STRIPPED_MANGROVE_LOG
+    result:
+      type: CHEST
+
+  mangrove_slab:
+    source:
+      type: STRIPPED_MANGROVE_LOG
+    result:
+      type: MANGROVE_SLAB
+      amount: 2
+
+  cherry_planks:
+    source:
+      type: STRIPPED_CHERRY_LOG
+    result:
+      type: CHERRY_PLANKS
+
+  cherry_stairs:
+    source:
+      type: STRIPPED_CHERRY_LOG
+    result:
+      type: CHERRY_STAIRS
+
+  cherry_crafting_table:
+    source:
+      type: STRIPPED_CHERRY_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  cherry_chest:
+    source:
+      type: STRIPPED_CHERRY_LOG
+    result:
+      type: CHEST
+
+  cherry_slab:
+    source:
+      type: STRIPPED_CHERRY_LOG
+    result:
+      type: CHERRY_SLAB
+      amount: 2
+
+  bamboo_planks:
+    source:
+      type: STRIPPED_BAMBOO_BLOCK
+    result:
+      type: BAMBOO_PLANKS
+
+  bamboo_stairs:
+    source:
+      type: STRIPPED_BAMBOO_BLOCK
+    result:
+      type: BAMBOO_STAIRS
+
+  bamboo_crafting_table:
+    source:
+      type: STRIPPED_BAMBOO_BLOCK
+    result:
+      type: CRAFTING_TABLE
+
+  bamboo_chest:
+    source:
+      type: STRIPPED_BAMBOO_BLOCK
+    result:
+      type: CHEST
+
+  bamboo_slab:
+    source:
+      type: STRIPPED_BAMBOO_BLOCK
+    result:
+      type: BAMBOO_SLAB
+      amount: 2
+
+  oak_planks_slab:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: OAK_SLAB
+      amount: 2
+
+  oak_planks_sticks:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  oak_planks_fence:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: OAK_FENCE
+      amount: 3
+
+  oak_planks_scaffolding:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  oak_planks_gate:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: OAK_FENCE_GATE
+      amount: 2
+
+  oak_planks_trapdoor:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: OAK_TRAPDOOR
+      amount: 2
+
+  oak_planks_pressure_plate:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: OAK_PRESSURE_PLATE
+      amount: 4
+
+  oak_planks_button:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: OAK_BUTTON
+      amount: 4
+
+  # Spruce
+  spruce_planks_slab:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SPRUCE_SLAB
+      amount: 2
+
+  spruce_planks_sticks:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  spruce_planks_fence:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SPRUCE_FENCE
+      amount: 3
+
+  spruce_planks_scaffolding:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  spruce_planks_gate:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SPRUCE_FENCE_GATE
+      amount: 2
+
+  spruce_planks_trapdoor:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SPRUCE_TRAPDOOR
+      amount: 2
+
+  spruce_planks_pressure_plate:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SPRUCE_PRESSURE_PLATE
+      amount: 4
+
+  spruce_planks_button:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SPRUCE_BUTTON
+      amount: 4
+
+  # Birch
+  birch_planks_slab:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: BIRCH_SLAB
+      amount: 2
+
+  birch_planks_sticks:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  birch_planks_fence:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: BIRCH_FENCE
+      amount: 3
+
+  birch_planks_scaffolding:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  birch_planks_gate:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: BIRCH_FENCE_GATE
+      amount: 2
+
+  birch_planks_trapdoor:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: BIRCH_TRAPDOOR
+      amount: 2
+
+  birch_planks_pressure_plate:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: BIRCH_PRESSURE_PLATE
+      amount: 4
+
+  birch_planks_button:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: BIRCH_BUTTON
+      amount: 4
+
+  # Jungle
+  jungle_planks_slab:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: JUNGLE_SLAB
+      amount: 2
+
+  jungle_planks_sticks:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  jungle_planks_fence:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: JUNGLE_FENCE
+      amount: 3
+
+  jungle_planks_scaffolding:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  jungle_planks_gate:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: JUNGLE_FENCE_GATE
+      amount: 2
+
+  jungle_planks_trapdoor:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: JUNGLE_TRAPDOOR
+      amount: 2
+
+  jungle_planks_pressure_plate:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: JUNGLE_PRESSURE_PLATE
+      amount: 4
+
+  jungle_planks_button:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: JUNGLE_BUTTON
+      amount: 4
+
+  # Acacia
+  acacia_planks_slab:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: ACACIA_SLAB
+      amount: 2
+
+  acacia_planks_sticks:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  acacia_planks_fence:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: ACACIA_FENCE
+      amount: 3
+
+  acacia_planks_scaffolding:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  acacia_planks_gate:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: ACACIA_FENCE_GATE
+      amount: 2
+
+  acacia_planks_trapdoor:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: ACACIA_TRAPDOOR
+      amount: 2
+
+  acacia_planks_pressure_plate:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: ACACIA_PRESSURE_PLATE
+      amount: 4
+
+  acacia_planks_button:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: ACACIA_BUTTON
+      amount: 4
+
+  # Dark Oak
+  dark_oak_planks_slab:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: DARK_OAK_SLAB
+      amount: 2
+
+  dark_oak_planks_sticks:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  dark_oak_planks_fence:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: DARK_OAK_FENCE
+      amount: 3
+
+  dark_oak_planks_scaffolding:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  dark_oak_planks_gate:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: DARK_OAK_FENCE_GATE
+      amount: 2
+
+  dark_oak_planks_trapdoor:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: DARK_OAK_TRAPDOOR
+      amount: 2
+
+  dark_oak_planks_pressure_plate:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: DARK_OAK_PRESSURE_PLATE
+      amount: 4
+
+  dark_oak_planks_button:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: DARK_OAK_BUTTON
+      amount: 4
+
+  # Mangrove
+  mangrove_planks_slab:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: MANGROVE_SLAB
+      amount: 2
+
+  mangrove_planks_sticks:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  mangrove_planks_fence:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: MANGROVE_FENCE
+      amount: 3
+
+  mangrove_planks_scaffolding:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  mangrove_planks_gate:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: MANGROVE_FENCE_GATE
+      amount: 2
+
+  mangrove_planks_trapdoor:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: MANGROVE_TRAPDOOR
+      amount: 2
+
+  mangrove_planks_pressure_plate:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: MANGROVE_PRESSURE_PLATE
+      amount: 4
+
+  mangrove_planks_button:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: MANGROVE_BUTTON
+      amount: 4
+
+  # Cherry
+  cherry_planks_slab:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: CHERRY_SLAB
+      amount: 2
+
+  cherry_planks_sticks:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  cherry_planks_fence:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: CHERRY_FENCE
+      amount: 3
+
+  cherry_planks_scaffolding:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  cherry_planks_gate:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: CHERRY_FENCE_GATE
+      amount: 2
+
+  cherry_planks_trapdoor:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: CHERRY_TRAPDOOR
+      amount: 2
+
+  cherry_planks_pressure_plate:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: CHERRY_PRESSURE_PLATE
+      amount: 4
+
+  cherry_planks_button:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: CHERRY_BUTTON
+      amount: 4
+
+  # Bamboo
+  bamboo_planks_slab:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: BAMBOO_SLAB
+      amount: 2
+
+  bamboo_planks_sticks:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  bamboo_planks_fence:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: BAMBOO_FENCE
+      amount: 3
+
+  bamboo_planks_scaffolding:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  bamboo_planks_gate:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: BAMBOO_FENCE_GATE
+      amount: 2
+
+  bamboo_planks_trapdoor:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: BAMBOO_TRAPDOOR
+      amount: 2
+
+  bamboo_planks_pressure_plate:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: BAMBOO_PRESSURE_PLATE
+      amount: 4
+
+  bamboo_planks_button:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: BAMBOO_BUTTON
+      amount: 4
+
+  # Crimson
+  crimson_planks_slab:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: CRIMSON_SLAB
+      amount: 2
+
+  crimson_planks_sticks:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  crimson_planks_fence:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: CRIMSON_FENCE
+      amount: 3
+
+  crimson_planks_scaffolding:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  crimson_planks_gate:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: CRIMSON_FENCE_GATE
+      amount: 2
+
+  crimson_planks_trapdoor:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: CRIMSON_TRAPDOOR
+      amount: 2
+
+  crimson_planks_pressure_plate:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: CRIMSON_PRESSURE_PLATE
+      amount: 4
+
+  crimson_planks_button:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: CRIMSON_BUTTON
+      amount: 4
+
+  # Warped
+  warped_planks_slab:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: WARPED_SLAB
+      amount: 2
+
+  warped_planks_sticks:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  warped_planks_fence:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: WARPED_FENCE
+      amount: 3
+
+  warped_planks_scaffolding:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  warped_planks_gate:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: WARPED_FENCE_GATE
+      amount: 2
+
+  warped_planks_trapdoor:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: WARPED_TRAPDOOR
+      amount: 2
+
+  warped_planks_pressure_plate:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: WARPED_PRESSURE_PLATE
+      amount: 4
+
+  warped_planks_button:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: WARPED_BUTTON
+      amount: 4
+
+  stone_smooth_stone:
+    source:
+      type: STONE
+    result:
+      type: SMOOTH_STONE
+
+  stone_stone_pressure_plate:
+    source:
+      type: STONE
+    result:
+      type: STONE_PRESSURE_PLATE
+      amount: 4
+
+  stone_stone_button:
+    source:
+      type: STONE
+    result:
+      type: STONE_BUTTON
+      amount: 4
+
+  cobblestone_smooth_stone:
+    source:
+      type: COBBLESTONE
+    result:
+      type: SMOOTH_STONE
+
+  cobblestone_stone_pressure_plate:
+    source:
+      type: COBBLESTONE
+    result:
+      type: STONE_PRESSURE_PLATE
+      amount: 4
+
+  cobblestone_stone_button:
+    source:
+      type: COBBLESTONE
+    result:
+      type: STONE_BUTTON
+      amount: 4
+
+  nether_brick_fence:
+    source:
+      type: NETHER_BRICK
+    result:
+      type: NETHER_BRICK_FENCE
+      amount: 2
+
+  #

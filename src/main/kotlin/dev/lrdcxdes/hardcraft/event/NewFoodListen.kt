@@ -2,6 +2,7 @@ package dev.lrdcxdes.hardcraft.event
 
 import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.Material
+import org.bukkit.Particle
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
@@ -9,6 +10,16 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 class NewFoodListen : Listener {
+    private val zazaEffects = listOf(
+        PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 0),
+        PotionEffect(PotionEffectType.LUCK, 60 * 20, 0),
+        PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 20, 0),
+        PotionEffect(PotionEffectType.STRENGTH, 20 * 20, 0),
+        PotionEffect(PotionEffectType.SPEED, 20 * 20, 0),
+        PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 20, 0),
+        PotionEffect(PotionEffectType.HASTE, 20 * 20, 0),
+    )
+
     @EventHandler
     fun onTryEat(event: PlayerInteractEvent) {
         // check if cacao beans
@@ -26,6 +37,10 @@ class NewFoodListen : Listener {
                 event.player.foodLevel += 1
             }
         } else if (event.item?.type?.name?.contains("SEEDS") == true) {
+            if (event.clickedBlock?.type?.equals(Material.FARMLAND) == true) {
+                return
+            }
+
             // 20% chance to eat
             if (event.player.foodLevel < 20 && event.player.saturation < 5 && event.player.exhaustion < 4) {
                 event.item!!.amount -= 1
@@ -39,26 +54,29 @@ class NewFoodListen : Listener {
         } else if (event.item?.type == Material.FLOWER_BANNER_PATTERN && event.item?.itemMeta?.customModelData == 3) {
             event.item!!.amount -= 1
             // /playsound minecraft:entity.blaze.ambient master lrdcxdes 0.2 2.0
-            // +0.5 block right in front of your eyes
+            // +0.5 block straight in front of your eyes
+            val loc = event.player.eyeLocation.add(event.player.location.direction.multiply(0.1))
+
             event.player.playSound(
-                event.player.eyeLocation.add(event.player.location.direction.multiply(0.1)).block.location,
+                loc,
                 "minecraft:entity.blaze.ambient",
                 0.2f,
                 2.0f
             )
 
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.REGENERATION, 10 * 20, 0))
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.LUCK, 60 * 20, 0))
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 20, 0))
+            // smoke effect
+            loc.world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, loc, 10, 0.1, 0.1, 0.1, 0.1)
+
+            // random zaza effect
+            val effect = zazaEffects[Hardcraft.instance.random.nextInt(zazaEffects.size)]
+            event.player.addPotionEffect(effect)
+
+            event.player.foodLevel = (event.player.foodLevel - 3).coerceAtLeast(0)
 
             // random if 3%
             if (Hardcraft.instance.random.nextInt(100) < 3) {
                 event.player.playSound(event.player.location, "minecraft:music_disc.stal", 0.6f, 1.5f)
             }
-
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.STRENGTH, 10 * 20, 0))
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.SPEED, 20 * 20, 0))
-            event.player.addPotionEffect(PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 20, 0))
         }
     }
 }

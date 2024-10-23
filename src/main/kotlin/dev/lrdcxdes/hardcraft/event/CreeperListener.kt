@@ -51,7 +51,13 @@ fun Creeper.defuse(player: Player) {
 
     val redstoneAmount = DEFUSE_LOOT_RANGE.random()
     player.sendMessage("You defused the creeper! You got $redstoneAmount redstone.")
-    player.inventory.addItem(ItemStack(Material.REDSTONE, redstoneAmount))
+
+    val item = ItemStack(Material.REDSTONE, redstoneAmount)
+    val meta = item.itemMeta
+    meta.persistentDataContainer.set(Hardcraft.instance.key("itemChecked"), PersistentDataType.BOOLEAN, true)
+    item.itemMeta = meta
+
+    player.inventory.addItem(item)
 
     this.persistentDataContainer.set(CreeperListener.DEFUSED, PersistentDataType.BOOLEAN, true)
 

@@ -1,0 +1,19 @@
+add:
+  bread:
+    source:
+      displayName: "<lang:bts.dough>"
+      type: WHITE_DYE
+      customModelData: 4
+    result:
+      type: BREAD
+    cookingTime: 160
+    experience: 0.25
+  cooked_carrot:
+    source:
+      type: CARROT
+    result:
+      displayName: "<lang:bts.cooked_carrot>"
+      type: BAKED_POTATO
+      customModelData: 3
+    cookingTime: 80
+    experience: 0.1

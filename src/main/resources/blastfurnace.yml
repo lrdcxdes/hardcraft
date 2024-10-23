@@ -1,0 +1,48 @@
+add:
+  brick:
+    source:
+      type: CLAY_BALL
+    result:
+      type: BRICK
+    cookingTime: 80
+    experience: 0.0
+
+  nether_brick:
+    source:
+      type: BRICK
+    result:
+      type: NETHER_BRICK
+    cookingTime: 120
+    experience: 0.0
+
+  bricks:
+    source:
+      type: CLAY
+    result:
+      type: BRICKS
+    cookingTime: 120
+    experience: 0.0
+
+  nether_bricks:
+    source:
+      type: BRICKS
+    result:
+      type: NETHER_BRICKS
+    cookingTime: 120
+    experience: 0.0
+
+  red_nether_bricks:
+    source:
+      type: NETHER_BRICKS
+    result:
+      type: RED_NETHER_BRICKS
+    cookingTime: 120
+    experience: 0.0
+
+  glass:
+    source:
+      type: [ SAND, RED_SAND ]
+    result:
+      type: GLASS
+    cookingTime: 80
+    experience: 0.05

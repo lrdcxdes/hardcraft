@@ -15,6 +15,11 @@ class TorchAndCampfire {
         override fun run() {
             // check torches near all players
             for (player in Hardcraft.instance.server.onlinePlayers) {
+                // ignore players in creative mode or in spectator mode
+                if (player.gameMode == org.bukkit.GameMode.CREATIVE || player.gameMode == org.bukkit.GameMode.SPECTATOR) {
+                    continue
+                }
+
                 val location = player.location
                 val range = (location.world.viewDistance * 16) / 4
                 for (x in -range..range) {
@@ -63,6 +68,8 @@ class TorchAndCampfire {
                                     val data = block.blockData as Campfire
                                     data.isLit = false
                                     block.blockData = data
+
+                                    block.removeMetadata("campfireTime", Hardcraft.instance)
 
                                     block.location.world.playSound(
                                         block.location,

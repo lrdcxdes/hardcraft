@@ -75,7 +75,7 @@ class GardenListener : Listener {
             return
         }
         loadedChunks.add(chunk.chunkKey)
-        val oldGardensSize = gardens.size
+
         for (x in 0..15) {
             for (z in 0..15) {
                 for (y in 0..255) {
@@ -114,25 +114,30 @@ class Gardens {
                             return
                         }
                         if (spawnSilverfish && Math.random() < spawnSilverfishChange) {
-                            garden.type = Material.AIR
-                            // Set the block below to rooted dirt
-                            val underBlock = garden.getRelative(0, -1, 0)
-                            if (underBlock.type in arrayOf(
-                                    Material.DIRT,
-                                    Material.GRASS_BLOCK,
-                                    Material.PODZOL,
-                                    Material.COARSE_DIRT,
-                                    Material.FARMLAND
-                                )
-                            ) {
-                                underBlock.type = Material.ROOTED_DIRT
-                            }
-                            val silverfish = CustomSilverfish((world as CraftWorld).handle)
-                            silverfish.spawn(garden.location.add(0.5, 0.0, 0.5))
+                            object : BukkitRunnable() {
+                                override fun run() {
+                                    garden.type = Material.AIR
+                                    // Set the block below to rooted dirt
+                                    val underBlock = garden.getRelative(0, -1, 0)
+                                    if (underBlock.type in arrayOf(
+                                            Material.DIRT,
+                                            Material.GRASS_BLOCK,
+                                            Material.PODZOL,
+                                            Material.COARSE_DIRT,
+                                            Material.FARMLAND
+                                        )
+                                    ) {
+                                        underBlock.type = Material.ROOTED_DIRT
+                                    }
+
+                                    val silverfish = CustomSilverfish((world as CraftWorld).handle)
+                                    silverfish.spawn(garden.location.add(0.5, 0.0, 0.5))
+                                }
+                            }.runTask(Hardcraft.instance)
                         }
                     }
                 }
-            }.runTaskTimer(Hardcraft.instance, 0, 20L * 30)
+            }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 60)
         }
 
         fun addBlock(block: Block) {

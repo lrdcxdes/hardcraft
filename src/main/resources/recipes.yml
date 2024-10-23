@@ -547,16 +547,16 @@ add:
       - "CTC"
       - "RXR"
     ingredients:
-        I:
-          type: IRON_INGOT
-        C:
-          type: COPPER_INGOT
-        T:
-          type: CRAFTING_TABLE
-        R:
-          type: REDSTONE
-        X:
-          type: DROPPER
+      I:
+        type: IRON_INGOT
+      C:
+        type: COPPER_INGOT
+      T:
+        type: CRAFTING_TABLE
+      R:
+        type: REDSTONE
+      X:
+        type: DROPPER
   hopper:
     result:
       type: HOPPER
@@ -623,14 +623,14 @@ add:
       - "TCT"
       - "BRB"
     ingredients:
-        T:
-          type: REDSTONE_TORCH
-        C:
-          type: COPPER_INGOT
-        B:
-          type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
-        R:
-          type: REDSTONE
+      T:
+        type: REDSTONE_TORCH
+      C:
+        type: COPPER_INGOT
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+      R:
+        type: REDSTONE
   comparator:
     result:
       type: COMPARATOR
@@ -851,16 +851,16 @@ add:
       - "WFC"
       - " B "
     ingredients:
-        W:
-          type: ANY_SEEDS
-        F:
-          type: WHITE_DYE
-          customModelData: 3
-          displayName: "<lang:bts.flour>"
-        C:
-          type: CARROT
-        B:
-          type: BOWL
+      W:
+        type: ANY_SEEDS
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+      C:
+        type: CARROT
+      B:
+        type: BOWL
   potato_stew:
     result:
       displayName: "<lang:bts.potato_stew>"
@@ -870,16 +870,16 @@ add:
       - "WFC"
       - " B "
     ingredients:
-        W:
-          type: ANY_SEEDS
-        F:
-          type: WHITE_DYE
-          customModelData: 3
-          displayName: "<lang:bts.flour>"
-        C:
-          type: POTATO
-        B:
-          type: BOWL
+      W:
+        type: ANY_SEEDS
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+      C:
+        type: POTATO
+      B:
+        type: BOWL
   meat_stew:
     result:
       displayName: "<lang:bts.meat_stew>"
@@ -889,16 +889,16 @@ add:
       - "WFM"
       - " B "
     ingredients:
-        W:
-          type: ANY_SEEDS
-        F:
-          type: WHITE_DYE
-          customModelData: 3
-          displayName: "<lang:bts.flour>"
-        M:
-          type: [ COOKED_BEEF, COOKED_CHICKEN, COOKED_MUTTON, COOKED_PORKCHOP, COOKED_RABBIT ]
-        B:
-          type: BOWL
+      W:
+        type: ANY_SEEDS
+      F:
+        type: WHITE_DYE
+        customModelData: 3
+        displayName: "<lang:bts.flour>"
+      M:
+        type: [ COOKED_BEEF, COOKED_CHICKEN, COOKED_MUTTON, COOKED_PORKCHOP, COOKED_RABBIT ]
+      B:
+        type: BOWL
   mushroom_stew:
     result:
       type: MUSHROOM_STEW
@@ -907,10 +907,10 @@ add:
       - "WWW"
       - " B "
     ingredients:
-        W:
-          type: ANY_MUSHROOM
-        B:
-          type: BOWL
+      W:
+        type: ANY_MUSHROOM
+      B:
+        type: BOWL
   melon:
     result:
       type: MELON_SLICE
@@ -1540,6 +1540,98 @@ add:
       T:
         type: STRING
 
+  soul_torch:
+    result:
+      type: SOUL_TORCH
+      amount: 4
+    shape:
+      - " G "
+      - "NCN"
+      - " S "
+    ingredients:
+      C:
+        type: CHARCOAL
+      S:
+        type: STICK
+      N:
+        type: NETHER_WART
+      G:
+        type: GLOW_INK_SAC
+
+  soul_campfire:
+    result:
+      type: SOUL_CAMPFIRE
+    shape:
+      - "GC"
+      - "ON"
+    ingredients:
+      C:
+        type: CHARCOAL
+      O:
+        type: ANY_LOG
+      N:
+        type: NETHERRACK
+      G:
+        type: GLOW_INK_SAC
+
+  cactus_juice:
+    result:
+      displayName: "<lang:bts.cactus_juice>"
+      type: POTION
+      color: "#3cc221"
+    shape:
+      - "C"
+      - "M"
+    ingredients:
+      C:
+        type: CACTUS
+      M:
+        type: GLASS_BOTTLE
+
+  packed_ice:
+    result:
+      type: PACKED_ICE
+    shape:
+      - "IC"
+      - "CI"
+    ingredients:
+      I:
+        type: SNOWBALL
+      C:
+        type: FLINT
+
+  paper:
+    result:
+      type: PAPER
+    shape:
+      - "S"
+    ingredients:
+      S:
+        type: SUGAR_CANE
+
+  rock:
+    result:
+      type: WOODEN_AXE
+      damage: 51
+      displayName: "<lang:bts.rock>"
+      customModelData: 4
+    shape:
+      - "S"
+    ingredients:
+      S:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE, STONE ]
+
+  pumpkin_seeds:
+    result:
+      type: PUMPKIN_SEEDS
+    shape:
+      - "P"
+    ingredients:
+      P:
+        type: MELON_SLICE
+        displayName: "<lang:bts.pumpkin_slice>"
+        customModelData: 3
+
 remove:
   - iron_sword
   - stonecutter
@@ -1614,3 +1706,296 @@ remove:
   - diamond_hoe
   - crafting_table
   - ladder
+  - soul_torch
+  - soul_campfire
+
+  # Doors
+  - oak_door
+  - spruce_door
+  - birch_door
+  - jungle_door
+  - acacia_door
+  - dark_oak_door
+  - mangrove_door
+  - bamboo_door
+  - cherry_door
+  - crimson_door
+  - warped_door
+
+  # Boats
+  - oak_boat
+  - spruce_boat
+  - birch_boat
+  - jungle_boat
+  - acacia_boat
+  - dark_oak_boat
+  - mangrove_boat
+  - bamboo_raft
+  - cherry_boat
+
+  # Chest Boats
+  - oak_chest_boat
+  - spruce_chest_boat
+  - birch_chest_boat
+  - jungle_chest_boat
+  - acacia_chest_boat
+  - dark_oak_chest_boat
+  - mangrove_chest_boat
+  - bamboo_chest_raft
+  - cherry_chest_boat
+
+  # Planks
+  - oak_planks
+  - spruce_planks
+  - birch_planks
+  - jungle_planks
+  - acacia_planks
+  - dark_oak_planks
+  - mangrove_planks
+  - bamboo_planks
+  - cherry_planks
+  - crimson_planks
+  - warped_planks
+
+  # Stairs
+  - oak_stairs
+  - spruce_stairs
+  - birch_stairs
+  - jungle_stairs
+  - acacia_stairs
+  - dark_oak_stairs
+  - mangrove_stairs
+  - bamboo_stairs
+  - cherry_stairs
+  - crimson_stairs
+  - warped_stairs
+
+  # Slabs
+  - oak_slab
+  - spruce_slab
+  - birch_slab
+  - jungle_slab
+  - acacia_slab
+  - dark_oak_slab
+  - mangrove_slab
+  - bamboo_slab
+  - cherry_slab
+  - crimson_slab
+  - warped_slab
+
+  # Fences
+  - oak_fence
+  - spruce_fence
+  - birch_fence
+  - jungle_fence
+  - acacia_fence
+  - dark_oak_fence
+  - mangrove_fence
+  - bamboo_fence
+  - cherry_fence
+  - crimson_fence
+  - warped_fence
+
+  # Fence Gates
+  - oak_fence_gate
+  - spruce_fence_gate
+  - birch_fence_gate
+  - jungle_fence_gate
+  - acacia_fence_gate
+  - dark_oak_fence_gate
+  - mangrove_fence_gate
+  - bamboo_fence_gate
+  - cherry_fence_gate
+  - crimson_fence_gate
+  - warped_fence_gate
+
+  # Buttons
+  - oak_button
+  - spruce_button
+  - birch_button
+  - jungle_button
+  - acacia_button
+  - dark_oak_button
+  - mangrove_button
+  - bamboo_button
+  - cherry_button
+  - crimson_button
+  - warped_button
+
+  # Pressure Plates
+  - oak_pressure_plate
+  - spruce_pressure_plate
+  - birch_pressure_plate
+  - jungle_pressure_plate
+  - acacia_pressure_plate
+  - dark_oak_pressure_plate
+  - mangrove_pressure_plate
+  - bamboo_pressure_plate
+  - cherry_pressure_plate
+  - crimson_pressure_plate
+  - warped_pressure_plate
+
+  # Signs
+  - oak_sign
+  - spruce_sign
+  - birch_sign
+  - jungle_sign
+  - acacia_sign
+  - dark_oak_sign
+  - mangrove_sign
+  - bamboo_sign
+  - cherry_sign
+  - crimson_sign
+  - warped_sign
+
+  # Hanging Signs
+  - oak_hanging_sign
+  - spruce_hanging_sign
+  - birch_hanging_sign
+  - jungle_hanging_sign
+  - acacia_hanging_sign
+  - dark_oak_hanging_sign
+  - mangrove_hanging_sign
+  - bamboo_hanging_sign
+  - cherry_hanging_sign
+  - crimson_hanging_sign
+  - warped_hanging_sign
+
+  # Trapdoors
+  - oak_trapdoor
+  - spruce_trapdoor
+  - birch_trapdoor
+  - jungle_trapdoor
+  - acacia_trapdoor
+  - dark_oak_trapdoor
+  - mangrove_trapdoor
+  - bamboo_trapdoor
+  - cherry_trapdoor
+  - crimson_trapdoor
+  - warped_trapdoor
+
+  # Other Wooden Items
+  #  - crafting_table
+  #  - bookshelf
+  #  - chest
+  #  - barrel
+  #  - composter
+  #  - lectern
+  #  - note_block
+  #  - jukebox
+  #  - piston
+  #  - bowl
+  #  - item_frame
+
+  # All Bricks crafts
+  - brick_stairs
+  - brick_slab
+  - brick_wall
+  - nether_brick_stairs
+  - nether_brick_slab
+  - nether_brick_wall
+  - nether_brick_fence
+  - red_nether_brick_stairs
+  - red_nether_brick_slab
+  - red_nether_brick_wall
+
+  - diorite_stairs
+  - diorite_slab
+  - diorite_wall
+  - polished_diorite
+  - polished_diorite_stairs
+  - polished_diorite_slab
+  - polished_diorite_wall
+  - andesite_stairs
+  - andesite_slab
+  - andesite_wall
+  - polished_andesite
+  - polished_andesite_stairs
+  - polished_andesite_slab
+  - polished_andesite_wall
+  - granite_stairs
+  - granite_slab
+  - granite_wall
+  - polished_granite
+  - polished_granite_stairs
+  - polished_granite_slab
+  - polished_granite_wall
+  - stone_stairs
+  - stone_slab
+  - mossy_cobblestone_stairs
+  - mossy_cobblestone_slab
+  - mossy_cobblestone_wall
+  - cobblestone_stairs
+  - cobblestone_slab
+  - cobblestone_wall
+  - stone_bricks
+  - chiseled_stone_bricks
+  - mossy_stone_brick_slabs
+  - mossy_stone_brick_stairs
+  - mossy_stone_brick_wall
+  - stone_brick_slabs
+  - stone_brick_stairs
+  - stone_brick_wall
+  - cobbled_deepslate_stairs
+  - cobbled_deepslate_slab
+  - cobbled_deepslate_wall
+  - deepslate_bricks
+  - deepslate_brick_stairs
+  - deepslate_brick_slab
+  - deepslate_brick_wall
+  - polished_deepslate
+  - polished_deepslate_stairs
+  - polished_deepslate_slab
+  - tuff_stairs
+  - tuff_slab
+  - tuff_wall
+  - polished_tuff
+  - polished_tuff_stairs
+  - polished_tuff_slab
+  - polished_tuff_wall
+  - chiseled_tuff
+  - chiseled_tuff_bricks
+  - tuff_bricks
+  - tuff_brick_stairs
+  - tuff_brick_slab
+  - tuff_brick_wall
+  - chiseled_deepslate
+  - deepslate_tile_stairs
+  - deepslate_tile_slab
+  - deepslate_tile_wall
+
+  - golden_carrot
+  - golden_apple
+  - enchanted_golden_apple
+
+  - leather_helmet
+  - leather_chestplate
+  - leather_leggings
+  - leather_boots
+  - chainmail_helmet
+  - chainmail_chestplate
+  - chainmail_leggings
+  - chainmail_boots
+  - iron_helmet
+  - iron_chestplate
+  - iron_leggings
+  - iron_boots
+  - diamond_helmet
+  - diamond_chestplate
+  - diamond_leggings
+  - diamond_boots
+  - netherite_helmet
+  - netherite_chestplate
+  - netherite_leggings
+  - netherite_boots
+  - turtle_helmet
+  - elytra
+
+  - arrow
+  - bow
+  - crossbow
+  - spectral_arrow
+  - tripwire_hook
+
+  - painting
+  - leather

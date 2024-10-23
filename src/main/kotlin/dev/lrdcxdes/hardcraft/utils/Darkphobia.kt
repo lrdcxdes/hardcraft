@@ -12,6 +12,11 @@ class Darkphobia {
     private val task = object : BukkitRunnable() {
         override fun run() {
             for (player in Hardcraft.instance.server.onlinePlayers) {
+                // ignore players in creative mode or in spectator mode
+                if (player.gameMode == org.bukkit.GameMode.CREATIVE || player.gameMode == org.bukkit.GameMode.SPECTATOR) {
+                    continue
+                }
+
                 var state = players[player.name] ?: 0.0
 
                 val lightLevel = player.eyeLocation.block.lightLevel
@@ -34,11 +39,11 @@ class Darkphobia {
                 }
 
                 if (state >= 480.0) {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 100, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 140, 0))
                 }
 
                 if (state >= 300.0) {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 100, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0))
                 }
 
                 if (state >= 180.0) {
@@ -86,7 +91,7 @@ class Darkphobia {
                 }
 
                 if (state >= 120.0) {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 100, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
                 }
 
                 if (state < 180.0) {

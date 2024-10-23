@@ -1,0 +1,47 @@
+add:
+  bread:
+    source:
+      displayName: "<lang:bts.dough>"
+      type: WHITE_DYE
+      customModelData: 4
+    result:
+      type: BREAD
+    cookingTime: 160
+    experience: 0.25
+  nether_brick:
+    source:
+      type: BRICK
+    result:
+      type: NETHER_BRICK
+    cookingTime: 120
+    experience: 0.0
+  bricks:
+    source:
+      type: CLAY
+    result:
+      type: BRICKS
+    cookingTime: 160
+    experience: 0.0
+  nether_bricks:
+    source:
+      type: BRICKS
+    result:
+      type: NETHER_BRICKS
+    cookingTime: 160
+    experience: 0.0
+  red_nether_bricks:
+    source:
+      type: NETHER_BRICKS
+    result:
+      type: RED_NETHER_BRICKS
+    cookingTime: 160
+    experience: 0.0
+  cooked_carrot:
+    source:
+      type: CARROT
+    result:
+      type: BAKED_POTATO
+      customModelData: 3
+      displayName: "<lang:bts.cooked_carrot>"
+    cookingTime: 160
+    experience: 0.1

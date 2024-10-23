@@ -3,12 +3,10 @@ package dev.lrdcxdes.hardcraft.event
 import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.Material
 import org.bukkit.block.Block
-import org.bukkit.block.data.Ageable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockPlaceEvent
-import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
@@ -84,6 +82,7 @@ class FernListener : Listener {
         if (fern.type != Material.FERN) {
             fern.removeMetadata("nowTime", Hardcraft.instance)
             fern.removeMetadata("endTime", Hardcraft.instance)
+            ferns.remove(fern)
             return
         }
 
@@ -101,14 +100,19 @@ class FernListener : Listener {
         var nowTime = fern.getMetadata("nowTime").firstOrNull()?.asLong() ?: return
         val endTime = fern.getMetadata("endTime").firstOrNull()?.asLong() ?: return
 
-        nowTime += 10
+        nowTime += 60
 
         val growned = nowTime >= endTime
 
         if (growned) {
             fern.removeMetadata("nowTime", Hardcraft.instance)
             fern.removeMetadata("endTime", Hardcraft.instance)
-            fern.type = Material.LARGE_FERN
+            object : BukkitRunnable() {
+                override fun run() {
+                    fern.type = Material.LARGE_FERN
+                }
+            }.runTask(Hardcraft.instance)
+
             ferns.remove(fern)
         } else {
             fern.setMetadata("nowTime", FixedMetadataValue(Hardcraft.instance, nowTime))
@@ -122,6 +126,6 @@ class FernListener : Listener {
                     growFern(fern)
                 }
             }
-        }.runTaskTimer(Hardcraft.instance, 0, 20L * 10)
+        }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 60)
     }
 }

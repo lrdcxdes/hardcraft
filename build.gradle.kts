@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.lrdcxdes"
-version = "0.6.5-alpha"
+version = "0.6.8-alpha"
 
 repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("net.kyori:adventure-api:4.17.0")
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
@@ -47,5 +47,10 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
+    archiveClassifier.set("all")
     destinationDirectory.set(file("C:\\Users\\lrdcxdes\\Desktop\\hardcraft\\plugins"))
+
+    // Include Kotlin runtime
+    from(sourceSets.main.get().output)
+    configurations = listOf(project.configurations.runtimeClasspath.get())
 }

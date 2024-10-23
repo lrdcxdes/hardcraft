@@ -11,8 +11,10 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.ItemSpawnEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
+import org.bukkit.event.inventory.InventoryType
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.scheduler.BukkitRunnable
 import kotlin.math.abs
 
 data class Food(val material: Material, val spoilTime: Long, val bestTemperature: Int) {
@@ -40,8 +42,8 @@ class FoodListener : Listener {
         Food(material, spoilTime, bestTemperature)
     }
 
-    private fun checkItem(item: ItemStack, temperature: Int) {
-        val food = foods.find { it.material == item.type } ?: return
+    fun checkItem(item: ItemStack, temperature: Int): Double {
+        val food = foods.find { it.material == item.type } ?: return 1.0
         val spoilTime = food.spoilTime
         val bestTemperature = food.bestTemperature
 
@@ -76,7 +78,7 @@ class FoodListener : Listener {
             if (freshness <= 0f) {
                 // Spoiled
                 item.amount = 0
-                return
+                return 0.0
             } else {
                 // Just update the freshness
                 meta.persistentDataContainer.set(
@@ -96,20 +98,35 @@ class FoodListener : Listener {
         val lore: List<Component> =
             listOf(
                 Hardcraft.minimessage.deserialize(
-                    "<gray>${(freshness * 100).toInt()}% Fresh</gray>"
+                    "<!italic><color:#AAAAAA>Fresh: <color:#FFAA00>${(freshness * 100).toInt()}%"
                 ),
-                Hardcraft.minimessage.deserialize(
-                    "<gray>${"Best Temperature: %d".format(bestTemperature)}</gray>"
-                )
+//                Hardcraft.minimessage.deserialize(
+//                    "<gray>${"Best Temperature: %d".format(bestTemperature)}</gray>"
+//                )
             )
 
         meta.lore(lore)
 
         item.itemMeta = meta
+
+        return freshness
     }
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
+        val inventory = event.inventory
+        // check ignoreItems
+        if (inventory.type == InventoryType.DISPENSER
+            &&
+            ignoreItems.any { ignoreItem ->
+                inventory.contents.any { item ->
+                    item?.type == ignoreItem.type &&
+                            item.itemMeta?.lore() == ignoreItem.itemMeta?.lore()
+                }
+            }
+        ) {
+            return
+        }
         val item = event.currentItem
         if (item != null && item.type.isEdible) {
             val isPlayerInv = event.view.topInventory == event.inventory
@@ -130,9 +147,33 @@ class FoodListener : Listener {
         checkItem(item, 0)
     }
 
+    private val ignoreItems: List<ItemStack> = listOf(
+        ItemStack(Material.MUSHROOM_STEW, 1).apply {
+            itemMeta = itemMeta.apply {
+                lore(
+                    listOf(
+                        Hardcraft.minimessage.deserialize("<!italic><gray>(x3) <lang:item.minecraft.brown_mushroom>"),
+                    )
+                )
+            }
+        },
+    )
+
     @EventHandler
     fun onInventoryOpen(event: InventoryOpenEvent) {
         val inventory = event.inventory
+        // check ignoreItems
+        if (inventory.type == InventoryType.DISPENSER
+            &&
+            ignoreItems.any { ignoreItem ->
+                inventory.contents.any { item ->
+                    item?.type == ignoreItem.type &&
+                            item.itemMeta?.lore() == ignoreItem.itemMeta?.lore()
+                }
+            }
+        ) {
+            return
+        }
         val temp = event.inventory.location?.block?.let {
             Hardcraft.instance.seasons.getTemperature(it)
         } ?: 0
@@ -142,4 +183,22 @@ class FoodListener : Listener {
             }
         }
     }
+
+    private val task = object : BukkitRunnable() {
+        override fun run() {
+            for (player in Hardcraft.instance.server.onlinePlayers) {
+                // ignore players in creative mode or in spectator mode
+                if (player.gameMode == org.bukkit.GameMode.CREATIVE || player.gameMode == org.bukkit.GameMode.SPECTATOR) {
+                    continue
+                }
+
+                val temp = player.getTemperature()
+                player.inventory.contents.forEach { item ->
+                    if (item != null && item.type.isEdible) {
+                        checkItem(item, temp)
+                    }
+                }
+            }
+        }
+    }.runTaskTimer(Hardcraft.instance, 0, 20L * 60)
 }
