@@ -69,28 +69,28 @@ add:
     addition:
       type: GOLD_BLOCK
     result:
-      type: GOLD_CHESTPLATE
+      type: GOLDEN_CHESTPLATE
   gold_leggings:
     base:
       type: CHAINMAIL_LEGGINGS
     addition:
       type: GOLD_BLOCK
     result:
-      type: GOLD_LEGGINGS
+      type: GOLDEN_LEGGINGS
   gold_boots:
     base:
       type: CHAINMAIL_BOOTS
     addition:
       type: GOLD_BLOCK
     result:
-      type: GOLD_BOOTS
+      type: GOLDEN_BOOTS
   gold_helmet:
     base:
       type: CHAINMAIL_HELMET
     addition:
       type: GOLD_BLOCK
     result:
-      type: GOLD_HELMET
+      type: GOLDEN_HELMET
   diamond_chestplate:
     base:
       type: CHAINMAIL_CHESTPLATE

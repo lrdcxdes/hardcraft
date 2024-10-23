@@ -40,7 +40,7 @@ class Hardcraft : JavaPlugin() {
         }
 
         // CustomCrafts
-        CustomCrafts()
+        cc = CustomCrafts()
         cc.loadAll()
 
         val manager = this.lifecycleManager

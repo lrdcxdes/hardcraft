@@ -38,7 +38,8 @@ class CustomCrafts {
     }
 
     private fun createResultItem(resultSection: ConfigurationSection): ItemStack {
-        val mat = Material.matchMaterial(resultSection.getString("type") ?: return ItemStack(Material.AIR))
+        val matType = resultSection.getString("type") ?: return ItemStack(Material.AIR)
+        val mat = Material.matchMaterial(matType)
         if (mat == null) {
             println("Invalid material: ${resultSection.getString("type")}")
             return ItemStack(Material.AIR)

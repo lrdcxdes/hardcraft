@@ -428,7 +428,7 @@ add:
       - "GDG"
     ingredients:
       E:
-        type: EYE_OF_ENDER
+        type: ENDER_EYE
       D:
         type: DIAMOND
       G:
@@ -689,9 +689,9 @@ add:
         type: PRISMARINE_SHARD
       S:
         type: NETHER_STAR
-  eye_of_ender:
+  ender_eye:
     result:
-      type: EYE_OF_ENDER
+      type: ENDER_EYE
     shape:
       - "NEN"
       - "BPB"
@@ -1673,7 +1673,7 @@ remove:
   - comparator
   - netherite_ingot
   - experience_bottle
-  - eye_of_ender
+  - ender_eye
   - sugar
   - bread
   - rabbit_stew
