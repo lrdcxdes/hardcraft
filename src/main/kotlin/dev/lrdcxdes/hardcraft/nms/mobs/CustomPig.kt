@@ -1,6 +1,5 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
-import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.PoopGoal
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.RaidGardenGoal
 import net.minecraft.server.level.ServerLevel
@@ -28,8 +27,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent
 import java.util.*
 
 class CustomPig(world: ServerLevel, private val isFriendly: Boolean = false) : Pig(EntityType.PIG, world), NeutralMob {
-    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
-
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
     private var persistentAngerTarget: UUID? = null
@@ -113,7 +110,7 @@ class CustomPig(world: ServerLevel, private val isFriendly: Boolean = false) : P
     }
 
     override fun getAttributes(): AttributeMap {
-        return attributes
+        return AttributeStore.getAttributes("pig")
     }
 
     private var moreFoodTicks = 0

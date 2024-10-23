@@ -28,7 +28,6 @@ import kotlin.math.max
 
 class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) : Sheep(EntityType.SHEEP, world),
     NeutralMob {
-    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
     private var persistentAngerTarget: UUID? = null
@@ -130,7 +129,7 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
     }
 
     override fun getAttributes(): AttributeMap {
-        return attributes
+        return AttributeStore.getAttributes("sheep")
     }
 
     private var moreFoodTicks = 0

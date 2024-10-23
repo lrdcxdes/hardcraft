@@ -18,9 +18,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CopyOnWriteArraySet
 
-// Common constants
 object Constants {
     val SOIL_TYPES = setOf(
         Material.DIRT,
@@ -42,12 +40,13 @@ object Constants {
 }
 
 class FernManager {
-    private val ferns = CopyOnWriteArraySet<Block>()
+    private val ferns = ConcurrentHashMap<Long, MutableSet<Block>>()
     private val plugin = Hardcraft.instance
 
     fun addFern(block: Block) {
         if (block.type != Material.FERN) return
 
+        val chunkKey = (block.chunk.x.toLong() shl 32) or block.chunk.z.toLong()
         if (!block.hasMetadata("nowTime")) {
             block.setMetadata("nowTime", FixedMetadataValue(plugin, 0L))
             block.setMetadata(
@@ -55,11 +54,12 @@ class FernManager {
                 FixedMetadataValue(plugin, 60L * (5 + plugin.random.nextInt(3)))
             )
         }
-        ferns.add(block)
+        ferns.computeIfAbsent(chunkKey) { mutableSetOf() }.add(block)
     }
 
     fun removeFern(block: Block, removeMetadata: Boolean = true) {
-        ferns.remove(block)
+        val chunkKey = (block.chunk.x.toLong() shl 32) or block.chunk.z.toLong()
+        ferns[chunkKey]?.remove(block)
         if (removeMetadata) {
             block.removeMetadata("nowTime", plugin)
             block.removeMetadata("endTime", plugin)
@@ -82,7 +82,7 @@ class FernManager {
             removeFern(fern)
             object : BukkitRunnable() {
                 override fun run() {
-                    growLargeFern(fern)
+                    fern.type = Material.LARGE_FERN
                 }
             }.runTask(plugin)
         } else {
@@ -90,49 +90,34 @@ class FernManager {
         }
     }
 
-    private fun growLargeFern(fern: Block) {
-        fern.type = Material.LARGE_FERN
-
-//        fern.getRelative(0, 1, 0).apply {
-//            type = Material.LARGE_FERN
-//            val x = blockData as Bisected
-//            x.half = Bisected.Half.TOP
-//            blockData = x
-//        }
-    }
-
     fun init() {
         object : BukkitRunnable() {
             override fun run() {
-                ferns.forEach { growFern(it) }
+                ferns.values.forEach { blocks ->
+                    blocks.forEach { growFern(it) }
+                }
             }
         }.runTaskTimerAsynchronously(plugin, 0, 20L * 60)
     }
 
-    fun getFerns() = ferns
+    fun getFerns(chunkKey: Long) = ferns[chunkKey] ?: emptySet()
+    fun removeChunk(chunkKey: Long) = ferns.remove(chunkKey)
 }
 
 class GardenManager {
-    private val gardens = CopyOnWriteArraySet<Block>()
-    private val loadedChunks = ConcurrentHashMap.newKeySet<Long>()
+    private val gardens = ConcurrentHashMap<Long, MutableSet<Block>>()
     private val world: World = Hardcraft.instance.server.getWorld("world")!!
     private var lastDayState: Boolean = world.isDayTime
     private val spawnSilverfishChance = 0.1
 
     fun addGarden(block: Block) {
-        gardens.add(block)
+        val chunkKey = (block.chunk.x.toLong() shl 32) or block.chunk.z.toLong()
+        gardens.computeIfAbsent(chunkKey) { mutableSetOf() }.add(block)
     }
 
     fun removeGarden(block: Block) {
-        gardens.remove(block)
-    }
-
-    fun processChunk(chunk: Long) {
-        if (!loadedChunks.add(chunk)) return
-    }
-
-    fun processRemoveChunk(chunk: Long) {
-        loadedChunks.remove(chunk)
+        val chunkKey = (block.chunk.x.toLong() shl 32) or block.chunk.z.toLong()
+        gardens[chunkKey]?.remove(block)
     }
 
     fun init() {
@@ -141,15 +126,23 @@ class GardenManager {
                 val spawnSilverfish = world.isDayTime && !lastDayState
                 lastDayState = world.isDayTime
 
-                gardens.forEach { garden ->
-                    val ageable = garden.blockData as? Ageable
-                    if (ageable == null || ageable.age < ageable.maximumAge) {
-                        removeGarden(garden)
-                        return@forEach
-                    }
-
-                    if (spawnSilverfish && Math.random() < spawnSilverfishChance) {
-                        spawnSilverfishAtGarden(garden)
+                val iterator = gardens.values.iterator()
+                while (iterator.hasNext()) {
+                    val blocks = iterator.next()
+                    blocks.removeIf { garden ->
+                        val ageable = garden.blockData as? Ageable
+                        if (ageable == null || ageable.age < ageable.maximumAge) {
+                            true
+                        } else {
+                            if (spawnSilverfish && Math.random() < spawnSilverfishChance) {
+                                object : BukkitRunnable() {
+                                    override fun run() {
+                                        spawnSilverfishAtGarden(garden)
+                                    }
+                                }.runTask(Hardcraft.instance)
+                            }
+                            false
+                        }
                     }
                 }
             }
@@ -157,16 +150,12 @@ class GardenManager {
     }
 
     private fun spawnSilverfishAtGarden(garden: Block) {
-        object : BukkitRunnable() {
-            override fun run() {
-                garden.type = Material.AIR
-                convertToRootedDirt(garden.getRelative(0, -1, 0))
+        garden.type = Material.AIR
+        convertToRootedDirt(garden.getRelative(0, -1, 0))
 
-                CustomSilverfish((world as CraftWorld).handle).spawn(
-                    garden.location.add(0.5, 0.0, 0.5)
-                )
-            }
-        }.runTask(Hardcraft.instance)
+        CustomSilverfish((world as CraftWorld).handle).spawn(
+            garden.location.add(0.5, 0.0, 0.5)
+        )
     }
 
     fun convertToRootedDirt(block: Block) {
@@ -175,7 +164,8 @@ class GardenManager {
         }
     }
 
-    fun getGardens() = gardens
+    fun getGardens(chunkKey: Long) = gardens[chunkKey] ?: emptySet()
+    fun removeChunk(chunkKey: Long) = gardens.remove(chunkKey)
 }
 
 class PlantsEventListener(
@@ -188,7 +178,7 @@ class PlantsEventListener(
         when (event.blockPlaced.type) {
             Material.FERN -> fernManager.addFern(event.blockPlaced)
             Material.LARGE_FERN -> event.isCancelled = true
-            else -> return
+            else -> handleGardenPlace(event)
         }
     }
 
@@ -207,21 +197,24 @@ class PlantsEventListener(
         fernManager.removeFern(block)
         event.isDropItems = false
 
-        // Drop items
         val world = block.world
         val location = block.location
 
-        val zazaCount = 1 + Hardcraft.instance.random.nextInt(3)
-        val zaza = ItemStack(Material.GREEN_DYE, zazaCount).apply {
-            itemMeta = itemMeta?.apply {
-                itemName(Hardcraft.minimessage.deserialize("<color:#00AA00><lang:bts.zaza>"))
-                setCustomModelData(3)
-            }
-        }
-        world.dropItemNaturally(location, zaza)
+        object : BukkitRunnable() {
+            override fun run() {
+                val zazaCount = 1 + Hardcraft.instance.random.nextInt(3)
+                val zaza = ItemStack(Material.GREEN_DYE, zazaCount).apply {
+                    itemMeta = itemMeta?.apply {
+                        itemName(Hardcraft.minimessage.deserialize("<color:#00AA00><lang:bts.zaza>"))
+                        setCustomModelData(3)
+                    }
+                }
+                world.dropItemNaturally(location, zaza)
 
-        val fernCount = 1 + Hardcraft.instance.random.nextInt(2)
-        world.dropItemNaturally(location, ItemStack(Material.FERN, fernCount))
+                val fernCount = 1 + Hardcraft.instance.random.nextInt(2)
+                world.dropItemNaturally(location, ItemStack(Material.FERN, fernCount))
+            }
+        }.runTask(Hardcraft.instance)
     }
 
     private fun handleGardenBreak(event: BlockBreakEvent) {
@@ -233,6 +226,16 @@ class PlantsEventListener(
 
         gardenManager.removeGarden(block)
         gardenManager.convertToRootedDirt(block.getRelative(0, -1, 0))
+    }
+
+    private fun handleGardenPlace(event: BlockPlaceEvent) {
+        val block = event.blockPlaced
+        if (block.type !in Constants.ALLOWED_GARDENS) return
+
+        val ageable = block.blockData as? Ageable ?: return
+        if (ageable.age < ageable.maximumAge) return
+
+        gardenManager.addGarden(block)
     }
 
     @EventHandler
@@ -249,24 +252,22 @@ class PlantsEventListener(
 
     @EventHandler
     fun onChunkLoad(event: ChunkLoadEvent) {
-        gardenManager.processChunk(event.chunk.chunkKey)
+        val chunk = event.chunk
 
         object : BukkitRunnable() {
             override fun run() {
-                processChunkBlocks(event.chunk)
+                processChunkBlocks(chunk)
             }
         }.runTaskAsynchronously(Hardcraft.instance)
     }
 
     @EventHandler
     fun onChunkUnload(event: ChunkUnloadEvent) {
-        gardenManager.processRemoveChunk(event.chunk.chunkKey)
+        val chunk = event.chunk
+        val chunkKey = (chunk.x.toLong() shl 32) or chunk.z.toLong()
 
-        object : BukkitRunnable() {
-            override fun run() {
-                processRemoveChunkBlocks(event.chunk)
-            }
-        }.runTaskAsynchronously(Hardcraft.instance)
+        fernManager.removeChunk(chunkKey)
+        gardenManager.removeChunk(chunkKey)
     }
 
     private fun processChunkBlocks(chunk: org.bukkit.Chunk) {
@@ -274,7 +275,6 @@ class PlantsEventListener(
             for (z in 0..15) {
                 for (y in 0..255) {
                     val block = chunk.getBlock(x, y, z)
-
                     when (block.type) {
                         Material.FERN -> fernManager.addFern(block)
                         in Constants.ALLOWED_GARDENS -> {
@@ -283,24 +283,7 @@ class PlantsEventListener(
                                 gardenManager.addGarden(block)
                             }
                         }
-
-                        else -> continue
-                    }
-                }
-            }
-        }
-    }
-
-    private fun processRemoveChunkBlocks(chunk: org.bukkit.Chunk) {
-        for (x in 0..15) {
-            for (z in 0..15) {
-                for (y in 0..255) {
-                    val block = chunk.getBlock(x, y, z)
-
-                    when (block.type) {
-                        Material.FERN -> fernManager.removeFern(block, false)
-                        in Constants.ALLOWED_GARDENS -> gardenManager.removeGarden(block)
-                        else -> continue
+                        else -> {}
                     }
                 }
             }

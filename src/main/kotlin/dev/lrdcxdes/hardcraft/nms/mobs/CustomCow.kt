@@ -25,7 +25,6 @@ import org.bukkit.event.entity.CreatureSpawnEvent
 import java.util.*
 
 class CustomCow(world: ServerLevel, private val isFriendly: Boolean = false) : Cow(EntityType.COW, world), NeutralMob {
-    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
 
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
@@ -101,7 +100,7 @@ class CustomCow(world: ServerLevel, private val isFriendly: Boolean = false) : C
     }
 
     override fun getAttributes(): AttributeMap {
-        return attributes
+        return AttributeStore.getAttributes("cow")
     }
 
     private var moreFoodTicks = 0

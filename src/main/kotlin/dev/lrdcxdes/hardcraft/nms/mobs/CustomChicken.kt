@@ -46,7 +46,6 @@ import java.util.function.Predicate
 import kotlin.math.*
 
 class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
-    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
 
 //    val DATA_TYPE_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId(
 //        CustomChicken::class.java, EntityDataSerializers.INT
@@ -913,7 +912,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     }
 
     override fun getAttributes(): AttributeMap {
-        return attributes
+        return AttributeStore.getAttributes("chicken")
     }
 
     companion object {

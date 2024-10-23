@@ -24,7 +24,6 @@ import java.util.*
 
 class CustomVillager(world: ServerLevel, private val isFriendly: Boolean) : Villager(EntityType.VILLAGER, world),
     NeutralMob {
-    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
     private var persistentAngerTarget: UUID? = null
@@ -90,7 +89,7 @@ class CustomVillager(world: ServerLevel, private val isFriendly: Boolean) : Vill
     }
 
     override fun getAttributes(): AttributeMap {
-        return attributes
+        return AttributeStore.getAttributes("villager")
     }
 
     companion object {

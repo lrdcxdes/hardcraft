@@ -24,7 +24,6 @@ import org.bukkit.event.entity.EntityRemoveEvent
 import java.util.*
 
 class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, world) {
-    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
 
     private class SilverfishWakeUpFriendsGoal(private val silverfish: Silverfish) : Goal() {
         private var lookForFriends = 0
@@ -195,7 +194,7 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
     }
 
     override fun getAttributes(): AttributeMap {
-        return attributes
+        return AttributeStore.getAttributes("silverfish")
     }
 
     override fun hurt(source: DamageSource, amount: Float): Boolean {

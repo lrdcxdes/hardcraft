@@ -28,7 +28,6 @@ import java.util.*
 class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
     Horse(EntityType.HORSE, world),
     NeutralMob {
-    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
 
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
@@ -111,7 +110,7 @@ class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
     }
 
     override fun getAttributes(): AttributeMap {
-        return attributes
+        return AttributeStore.getAttributes("horse")
     }
 
     private var moreFoodTicks = 0
