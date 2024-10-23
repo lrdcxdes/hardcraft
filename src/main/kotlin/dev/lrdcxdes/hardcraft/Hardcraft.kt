@@ -37,6 +37,7 @@ class Hardcraft : JavaPlugin() {
     lateinit var fernListener: FernListener
     lateinit var foodListener: FoodListener
     lateinit var seasons: Seasons
+    lateinit var cc: CustomCrafts
 
     override fun onEnable() {
         // Plugin startup logic
@@ -50,7 +51,7 @@ class Hardcraft : JavaPlugin() {
         }
 
         // CustomCrafts
-        val cc = CustomCrafts()
+        CustomCrafts()
         cc.loadAll()
 
         val manager = this.lifecycleManager
@@ -187,6 +188,9 @@ class Hardcraft : JavaPlugin() {
 
         // JoinListener
         server.pluginManager.registerEvents(JoinListener(), this)
+
+        // FlintAndSteelListen
+        server.pluginManager.registerEvents(FlintAndSteelListen(), this)
 
         // Raids
 //        raids()

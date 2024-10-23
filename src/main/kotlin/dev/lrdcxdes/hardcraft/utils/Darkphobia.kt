@@ -44,7 +44,11 @@ class Darkphobia : Listener {
         state.fearLevel = state.fearLevel.coerceIn(0.0, 500.0)
 
         // Apply effects based on fear level
-        applyEffects(player, state)
+        object : BukkitRunnable() {
+            override fun run() {
+                applyEffects(player, state)
+            }
+        }.runTask(Hardcraft.instance)
     }
 
     private fun applyEffects(player: Player, state: DarkphobiaState) {
@@ -130,7 +134,7 @@ class Darkphobia : Listener {
                     updatePlayerState(player)
                 }
             }
-        }.runTaskTimer(Hardcraft.instance, 0, 20L * 5)
+        }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 5)
     }
 
     enum class SoundCategory {

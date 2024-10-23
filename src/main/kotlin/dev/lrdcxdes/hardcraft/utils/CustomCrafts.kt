@@ -1,7 +1,6 @@
 package dev.lrdcxdes.hardcraft.utils
 
 import dev.lrdcxdes.hardcraft.Hardcraft
-import net.minecraft.world.item.SmithingTemplateItem
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -10,9 +9,9 @@ import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.*
 import org.bukkit.inventory.meta.Damageable
+import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
 import java.io.File
 
 
@@ -25,6 +24,8 @@ class CustomCrafts {
     private val stonecutterFile: File = Hardcraft.instance.dataFolder.resolve("stonecutter.yml")
     private val smithingFile: File = Hardcraft.instance.dataFolder.resolve("smithing.yml")
 
+    val customRecipesKeys: MutableList<NamespacedKey> = mutableListOf()
+
     fun loadAll() {
         this.loadRecipesFromConfig()
         this.loadFurnaceRecipes()
@@ -34,6 +35,65 @@ class CustomCrafts {
         this.loadStonecutterRecipes()
         this.loadSmithingRecipes()
         this.idk()
+    }
+
+    private fun createResultItem(resultSection: ConfigurationSection): ItemStack {
+        val mat = Material.matchMaterial(resultSection.getString("type") ?: return ItemStack(Material.AIR))
+        if (mat == null) {
+            println("Invalid material: ${resultSection.getString("type")}")
+            return ItemStack(Material.AIR)
+        }
+        val amount = resultSection.getInt("amount", 1)
+        val customModelData = resultSection.getInt("customModelData", -1)
+        val result = ItemStack(mat, amount).apply {
+            itemMeta = itemMeta?.apply {
+                if (customModelData != -1) setCustomModelData(customModelData)
+                resultSection.getString("displayName")?.let {
+                    itemName(Hardcraft.minimessage.deserialize(it))
+                }
+                if (resultSection.contains("damage")) {
+                    (this as? Damageable)?.damage = resultSection.getInt("damage")
+                }
+                setPotionEffects(resultSection.getConfigurationSection("potionEffects"))
+                setColor(resultSection.getString("color"))
+            }
+        }
+        return result
+    }
+
+    private fun ItemMeta.setPotionEffects(potionEffects: ConfigurationSection?) {
+        potionEffects?.let {
+            for (key in it.getKeys(false)) {
+                val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key)) ?: continue
+                val duration = it.getInt("$key.duration", 1)
+                val amplifier = it.getInt("$key.amplifier", 1)
+                val ambient = it.getBoolean("$key.ambient", false)
+                val particles = it.getBoolean("$key.particles", true)
+                val icon = it.getBoolean("$key.icon", true)
+                val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
+                (this as? PotionMeta)?.addCustomEffect(effectInstance, true)
+            }
+        }
+    }
+
+    private fun ItemMeta.setColor(color: String?) {
+        color?.let {
+            (this as? PotionMeta)?.color = Color.fromRGB(it.substring(1).toInt(16))
+        }
+    }
+
+    private fun getSource(sourceSection: ConfigurationSection): Any {
+        return if (sourceSection.contains("type")) {
+            val type = sourceSection.getString("type") ?: return Material.AIR
+            if (type.startsWith("ANY_")) {
+                val matName = type.substring(3)
+                RecipeChoice.MaterialChoice(Material.entries.filter { it.name.contains(matName) && it.isItem })
+            } else {
+                Material.matchMaterial(type) ?: Material.AIR
+            }
+        } else {
+            RecipeChoice.MaterialChoice(sourceSection.getStringList("type").mapNotNull { Material.matchMaterial(it) })
+        }
     }
 
     private fun loadRecipesFromConfig() {
@@ -128,65 +188,10 @@ class CustomCrafts {
                 }
 
                 // Создаем рецепт
-                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
-                val amount = resultSection.getInt("amount", 1)
-                val customModelData = resultSection.getInt("customModelData", -1)
-                val result = ItemStack(mat, amount)
-                if (customModelData != -1) {
-                    val meta = result.itemMeta
-                    meta.setCustomModelData(customModelData)
-                    result.itemMeta = meta
-                }
-                val displayName = resultSection.getString("displayName")
-                if (displayName != null) {
-                    val meta = result.itemMeta
-                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
-                    result.itemMeta = meta
-                }
+                val result = createResultItem(resultSection)
 
-                if (resultSection.getInt("damage", -1) != -1) {
-                    val meta = result.itemMeta as Damageable
-                    meta.damage = resultSection.getInt("damage")
-                    result.itemMeta = meta
-                }
-
-                // check if potion effects
-                val potionEffects = resultSection.getConfigurationSection("potionEffects")
-                if (potionEffects != null) {
-                    for (key in potionEffects.getKeys(false)) {
-                        PotionEffectType.BAD_OMEN
-                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
-                        if (effect == null) {
-                            println("Invalid potion effect: $key")
-                            continue
-                        }
-                        val duration = potionEffects.getInt("$key.duration", 1)
-                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
-                        val ambient = potionEffects.getBoolean("$key.ambient", false)
-                        val particles = potionEffects.getBoolean("$key.particles", true)
-                        val icon = potionEffects.getBoolean("$key.icon", true)
-                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
-
-                        val meta = result.itemMeta as PotionMeta
-                        meta.addCustomEffect(effectInstance, true)
-
-                        result.itemMeta = meta
-                    }
-                }
-
-                val color = resultSection.getString("color")
-                if (color != null) {
-                    val meta = result.itemMeta as PotionMeta
-                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
-                    result.itemMeta = meta
-                }
-
-                println("Adding recipe $recipeName")
-                println("Result: $result")
-                println("Ingredients: $ingredients")
-                println("Shape: $shape")
-
-                val recipe = ShapedRecipe(NamespacedKey(Hardcraft.instance, recipeName), result)
+                val key = NamespacedKey(Hardcraft.instance, recipeName)
+                val recipe = ShapedRecipe(key, result)
                 recipe.shape(*shape.toTypedArray())
 
                 // Добавляем ингредиенты
@@ -212,6 +217,7 @@ class CustomCrafts {
 
                 // Добавляем рецепт на сервер
                 Hardcraft.instance.server.addRecipe(recipe)
+                customRecipesKeys.add(key)
             }
         } catch (e: Exception) {
             Hardcraft.instance.logger.severe("Error while loading recipes from config")
@@ -279,14 +285,16 @@ class CustomCrafts {
         for (i in woolColors.indices) {
             val color = woolColors[i].name.split("_WOOL")[0]
             val resultBed = ItemStack(Material.matchMaterial("${color}_BED")!!, 1)
+            val key = NamespacedKey(Hardcraft.instance, "${color}_bed")
             val recipe = ShapedRecipe(
-                NamespacedKey(Hardcraft.instance, "${color}_bed"),
+                key,
                 resultBed
             )
             recipe.shape("WW", "PP")
             recipe.setIngredient('W', woolColors[i])
             recipe.setIngredient('P', allWoodAdapter)
             Hardcraft.instance.server.addRecipe(recipe)
+            customRecipesKeys.add(key)
         }
     }
 
@@ -350,72 +358,18 @@ class CustomCrafts {
                 }
 
                 // Создаем рецепт
-                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
-                val amount = resultSection.getInt("amount", 1)
-                val customModelData = resultSection.getInt("customModelData", -1)
-                val result = ItemStack(mat, amount)
-                if (customModelData != -1) {
-                    val meta = result.itemMeta
-                    meta.setCustomModelData(customModelData)
-                    result.itemMeta = meta
-                }
-                val displayName = resultSection.getString("displayName")
-                if (displayName != null) {
-                    val meta = result.itemMeta
-                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
-                    result.itemMeta = meta
-                }
-
-                if (resultSection.getInt("damage", -1) != -1) {
-                    val meta = result.itemMeta as Damageable
-                    meta.damage = resultSection.getInt("damage")
-                    result.itemMeta = meta
-                }
-
-                // check if potion effects
-                val potionEffects = resultSection.getConfigurationSection("potionEffects")
-                if (potionEffects != null) {
-                    for (key in potionEffects.getKeys(false)) {
-                        PotionEffectType.BAD_OMEN
-                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
-                        if (effect == null) {
-                            println("Invalid potion effect: $key")
-                            continue
-                        }
-                        val duration = potionEffects.getInt("$key.duration", 1)
-                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
-                        val ambient = potionEffects.getBoolean("$key.ambient", false)
-                        val particles = potionEffects.getBoolean("$key.particles", true)
-                        val icon = potionEffects.getBoolean("$key.icon", true)
-                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
-
-                        val meta = result.itemMeta as PotionMeta
-                        meta.addCustomEffect(effectInstance, true)
-
-                        result.itemMeta = meta
-                    }
-                }
-
-                val color = resultSection.getString("color")
-                if (color != null) {
-                    val meta = result.itemMeta as PotionMeta
-                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
-                    result.itemMeta = meta
-                }
-
-                println("Adding recipe $recipeName")
-                println("Result: $result")
-                println("Ingredients: $source")
+                val result = createResultItem(resultSection)
 
                 val cookingTime = resultSection.getInt("cookingTime", 200)
                 val experience = resultSection.getDouble("experience", 0.1).toFloat()
 
                 val recipeName1 = "furnace_$recipeName"
+                val key = NamespacedKey(Hardcraft.instance, recipeName1)
 
                 val recipe: FurnaceRecipe = when (source) {
                     is Material -> {
                         FurnaceRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -425,7 +379,7 @@ class CustomCrafts {
 
                     is RecipeChoice -> {
                         FurnaceRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -439,6 +393,7 @@ class CustomCrafts {
                 }
 
                 Hardcraft.instance.server.addRecipe(recipe)
+                customRecipesKeys.add(key)
             }
         } catch (e: Exception) {
             Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
@@ -506,72 +461,18 @@ class CustomCrafts {
                 }
 
                 // Создаем рецепт
-                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
-                val amount = resultSection.getInt("amount", 1)
-                val customModelData = resultSection.getInt("customModelData", -1)
-                val result = ItemStack(mat, amount)
-                if (customModelData != -1) {
-                    val meta = result.itemMeta
-                    meta.setCustomModelData(customModelData)
-                    result.itemMeta = meta
-                }
-                val displayName = resultSection.getString("displayName")
-                if (displayName != null) {
-                    val meta = result.itemMeta
-                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
-                    result.itemMeta = meta
-                }
-
-                if (resultSection.getInt("damage", -1) != -1) {
-                    val meta = result.itemMeta as Damageable
-                    meta.damage = resultSection.getInt("damage")
-                    result.itemMeta = meta
-                }
-
-                // check if potion effects
-                val potionEffects = resultSection.getConfigurationSection("potionEffects")
-                if (potionEffects != null) {
-                    for (key in potionEffects.getKeys(false)) {
-                        PotionEffectType.BAD_OMEN
-                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
-                        if (effect == null) {
-                            println("Invalid potion effect: $key")
-                            continue
-                        }
-                        val duration = potionEffects.getInt("$key.duration", 1)
-                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
-                        val ambient = potionEffects.getBoolean("$key.ambient", false)
-                        val particles = potionEffects.getBoolean("$key.particles", true)
-                        val icon = potionEffects.getBoolean("$key.icon", true)
-                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
-
-                        val meta = result.itemMeta as PotionMeta
-                        meta.addCustomEffect(effectInstance, true)
-
-                        result.itemMeta = meta
-                    }
-                }
-
-                val color = resultSection.getString("color")
-                if (color != null) {
-                    val meta = result.itemMeta as PotionMeta
-                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
-                    result.itemMeta = meta
-                }
-
-                println("Adding recipe $recipeName")
-                println("Result: $result")
-                println("Ingredients: $source")
+                val result = createResultItem(resultSection)
 
                 val cookingTime = resultSection.getInt("cookingTime", 200)
                 val experience = resultSection.getDouble("experience", 0.1).toFloat()
 
                 val recipeName1 = "smoker_$recipeName"
+                val key = NamespacedKey(Hardcraft.instance, recipeName1)
 
                 val recipe: SmokingRecipe = when (source) {
                     is Material -> {
                         SmokingRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -581,7 +482,7 @@ class CustomCrafts {
 
                     is RecipeChoice -> {
                         SmokingRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -595,6 +496,7 @@ class CustomCrafts {
                 }
 
                 Hardcraft.instance.server.addRecipe(recipe)
+                customRecipesKeys.add(key)
             }
         } catch (e: Exception) {
             Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
@@ -662,72 +564,18 @@ class CustomCrafts {
                 }
 
                 // Создаем рецепт
-                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
-                val amount = resultSection.getInt("amount", 1)
-                val customModelData = resultSection.getInt("customModelData", -1)
-                val result = ItemStack(mat, amount)
-                if (customModelData != -1) {
-                    val meta = result.itemMeta
-                    meta.setCustomModelData(customModelData)
-                    result.itemMeta = meta
-                }
-                val displayName = resultSection.getString("displayName")
-                if (displayName != null) {
-                    val meta = result.itemMeta
-                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
-                    result.itemMeta = meta
-                }
-
-                if (resultSection.getInt("damage", -1) != -1) {
-                    val meta = result.itemMeta as Damageable
-                    meta.damage = resultSection.getInt("damage")
-                    result.itemMeta = meta
-                }
-
-                // check if potion effects
-                val potionEffects = resultSection.getConfigurationSection("potionEffects")
-                if (potionEffects != null) {
-                    for (key in potionEffects.getKeys(false)) {
-                        PotionEffectType.BAD_OMEN
-                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
-                        if (effect == null) {
-                            println("Invalid potion effect: $key")
-                            continue
-                        }
-                        val duration = potionEffects.getInt("$key.duration", 1)
-                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
-                        val ambient = potionEffects.getBoolean("$key.ambient", false)
-                        val particles = potionEffects.getBoolean("$key.particles", true)
-                        val icon = potionEffects.getBoolean("$key.icon", true)
-                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
-
-                        val meta = result.itemMeta as PotionMeta
-                        meta.addCustomEffect(effectInstance, true)
-
-                        result.itemMeta = meta
-                    }
-                }
-
-                val color = resultSection.getString("color")
-                if (color != null) {
-                    val meta = result.itemMeta as PotionMeta
-                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
-                    result.itemMeta = meta
-                }
-
-                println("Adding recipe $recipeName")
-                println("Result: $result")
-                println("Ingredients: $source")
+                val result = createResultItem(resultSection)
 
                 val cookingTime = resultSection.getInt("cookingTime", 200)
                 val experience = resultSection.getDouble("experience", 0.1).toFloat()
 
                 val recipeName1 = "campfire_$recipeName"
+                val key = NamespacedKey(Hardcraft.instance, recipeName1)
 
                 val recipe: CampfireRecipe = when (source) {
                     is Material -> {
                         CampfireRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -737,7 +585,7 @@ class CustomCrafts {
 
                     is RecipeChoice -> {
                         CampfireRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -751,6 +599,7 @@ class CustomCrafts {
                 }
 
                 Hardcraft.instance.server.addRecipe(recipe)
+                customRecipesKeys.add(key)
             }
         } catch (e: Exception) {
             Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
@@ -818,72 +667,18 @@ class CustomCrafts {
                 }
 
                 // Создаем рецепт
-                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
-                val amount = resultSection.getInt("amount", 1)
-                val customModelData = resultSection.getInt("customModelData", -1)
-                val result = ItemStack(mat, amount)
-                if (customModelData != -1) {
-                    val meta = result.itemMeta
-                    meta.setCustomModelData(customModelData)
-                    result.itemMeta = meta
-                }
-                val displayName = resultSection.getString("displayName")
-                if (displayName != null) {
-                    val meta = result.itemMeta
-                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
-                    result.itemMeta = meta
-                }
-
-                if (resultSection.getInt("damage", -1) != -1) {
-                    val meta = result.itemMeta as Damageable
-                    meta.damage = resultSection.getInt("damage")
-                    result.itemMeta = meta
-                }
-
-                // check if potion effects
-                val potionEffects = resultSection.getConfigurationSection("potionEffects")
-                if (potionEffects != null) {
-                    for (key in potionEffects.getKeys(false)) {
-                        PotionEffectType.BAD_OMEN
-                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
-                        if (effect == null) {
-                            println("Invalid potion effect: $key")
-                            continue
-                        }
-                        val duration = potionEffects.getInt("$key.duration", 1)
-                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
-                        val ambient = potionEffects.getBoolean("$key.ambient", false)
-                        val particles = potionEffects.getBoolean("$key.particles", true)
-                        val icon = potionEffects.getBoolean("$key.icon", true)
-                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
-
-                        val meta = result.itemMeta as PotionMeta
-                        meta.addCustomEffect(effectInstance, true)
-
-                        result.itemMeta = meta
-                    }
-                }
-
-                val color = resultSection.getString("color")
-                if (color != null) {
-                    val meta = result.itemMeta as PotionMeta
-                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
-                    result.itemMeta = meta
-                }
-
-                println("Adding recipe $recipeName")
-                println("Result: $result")
-                println("Ingredients: $source")
+                val result = createResultItem(resultSection)
 
                 val cookingTime = resultSection.getInt("cookingTime", 200)
                 val experience = resultSection.getDouble("experience", 0.1).toFloat()
 
                 val recipeName1 = "blasting_$recipeName"
+                val key = NamespacedKey(Hardcraft.instance, recipeName1)
 
                 val recipe: BlastingRecipe = when (source) {
                     is Material -> {
                         BlastingRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -893,7 +688,7 @@ class CustomCrafts {
 
                     is RecipeChoice -> {
                         BlastingRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source,
                             experience,
@@ -907,6 +702,7 @@ class CustomCrafts {
                 }
 
                 Hardcraft.instance.server.addRecipe(recipe)
+                customRecipesKeys.add(key)
             }
         } catch (e: Exception) {
             Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
@@ -974,69 +770,15 @@ class CustomCrafts {
                 }
 
                 // Создаем рецепт
-                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
-                val amount = resultSection.getInt("amount", 1)
-                val customModelData = resultSection.getInt("customModelData", -1)
-                val result = ItemStack(mat, amount)
-                if (customModelData != -1) {
-                    val meta = result.itemMeta
-                    meta.setCustomModelData(customModelData)
-                    result.itemMeta = meta
-                }
-                val displayName = resultSection.getString("displayName")
-                if (displayName != null) {
-                    val meta = result.itemMeta
-                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
-                    result.itemMeta = meta
-                }
-
-                if (resultSection.getInt("damage", -1) != -1) {
-                    val meta = result.itemMeta as Damageable
-                    meta.damage = resultSection.getInt("damage")
-                    result.itemMeta = meta
-                }
-
-                // check if potion effects
-                val potionEffects = resultSection.getConfigurationSection("potionEffects")
-                if (potionEffects != null) {
-                    for (key in potionEffects.getKeys(false)) {
-                        PotionEffectType.BAD_OMEN
-                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
-                        if (effect == null) {
-                            println("Invalid potion effect: $key")
-                            continue
-                        }
-                        val duration = potionEffects.getInt("$key.duration", 1)
-                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
-                        val ambient = potionEffects.getBoolean("$key.ambient", false)
-                        val particles = potionEffects.getBoolean("$key.particles", true)
-                        val icon = potionEffects.getBoolean("$key.icon", true)
-                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
-
-                        val meta = result.itemMeta as PotionMeta
-                        meta.addCustomEffect(effectInstance, true)
-
-                        result.itemMeta = meta
-                    }
-                }
-
-                val color = resultSection.getString("color")
-                if (color != null) {
-                    val meta = result.itemMeta as PotionMeta
-                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
-                    result.itemMeta = meta
-                }
-
-                println("Adding recipe $recipeName")
-                println("Result: $result")
-                println("Ingredients: $source")
+                val result = createResultItem(resultSection)
 
                 val recipeName1 = "sc_$recipeName"
+                val key = NamespacedKey(Hardcraft.instance, recipeName1)
 
                 val recipe: StonecuttingRecipe = when (source) {
                     is Material -> {
                         StonecuttingRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source
                         )
@@ -1044,7 +786,7 @@ class CustomCrafts {
 
                     is RecipeChoice -> {
                         StonecuttingRecipe(
-                            NamespacedKey(Hardcraft.instance, recipeName1),
+                            key,
                             result,
                             source
                         )
@@ -1056,6 +798,7 @@ class CustomCrafts {
                 }
 
                 Hardcraft.instance.server.addRecipe(recipe)
+                customRecipesKeys.add(key)
             }
         } catch (e: Exception) {
             Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")
@@ -1165,63 +908,7 @@ class CustomCrafts {
                 }
 
                 // Создаем рецепт
-                val mat = Material.matchMaterial(resultSection.getString("type") ?: continue) ?: continue
-                val amount = resultSection.getInt("amount", 1)
-                val customModelData = resultSection.getInt("customModelData", -1)
-                val result = ItemStack(mat, amount)
-                if (customModelData != -1) {
-                    val meta = result.itemMeta
-                    meta.setCustomModelData(customModelData)
-                    result.itemMeta = meta
-                }
-                val displayName = resultSection.getString("displayName")
-                if (displayName != null) {
-                    val meta = result.itemMeta
-                    meta.itemName(Hardcraft.minimessage.deserialize(displayName))
-                    result.itemMeta = meta
-                }
-
-                if (resultSection.getInt("damage", -1) != -1) {
-                    val meta = result.itemMeta as Damageable
-                    meta.damage = resultSection.getInt("damage")
-                    result.itemMeta = meta
-                }
-
-                // check if potion effects
-                val potionEffects = resultSection.getConfigurationSection("potionEffects")
-                if (potionEffects != null) {
-                    for (key in potionEffects.getKeys(false)) {
-                        PotionEffectType.BAD_OMEN
-                        val effect = Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(key))
-                        if (effect == null) {
-                            println("Invalid potion effect: $key")
-                            continue
-                        }
-                        val duration = potionEffects.getInt("$key.duration", 1)
-                        val amplifier = potionEffects.getInt("$key.amplifier", 1)
-                        val ambient = potionEffects.getBoolean("$key.ambient", false)
-                        val particles = potionEffects.getBoolean("$key.particles", true)
-                        val icon = potionEffects.getBoolean("$key.icon", true)
-                        val effectInstance = PotionEffect(effect, duration, amplifier, ambient, particles, icon)
-
-                        val meta = result.itemMeta as PotionMeta
-                        meta.addCustomEffect(effectInstance, true)
-
-                        result.itemMeta = meta
-                    }
-                }
-
-                val color = resultSection.getString("color")
-                if (color != null) {
-                    val meta = result.itemMeta as PotionMeta
-                    meta.color = Color.fromRGB(color.substring(1).toInt(16))
-                    result.itemMeta = meta
-                }
-
-                println("Adding recipe $recipeName")
-                println("Result: $result")
-                println("base: $base")
-                println("addition: $addition")
+                val result = createResultItem(resultSection)
 
                 val recipeName1 = "smithing_$recipeName"
 
@@ -1253,8 +940,10 @@ class CustomCrafts {
                     }
                 }
 
+                val key = NamespacedKey(Hardcraft.instance, recipeName1)
+
                 val recipe = SmithingTransformRecipe(
-                    NamespacedKey(Hardcraft.instance, recipeName1),
+                    key,
                     result,
                     RecipeChoice.empty(),
                     baseChoice,
@@ -1262,6 +951,7 @@ class CustomCrafts {
                 )
 
                 Hardcraft.instance.server.addRecipe(recipe)
+                customRecipesKeys.add(key)
             }
         } catch (e: Exception) {
             Hardcraft.instance.logger.severe("Error while loading furnace recipes from config")

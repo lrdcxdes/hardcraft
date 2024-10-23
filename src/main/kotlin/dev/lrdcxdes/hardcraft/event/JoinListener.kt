@@ -39,6 +39,7 @@ class JoinListener : Listener {
         }
 
         // give player all recipes
+        event.player.discoverRecipes(Hardcraft.instance.cc.customRecipesKeys)
     }
 
     @EventHandler

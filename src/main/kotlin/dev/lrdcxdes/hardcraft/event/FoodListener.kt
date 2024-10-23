@@ -200,5 +200,5 @@ class FoodListener : Listener {
                 }
             }
         }
-    }.runTaskTimer(Hardcraft.instance, 0, 20L * 60)
+    }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 60)
 }

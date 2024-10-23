@@ -60,7 +60,7 @@ class Seasons {
                 }
                 lastTime = world.time
             }
-        }.runTaskTimer(Hardcraft.instance, 0, 20L * 10)
+        }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 10)
     }
 
     private fun updateBiomeTemperatures() {
