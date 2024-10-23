@@ -3,6 +3,9 @@ package dev.lrdcxdes.hardcraft
 import com.mojang.brigadier.Command
 import dev.lrdcxdes.hardcraft.customtables.CustomTableListen
 import dev.lrdcxdes.hardcraft.event.*
+import dev.lrdcxdes.hardcraft.plants.FernManager
+import dev.lrdcxdes.hardcraft.plants.GardenManager
+import dev.lrdcxdes.hardcraft.plants.PlantsEventListener
 import dev.lrdcxdes.hardcraft.raids.Guardian
 import dev.lrdcxdes.hardcraft.raids.PrivateListener
 import dev.lrdcxdes.hardcraft.seasons.Seasons
@@ -70,25 +73,11 @@ class Hardcraft : JavaPlugin() {
                         val player = context.source.sender as? Player ?: return@executes Command.SINGLE_SUCCESS
 
                         player.getTemperatureAsync { temp ->
-                            val seasonTemp = seasons.getTemperature().toString()
-                            val biomeTemp = seasons.getTemperature(player.location.block.biome).toString()
-                            val skyTemp = seasons.getSkyLightTemp(player).toString()
-                            val blockTemp = seasons.getBlockTemp(player.location.block).toString()
                             player.sendMessage(
                                 minimessage.deserialize(
                                     """
-                                    --------------------------
-                                <red>Temperature Info</red>
-                                <blue>--------------------------</blue>
-                                Season: <white>${seasons.season}</white>
-                                Day: <white>${seasons.getDay()}</white>
-                                Biome: <white>${player.location.block.biome}</white>
-                                <green>Your temperature: <white>$temp</white></green>
-                                <green>Season temperature: <white>$seasonTemp</white></green>
-                                <green>Biome temperature: <white>$biomeTemp</white></green>
-                                <green>Block temperature: <white>$blockTemp</white></green>
-                                <green>Sky temperature: <white>$skyTemp</white></green>
-                            """.trimIndent()
+                                    <green>Temperature: $temp</green>
+                                """.trimIndent()
                                 )
                             )
                         }
@@ -121,10 +110,23 @@ class Hardcraft : JavaPlugin() {
         }
 
         // gardens
-        Gardens.init()
-        GardenListener().let {
-            server.pluginManager.registerEvents(it, this)
-        }
+//        Gardens.init()
+//        GardenListener().let {
+//            server.pluginManager.registerEvents(it, this)
+//        }
+
+        // FernListener
+//        fernListener = FernListener()
+//        fernListener.init()
+//        server.pluginManager.registerEvents(fernListener, this)
+
+        // Plants
+        val gardenManager = GardenManager()
+        gardenManager.init()
+        val fernManager = FernManager()
+        fernManager.init()
+        val plantsEventListener = PlantsEventListener(fernManager, gardenManager)
+        server.pluginManager.registerEvents(plantsEventListener, this)
 
         // food freshness
         foodListener = FoodListener()
@@ -137,6 +139,9 @@ class Hardcraft : JavaPlugin() {
 
         // Player freezes by temperature
         server.pluginManager.registerEvents(PlayerTemperatureListener(), this)
+
+        val temperatureEffectsHandler = TemperatureEffectsHandler()
+        temperatureEffectsHandler.startEffectsMonitoring()
 
         // TorchAndCampfire
         TorchAndCampfire()
@@ -175,12 +180,7 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(CustomItemsSpawn(), this)
 
         // Chuma
-        val chuma = Chuma()
-
-        // FernListener
-        fernListener = FernListener()
-        fernListener.init()
-        server.pluginManager.registerEvents(fernListener, this)
+        Chuma()
 
         // CustomTableListen
         server.pluginManager.registerEvents(CustomTableListen(), this)

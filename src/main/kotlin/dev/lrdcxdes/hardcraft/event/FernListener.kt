@@ -3,6 +3,7 @@ package dev.lrdcxdes.hardcraft.event
 import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.Material
 import org.bukkit.block.Block
+import org.bukkit.block.data.Bisected
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
@@ -57,6 +58,11 @@ class FernListener : Listener {
             val fernCount = 1 + Hardcraft.instance.random.nextInt(2)
             val fern = ItemStack(Material.FERN, fernCount)
             block.world.dropItemNaturally(block.location, fern)
+        } else if (block.type == Material.FERN) {
+            ferns.remove(block)
+
+            block.removeMetadata("nowTime", Hardcraft.instance)
+            block.removeMetadata("endTime", Hardcraft.instance)
         }
     }
 
@@ -110,6 +116,15 @@ class FernListener : Listener {
             object : BukkitRunnable() {
                 override fun run() {
                     fern.type = Material.LARGE_FERN
+                    val data = fern.blockData as Bisected
+                    data.half = Bisected.Half.BOTTOM
+                    fern.blockData = data
+
+                    val fernUp = fern.getRelative(0, 1, 0)
+                    fernUp.type = Material.LARGE_FERN
+                    val dataUp = fernUp.blockData as Bisected
+                    dataUp.half = Bisected.Half.TOP
+                    fernUp.blockData = dataUp
                 }
             }.runTask(Hardcraft.instance)
 

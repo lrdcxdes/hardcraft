@@ -1,107 +1,139 @@
 package dev.lrdcxdes.hardcraft.utils
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import org.bukkit.Sound
+import org.bukkit.entity.Player
+import org.bukkit.event.EventHandler
+import org.bukkit.event.Listener
+import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
+import kotlin.random.Random
 
-class Darkphobia {
-    private val players = mutableMapOf<String, Double>()
-    private val soundTimers = mutableMapOf<String, Int>()
+class Darkphobia : Listener {
+    private val players = mutableMapOf<String, DarkphobiaState>()
 
-    private val task = object : BukkitRunnable() {
-        override fun run() {
-            for (player in Hardcraft.instance.server.onlinePlayers) {
-                // ignore players in creative mode or in spectator mode
-                if (player.gameMode == org.bukkit.GameMode.CREATIVE || player.gameMode == org.bukkit.GameMode.SPECTATOR) {
-                    continue
-                }
+    data class DarkphobiaState(
+        var fearLevel: Double = 0.0,
+        var soundTimer: Int = 0
+    )
 
-                var state = players[player.name] ?: 0.0
+    init {
+        // Register events
+        Hardcraft.instance.server.pluginManager.registerEvents(this, Hardcraft.instance)
+        startMainLoop()
+    }
 
-                val lightLevel = player.eyeLocation.block.lightLevel
-                if (lightLevel < 6) {
-                    state += (1.0) * 5
-                } else {
-                    state -= (4.0) * 5
-                }
+    @EventHandler
+    fun onPlayerDeath(event: PlayerDeathEvent) {
+        // Reset player's darkphobia state on death
+        players.remove(event.entity.name)
+    }
 
-                // max state is 500.0
-                // 120+ = slow speed 20%
-                // 180+ = sound noises
-                // 300+ = darkness effect
-                // 480+ = hunger effect
+    private fun updatePlayerState(player: Player) {
+        if (player.gameMode.isInvulnerable) {
+            return
+        }
 
-                if (state > 500.0) {
-                    state = 500.0
-                } else if (state < 0.0) {
-                    state = 0.0
-                }
+        val state = players.getOrPut(player.name) { DarkphobiaState() }
 
-                if (state >= 480.0) {
+        // Update fear level based on light
+        val lightLevel = player.eyeLocation.block.lightLevel
+        state.fearLevel += if (lightLevel < 6) 5.0 else -20.0
+        state.fearLevel = state.fearLevel.coerceIn(0.0, 500.0)
+
+        // Apply effects based on fear level
+        applyEffects(player, state)
+    }
+
+    private fun applyEffects(player: Player, state: DarkphobiaState) {
+        with(state.fearLevel) {
+            when {
+                this >= 480.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 140, 0))
-                }
-
-                if (state >= 300.0) {
                     player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
+                    playSounds(player, state)
                 }
 
-                if (state >= 180.0) {
-                    val timer = soundTimers[player.name] ?: 0
-                    if (timer == 0) {
-                        soundTimers[player.name] = 1
-                        player.playSound(player.location, "minecraft:ambient.cave", 1.0f, 0.5f)
-                    } else {
-                        // every 30 seconds
-                        if (timer % 30 == 0) {
-                            soundTimers[player.name] = timer + 1
-                            // random minecraft:ambient.cave, minecraft:block.{player_block}.place, minecraft:block.{player_block}.break, minecraft:entity.player.attack.nodamage, minecraft:entity.creeper.primed
-                            val sounds = arrayOf(
-                                "minecraft:ambient.cave",
-                                "minecraft:block.stone.place",
-                                "minecraft:block.stone.break",
-                                "minecraft:block.stone.step",
-                                "minecraft:entity.player.attack.nodamage",
-                                "minecraft:entity.creeper.primed"
-                            )
-                            // if its place/break/step/attack then can be multiple times in a row random count
-                            val sound = sounds[Hardcraft.instance.random.nextInt(sounds.size)]
-                            if (sound.contains("place") || sound.contains("break") || sound.contains("step") || sound.contains(
-                                    "attack"
-                                )
-                            ) {
-                                val randomLoc = player.location.clone().add(
-                                    Hardcraft.instance.random.nextInt(10) - 5.0,
-                                    Hardcraft.instance.random.nextInt(10) - 5.0,
-                                    Hardcraft.instance.random.nextInt(10) - 5.0
-                                )
-                                val count = Hardcraft.instance.random.nextInt(3) + 1
-                                for (i in 0 until count) {
-                                    player.playSound(randomLoc, sound, 1.0f, 1.0f)
-                                }
-                            } else if (sound.contains("cave")) {
-                                player.playSound(player.location, sound, 1.0f, 0.5f)
-                            } else {
-                                // behind player
-                                val loc = player.location.clone().add(player.location.direction.multiply(-1))
-                                player.playSound(loc, sound, 1.0f, 1.0f)
-                            }
-                        }
-                    }
+                this >= 300.0 -> {
+                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
+                    playSounds(player, state)
                 }
 
-                if (state >= 120.0) {
+                this >= 180.0 -> {
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
+                    playSounds(player, state)
+                }
+
+                this >= 120.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
                 }
 
-                if (state < 180.0) {
-                    soundTimers.remove(player.name)
-                } else {
-                    soundTimers[player.name] = soundTimers[player.name]!!.plus(1)
+                this < 180.0 -> {
+                    state.soundTimer = 0
                 }
 
-                players[player.name] = state
+                else -> {}
             }
         }
-    }.runTaskTimer(Hardcraft.instance, 0, 20L * 5)
+    }
+
+    private fun playSounds(player: Player, state: DarkphobiaState) {
+        if (state.soundTimer % 30 != 0) {
+            state.soundTimer++
+            return
+        }
+
+        val sounds = listOf(
+            Sound.AMBIENT_CAVE to SoundCategory.AMBIENT,
+            Sound.BLOCK_STONE_PLACE to SoundCategory.BLOCKS,
+            Sound.BLOCK_STONE_BREAK to SoundCategory.BLOCKS,
+            Sound.BLOCK_STONE_STEP to SoundCategory.BLOCKS,
+            Sound.ENTITY_PLAYER_ATTACK_NODAMAGE to SoundCategory.PLAYERS,
+            Sound.ENTITY_CREEPER_PRIMED to SoundCategory.HOSTILE
+        )
+
+        val (sound, category) = sounds.random()
+
+        when (category) {
+            SoundCategory.BLOCKS, SoundCategory.PLAYERS -> {
+                val randomLoc = player.location.clone().add(
+                    Random.nextDouble(-5.0, 5.0),
+                    Random.nextDouble(-5.0, 5.0),
+                    Random.nextDouble(-5.0, 5.0)
+                )
+                repeat(Random.nextInt(1, 4)) {
+                    player.playSound(randomLoc, sound, 1.0f, 1.0f)
+                }
+            }
+
+            SoundCategory.AMBIENT -> {
+                player.playSound(player.location, sound, 1.0f, 0.5f)
+            }
+
+            else -> {
+                val behindPlayer = player.location.clone().add(player.location.direction.multiply(-1))
+                player.playSound(behindPlayer, sound, 1.0f, 1.0f)
+            }
+        }
+
+        state.soundTimer++
+    }
+
+    private fun startMainLoop() {
+        object : BukkitRunnable() {
+            override fun run() {
+                Hardcraft.instance.server.onlinePlayers.forEach { player ->
+                    updatePlayerState(player)
+                }
+            }
+        }.runTaskTimer(Hardcraft.instance, 0, 20L * 5)
+    }
+
+    enum class SoundCategory {
+        AMBIENT, BLOCKS, PLAYERS, HOSTILE
+    }
 }

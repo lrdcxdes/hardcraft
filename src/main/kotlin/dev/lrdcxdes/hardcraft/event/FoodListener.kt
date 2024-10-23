@@ -188,7 +188,7 @@ class FoodListener : Listener {
         override fun run() {
             for (player in Hardcraft.instance.server.onlinePlayers) {
                 // ignore players in creative mode or in spectator mode
-                if (player.gameMode == org.bukkit.GameMode.CREATIVE || player.gameMode == org.bukkit.GameMode.SPECTATOR) {
+                if (player.gameMode.isInvulnerable) {
                     continue
                 }
 

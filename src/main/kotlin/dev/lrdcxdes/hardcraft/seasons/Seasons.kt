@@ -3,12 +3,11 @@ package dev.lrdcxdes.hardcraft.seasons
 import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.block.Biome
 import org.bukkit.block.Block
-import org.bukkit.block.Campfire
-import org.bukkit.block.Smoker
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
+import java.util.concurrent.ConcurrentHashMap
 
 class Seasons {
     private val world = Hardcraft.instance.server.worlds[0]
@@ -17,181 +16,194 @@ class Seasons {
     private var day: Long = 0
     private var lastTime: Long = 0
 
-    val season: String
-        get() {
-            val dayOfYear = (day % 365).toInt()
-            return when (dayOfYear) {
-                in 0..89 -> "spring"
-                in 90..179 -> "summer"
-                in 180..269 -> "autumn"
-                in 270..364 -> "winter"
-                else -> "spring"
-            }
-        }
+    // Use ConcurrentHashMap for thread-safe caching
+    private val playerTemperatureCache = ConcurrentHashMap<Player, CacheEntry>()
+    private val blockTemperatureCache = ConcurrentHashMap<Block, CacheEntry>()
+    private val biomeTemperatureCache = ConcurrentHashMap<Biome, Int>()
 
-    var biomesTemperatures: Map<Biome, Int> = mapOf()
+    // Cache validity duration in milliseconds
+    private val CACHE_DURATION = 5000L
+
+    // Pre-calculated light modifiers for better performance
+    private val lightModifiers = Array(16) { i -> (i - 15) / 2 }
+
+    data class CacheEntry(
+        val temperature: Int,
+        val timestamp: Long
+    )
+
+    val season: String
+        get() = when (val dayOfYear = (day % 365).toInt()) {
+            in 0..89 -> "spring"
+            in 90..179 -> "summer"
+            in 180..269 -> "autumn"
+            else -> "winter"
+        }
 
     var seasonTemperature: Int = 0
-
-    private val playerTemperatureCache: MutableMap<Player, Pair<Int, Long>> = mutableMapOf()
-    private val blockTemperatureCache: MutableMap<Block, Pair<Int, Long>> = mutableMapOf()
+        private set
 
     init {
-        if (world.persistentDataContainer.has(dayKey, PersistentDataType.LONG)) {
-            day = world.persistentDataContainer.get(dayKey, PersistentDataType.LONG) ?: 0
-        } else {
-            world.persistentDataContainer.set(dayKey, PersistentDataType.LONG, 0)
-        }
-
+        day = world.persistentDataContainer.get(dayKey, PersistentDataType.LONG) ?: 0L
         lastTime = world.time
-
         seasonTemperature = seasonTemperatures[season]!!.random()
-        biomesTemperatures = generateBiomesTemperature()
+        updateBiomeTemperatures()
 
+        // Schedule day tracking task
         task = object : BukkitRunnable() {
             override fun run() {
                 if (world.time < lastTime) {
                     day++
                     world.persistentDataContainer.set(dayKey, PersistentDataType.LONG, day)
                     seasonTemperature = seasonTemperatures[season]!!.random()
-                    biomesTemperatures = generateBiomesTemperature()
+                    updateBiomeTemperatures()
                 }
                 lastTime = world.time
             }
         }.runTaskTimer(Hardcraft.instance, 0, 20L * 10)
     }
 
-    fun getDay(): Long {
-        return day
-    }
-
-    fun getTemperature(): Int {
-        return seasonTemperature
-    }
-
-    fun getTemperature(biome: Biome): Int {
-        return biomesTemperatures[biome] ?: seasonTemperature
+    private fun updateBiomeTemperatures() {
+        biomeTemperatureCache.clear()
+        Biome.entries.forEach { biome ->
+            biomeTemperatureCache[biome] = seasonTemperature + (biomeMap[biome] ?: 0)
+        }
     }
 
     fun getTemperature(player: Player): Int {
         val currentTime = System.currentTimeMillis()
 
-        // Check if temperature is cached for the player and valid within the last 5 seconds
-        val cached = playerTemperatureCache[player]
-        if (cached != null && (currentTime - cached.second) < 5000) {
-            return cached.first
-        }
-
-        var envTemp = getTemperature(player.location.block.biome)
-        // using player.location.block.lightFromSky / 2 go near to 0
-        val lightTemp = (player.location.block.lightFromSky - 15) / 2
-        if (lightTemp < 0) {
-            if (envTemp > 0) {
-                envTemp += lightTemp
-                if (envTemp < 0) {
-                    envTemp = 0
-                }
-            } else {
-                envTemp -= lightTemp
-                if (envTemp > 0) {
-                    envTemp = 0
-                }
+        // Check cache
+        playerTemperatureCache[player]?.let { cached ->
+            if (currentTime - cached.timestamp < CACHE_DURATION) {
+                return cached.temperature
             }
         }
-        val blockTemp = player.location.block.lightFromBlocks / 2
-        envTemp += blockTemp
 
-        // calculate smoker and campfire
-        // if player is near a campfire or smoker then add 7-10°C to the temperature
-        val campfire = player.findNearBlock(
-            ignoreWalls = false,
-            range = 5
-        ) { it.type.name.contains("CAMPFIRE") && it.lightLevel > 0 }
-        val smoker = player.findNearBlock(
-            ignoreWalls = false,
-            range = 5
-        ) { it.type.name.contains("SMOKER") && it.lightLevel > 0 }
+        // Calculate base temperature
+        var temp = getBiomeTemperature(player.location.block.biome)
 
-        if (campfire != null) {
-            envTemp += 7
-        }
-        if (smoker != null) {
-            envTemp += 10
-        }
+        // Apply light modifications
+        temp = applyLightModifiers(temp, player.location.block)
 
-        // Cache the temperature for the player
-        playerTemperatureCache[player] = envTemp to currentTime
+        // Calculate nearby heat sources
+        temp += calculateHeatSources(player)
 
-        return envTemp
+        // Apply armor bonuses
+        temp += calculateArmorBonus(player)
+
+        // Cache and return
+        playerTemperatureCache[player] = CacheEntry(temp, currentTime)
+        return temp
     }
 
     fun getTemperature(block: Block): Int {
         val currentTime = System.currentTimeMillis()
-        val cached = blockTemperatureCache[block]
 
-        if (cached != null && (currentTime - cached.second) < 5000) {
-            return cached.first
+        // Check cache
+        blockTemperatureCache[block]?.let { cached ->
+            if (currentTime - cached.timestamp < CACHE_DURATION) {
+                return cached.temperature
+            }
         }
 
-        var envTemp = getTemperature(block.biome)
-        val lightTemp = (block.lightFromSky - 15) / 2
-        if (lightTemp < 0) {
-            if (envTemp > 0) {
-                envTemp += lightTemp
-                if (envTemp < 0) {
-                    envTemp = 0
-                }
+        // Calculate base temperature
+        var temp = getBiomeTemperature(block.biome)
+
+        // Apply light modifications
+        temp = applyLightModifiers(temp, block)
+
+        // Cache and return
+        blockTemperatureCache[block] = CacheEntry(temp, currentTime)
+        return temp
+    }
+
+    private fun getBiomeTemperature(biome: Biome): Int =
+        biomeTemperatureCache[biome] ?: seasonTemperature
+
+    private fun applyLightModifiers(baseTemp: Int, block: Block): Int {
+        var temp = baseTemp
+
+        // Use pre-calculated light modifiers
+        val skyMod = lightModifiers[block.lightFromSky.toInt()]
+        if (skyMod < 0) {
+            temp = if (temp > 0) {
+                maxOf(0, temp + skyMod)
             } else {
-                envTemp -= lightTemp
-                if (envTemp > 0) {
-                    envTemp = 0
+                minOf(0, temp - skyMod)
+            }
+        }
+
+        // Add block light contribution
+        temp += block.lightFromBlocks.toInt() / 2
+        return temp
+    }
+
+    private fun calculateHeatSources(player: Player): Int {
+        var heatBonus = 0
+
+        // Optimize block checking by checking only relevant blocks
+        val loc = player.location
+        val range = 5
+        val minX = loc.blockX - range
+        val minY = loc.blockY - range
+        val minZ = loc.blockZ - range
+        val maxX = loc.blockX + range
+        val maxY = loc.blockY + range
+        val maxZ = loc.blockZ + range
+
+        // Check for heat sources
+        blockLoop@ for (x in minX..maxX step 2) {
+            for (y in minY..maxY step 2) {
+                for (z in minZ..maxZ step 2) {
+                    val block = world.getBlockAt(x, y, z)
+                    when {
+                        block.type.name.contains("CAMPFIRE") && block.lightLevel > 0 -> {
+                            heatBonus += 7
+                            break@blockLoop
+                        }
+
+                        block.type.name.contains("SMOKER") && block.lightLevel > 0 -> {
+                            heatBonus += 10
+                            break@blockLoop
+                        }
+                    }
                 }
             }
         }
-        val blockTemp = block.lightFromBlocks / 2
-        envTemp += blockTemp
 
-        val underName = block.getRelative(0, -1, 0).type.name
-        val haveIceUnder = if (underName.contains("PACKED_ICE")) -15 else if (underName.contains("MAGMA")) 15 else 0
-        envTemp += haveIceUnder
-
-        blockTemperatureCache[block] = envTemp to currentTime
-
-        return envTemp
+        return heatBonus
     }
 
-    fun getSkyLightTemp(player: Player): Int {
-        var envTemp = getTemperature(player.location.block.biome)
-        val lightTemp = (player.location.block.lightFromSky - 15) / 2
-        if (lightTemp < 0) {
-            if (envTemp > 0) {
-                envTemp += lightTemp
-                return if (envTemp < 0) {
-                    0
-                } else {
-                    lightTemp
+    private fun calculateArmorBonus(player: Player): Int {
+        var bonus = 0
+
+        player.inventory.armorContents.forEach { item ->
+            when {
+                item == null -> return@forEach
+                item.type.name.contains("LEATHER") -> {
+                    bonus += when {
+                        item.type.name.contains("HELMET") -> 3
+                        item.type.name.contains("CHESTPLATE") -> 6
+                        item.type.name.contains("LEGGINGS") -> 5
+                        item.type.name.contains("BOOTS") -> 6
+                        else -> 0
+                    }
                 }
-            } else {
-                envTemp -= lightTemp
-                return if (envTemp > 0) {
-                    0
-                } else {
-                    -lightTemp
+
+                else -> {
+                    bonus += when {
+                        item.type.name.contains("HELMET") -> 2
+                        item.type.name.contains("CHESTPLATE") -> 2
+                        item.type.name.contains("LEGGINGS") -> 2
+                        item.type.name.contains("BOOTS") -> 1
+                        else -> 0
+                    }
                 }
             }
         }
-        return 0
-    }
 
-    fun getBlockTemp(block: Block): Int {
-        return block.lightFromBlocks / 2
-    }
-
-    fun generateBiomesTemperature(): Map<Biome, Int> {
-        return Biome.entries.associateWith { biome ->
-            val temperature = seasonTemperature + (biomeMap[biome] ?: 0)
-            temperature
-        }
+        return bonus
     }
 
     companion object {
@@ -269,52 +281,6 @@ class Seasons {
             Biome.END_BARRENS to -7
         )
     }
-}
-
-private fun Player.findNearBlock(
-    ignoreWalls: Boolean,
-    range: Int,
-    blockPredicate: (Block) -> Boolean
-): Block? {
-    val loc = location
-    val x = loc.blockX
-    val y = loc.blockY
-    val z = loc.blockZ
-    for (i in -range..range) {
-        for (j in -range..range) {
-            for (k in -range..range) {
-                val block = world.getBlockAt(x + i, y + j, z + k)
-                if (blockPredicate(block)) {
-                    println("Found block: $block")
-                    println("Block light level: ${block.lightLevel}")
-                    if (ignoreWalls) {
-                        return block
-                    } else {
-                        // Perform ray tracing to ensure the block is not behind a wall
-                        val playerEyeLoc = eyeLocation
-                        val targetBlockLoc = block.location.add(0.5, 0.5, 0.5) // Center of the block
-
-                        val direction = targetBlockLoc.toVector().subtract(playerEyeLoc.toVector()).normalize()
-
-                        // Perform a ray trace from the player's eye location to the block
-                        val rayTraceResult = world.rayTraceBlocks(
-                            playerEyeLoc,
-                            direction,
-                            playerEyeLoc.distance(targetBlockLoc)
-                        )
-
-                        println("Ray trace hitblock: ${rayTraceResult?.hitBlock}")
-
-                        // If the ray trace hits the same block or doesn't hit anything, apply the effect
-                        if (rayTraceResult == null || rayTraceResult.hitBlock == block) {
-                            return block
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return null
 }
 
 fun Player.getTemperature(): Int {

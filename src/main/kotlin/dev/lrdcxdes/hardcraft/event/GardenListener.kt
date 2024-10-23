@@ -76,22 +76,26 @@ class GardenListener : Listener {
         }
         loadedChunks.add(chunk.chunkKey)
 
-        for (x in 0..15) {
-            for (z in 0..15) {
-                for (y in 0..255) {
-                    val block = chunk.getBlock(x, y, z)
-                    if (block.blockData is Ageable) {
-                        val ageable = block.blockData as Ageable
-                        if (allowedGardens.contains(block.type) &&
-                            ageable.age == ageable.maximumAge
-                        ) {
-                            Gardens.addBlock(block)
+        object : BukkitRunnable() {
+            override fun run() {
+                for (x in 0..15) {
+                    for (z in 0..15) {
+                        for (y in 0..255) {
+                            val block = chunk.getBlock(x, y, z)
+                            if (block.blockData is Ageable) {
+                                val ageable = block.blockData as Ageable
+                                if (allowedGardens.contains(block.type) &&
+                                    ageable.age == ageable.maximumAge
+                                ) {
+                                    Gardens.addBlock(block)
+                                }
+                            }
+                            Hardcraft.instance.fernListener.processInChunk(block)
                         }
                     }
-                    Hardcraft.instance.fernListener.processInChunk(block)
                 }
             }
-        }
+        }.runTaskAsynchronously(Hardcraft.instance)
     }
 }
 

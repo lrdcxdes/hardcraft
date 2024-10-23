@@ -37,6 +37,8 @@ class JoinListener : Listener {
         if (!haveRock) {
             event.player.inventory.addItem(rock)
         }
+
+        // give player all recipes
     }
 
     @EventHandler

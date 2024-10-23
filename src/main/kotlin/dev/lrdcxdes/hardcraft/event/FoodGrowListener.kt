@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.event
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import org.bukkit.block.data.Ageable
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockGrowEvent
@@ -52,7 +53,7 @@ class FoodGrowListener : Listener {
             in 17..25 -> {
                 event.isCancelled = true
                 // 200%
-                val ageable = block.blockData as org.bukkit.block.data.Ageable
+                val ageable = block.blockData as? Ageable ?: return
                 ageable.age = (ageable.age + 2).coerceAtMost(ageable.maximumAge)
                 block.blockData = ageable
             }
