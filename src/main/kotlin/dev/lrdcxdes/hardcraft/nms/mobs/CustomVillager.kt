@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
+import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.entity.EntityType
@@ -23,12 +24,13 @@ import java.util.*
 
 class CustomVillager(world: ServerLevel, private val isFriendly: Boolean) : Villager(EntityType.VILLAGER, world),
     NeutralMob {
+    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
     private var persistentAngerTarget: UUID? = null
 
     fun spawn(loc: org.bukkit.Location) {
-        this.setPosRaw(loc.x, loc.y, loc.z)
+        this.moveTo(loc.x, loc.y, loc.z)
         this.persist = true
         (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
     }
@@ -88,7 +90,7 @@ class CustomVillager(world: ServerLevel, private val isFriendly: Boolean) : Vill
     }
 
     override fun getAttributes(): AttributeMap {
-        return AttributeMap(createAttributes().build())
+        return attributes
     }
 
     companion object {

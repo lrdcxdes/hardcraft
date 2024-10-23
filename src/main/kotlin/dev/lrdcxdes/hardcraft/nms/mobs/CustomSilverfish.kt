@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
+import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.RaidGardenGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -23,6 +24,8 @@ import org.bukkit.event.entity.EntityRemoveEvent
 import java.util.*
 
 class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, world) {
+    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
+
     private class SilverfishWakeUpFriendsGoal(private val silverfish: Silverfish) : Goal() {
         private var lookForFriends = 0
 
@@ -192,7 +195,7 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
     }
 
     override fun getAttributes(): AttributeMap {
-        return AttributeMap(createAttributes().build())
+        return attributes
     }
 
     override fun hurt(source: DamageSource, amount: Float): Boolean {
@@ -208,7 +211,7 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
     }
 
     fun spawn(loc: org.bukkit.Location) {
-        this.setPosRaw(loc.x, loc.y, loc.z)
+        this.moveTo(loc.x, loc.y, loc.z)
         this.persist = true
         (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
     }

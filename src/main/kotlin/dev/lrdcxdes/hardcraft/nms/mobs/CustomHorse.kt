@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
+import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.PoopGoal
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.RaidGardenGoal
 import net.minecraft.server.level.ServerLevel
@@ -27,6 +28,8 @@ import java.util.*
 class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
     Horse(EntityType.HORSE, world),
     NeutralMob {
+    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
+
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
     private var persistentAngerTarget: UUID? = null
@@ -75,7 +78,7 @@ class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
     }
 
     fun spawn(loc: org.bukkit.Location) {
-        this.setPosRaw(loc.x, loc.y, loc.z)
+        this.moveTo(loc.x, loc.y, loc.z)
         this.persist = true
         (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
     }
@@ -108,7 +111,7 @@ class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
     }
 
     override fun getAttributes(): AttributeMap {
-        return AttributeMap(createAttributes().build())
+        return attributes
     }
 
     private var moreFoodTicks = 0

@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.PoopGoal
 import io.papermc.paper.event.entity.EntityToggleSitEvent
 import net.minecraft.advancements.CriteriaTriggers
@@ -45,6 +46,8 @@ import java.util.function.Predicate
 import kotlin.math.*
 
 class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
+    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
+
 //    val DATA_TYPE_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId(
 //        CustomChicken::class.java, EntityDataSerializers.INT
 //    )
@@ -895,7 +898,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     }
 
     fun spawn(loc: Location) {
-        this.setPosRaw(loc.x, loc.y, loc.z)
+        this.moveTo(loc.x, loc.y, loc.z)
 
         this.getBukkitEntity().persistentDataContainer.set(KEY, PersistentDataType.BOOLEAN, true)
 
@@ -910,7 +913,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     }
 
     override fun getAttributes(): AttributeMap {
-        return AttributeMap(createAttributes().build())
+        return attributes
     }
 
     companion object {

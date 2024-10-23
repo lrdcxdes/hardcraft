@@ -25,6 +25,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent
 import java.util.*
 
 class CustomCow(world: ServerLevel, private val isFriendly: Boolean = false) : Cow(EntityType.COW, world), NeutralMob {
+    private val attributes: AttributeMap = AttributeMap(createAttributes().build())
+
     private val PERSISTENT_ANGER_TIME = UniformInt.of(20, 39)
     private var remainingAngerTime = 0
     private var persistentAngerTarget: UUID? = null
@@ -66,9 +68,9 @@ class CustomCow(world: ServerLevel, private val isFriendly: Boolean = false) : C
     }
 
     fun spawn(loc: org.bukkit.Location) {
-        this.setPosRaw(loc.x, loc.y, loc.z)
         this.persist = true
-        (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
+        this.moveTo(loc.x, loc.y, loc.z)
+        (loc.world as CraftWorld).handle.addFreshEntityWithPassengers(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
     }
 
     override fun aiStep() {
@@ -99,7 +101,7 @@ class CustomCow(world: ServerLevel, private val isFriendly: Boolean = false) : C
     }
 
     override fun getAttributes(): AttributeMap {
-        return AttributeMap(createAttributes().build())
+        return attributes
     }
 
     private var moreFoodTicks = 0
