@@ -328,11 +328,22 @@ add:
         type: COPPER_INGOT
       G:
         type: GLOWSTONE_DUST
+  flint_and_steel0:
+    result:
+      type: FLINT_AND_STEEL
+      customModelData: 4
+      damage: 61
+    shape:
+      - "S "
+      - " S"
+    ingredients:
+      S:
+        type: STICK
   flint_and_steel1:
     result:
       type: FLINT_AND_STEEL
       customModelData: 3
-      damage: 61
+      damage: 57
     shape:
       - "I "
       - " F"
@@ -344,7 +355,7 @@ add:
   flint_and_steel2:
     result:
       type: FLINT_AND_STEEL
-      damage: 44
+      damage: 19
     shape:
       - "I "
       - " F"
@@ -1632,6 +1643,46 @@ add:
         displayName: "<lang:bts.pumpkin_slice>"
         customModelData: 3
 
+  bowl:
+    result:
+      type: BOWL
+    shape:
+      - "S S"
+      - " S "
+    ingredients:
+      S:
+        type: STICK
+
+  brush_sieve:
+    result:
+      type: BRUSH
+      customModelData: 3
+      displayName: "<lang:bts.sieve>"
+      damage: 40
+    shape:
+      - "SFS"
+      - " S "
+    ingredients:
+      S:
+        type: STICK
+      F:
+        type: FLINT
+
+  brush_sieve2:
+    result:
+      type: BRUSH
+      customModelData: 3
+      displayName: "<lang:bts.sieve>"
+      damage: 40
+    shape:
+      - "F"
+      - "B"
+    ingredients:
+      B:
+        type: BOWL
+      F:
+        type: FLINT
+
 remove:
   - iron_sword
   - stonecutter
@@ -1884,7 +1935,7 @@ remove:
   #  - note_block
   #  - jukebox
   #  - piston
-  #  - bowl
+  - bowl
   #  - item_frame
 
   # All Bricks crafts

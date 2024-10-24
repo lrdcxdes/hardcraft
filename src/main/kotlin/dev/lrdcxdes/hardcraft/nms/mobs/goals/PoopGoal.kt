@@ -30,7 +30,7 @@ open class PoopGoal(
         val itemStack = ItemStack(Material.BROWN_DYE).apply {
             amount = 1
             itemMeta = itemMeta.apply {
-                displayName(Hardcraft.minimessage.deserialize("<gradient:#8B4513:#CD853F>Poop</gradient>"))
+                itemName(Hardcraft.minimessage.deserialize("<color:#562B00>Poop</color>"))
             }
         }
         val stack = CraftItemStack.asNMSCopy(itemStack)

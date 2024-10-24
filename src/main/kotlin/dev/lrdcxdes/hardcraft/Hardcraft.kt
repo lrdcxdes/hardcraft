@@ -181,6 +181,9 @@ class Hardcraft : JavaPlugin() {
         // FlintAndSteelListen
         server.pluginManager.registerEvents(FlintAndSteelListen(), this)
 
+        // SieveBowlListen
+        server.pluginManager.registerEvents(SieveBowlListen(), this)
+
         // Raids
 //        raids()
 

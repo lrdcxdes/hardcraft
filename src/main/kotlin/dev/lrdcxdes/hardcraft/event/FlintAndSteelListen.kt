@@ -13,17 +13,21 @@ class FlintAndSteelListen : Listener {
         if (event.action == Action.RIGHT_CLICK_BLOCK) {
             if (event.item != null) {
                 if (event.item!!.type == Material.FLINT_AND_STEEL) {
-                    if (event.clickedBlock != null) {
-                        if (event.clickedBlock!!.type == Material.CAMPFIRE) {
+                    // Check if the flint&steel customModelData is 4 and then 50% chance to cancel event
+                    val meta = event.item!!.itemMeta as org.bukkit.inventory.meta.Damageable
+                    if (meta.hasCustomModelData() && meta.customModelData == 4) {
+                        if (Math.random() < 0.5) {
                             event.isCancelled = true
 
-                            val meta = event.item!!.itemMeta as org.bukkit.inventory.meta.Damageable
                             meta.damage += 1
-                            event.item!!.itemMeta = meta
 
-                            val data = event.clickedBlock!!.blockData as Campfire
-                            data.isLit = true
-                            event.clickedBlock!!.blockData = data
+                            if (meta.damage >= event.item!!.type.maxDurability) {
+                                event.item!!.amount -= 1
+                            } else {
+                                event.item!!.itemMeta = meta
+                            }
+
+                            return
                         }
                     }
                 }
