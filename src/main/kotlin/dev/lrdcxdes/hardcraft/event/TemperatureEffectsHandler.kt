@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.event
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -40,6 +41,30 @@ class TemperatureEffectsHandler {
             when {
                 temp < -20 -> applyDamage(player, 1.0)
                 temp < -10 -> applyDamage(player, 0.5)
+            }
+
+            // 8 - +21
+            // 7 - +8 -- +20
+            // 6 - -7 -- +7
+            // 5 - -20 -- -8
+            // 4 - -21
+            // 3 - (off)
+
+            val thermometer =
+                player.inventory.find { it?.type == Material.RAW_COPPER && it.itemMeta?.hasCustomModelData() == true && it.itemMeta?.customModelData in 3..8 }
+
+            if (thermometer != null) {
+                val meta = thermometer.itemMeta
+                val data = when {
+                    temp >= 21 -> 8
+                    temp >= 8 -> 7
+                    temp >= -7 -> 6
+                    temp >= -20 -> 5
+                    else -> 4
+                }
+                Hardcraft.instance.logger.info("Temperature: $temp, Data: $data")
+                meta?.setCustomModelData(data)
+                thermometer.itemMeta = meta
             }
         }
     }

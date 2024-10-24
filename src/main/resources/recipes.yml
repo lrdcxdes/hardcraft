@@ -1683,6 +1683,55 @@ add:
       F:
         type: FLINT
 
+  iron_saw:
+    result:
+      type: STONE_AXE
+      customModelData: 5
+      damage: 119
+      displayName: "<lang:bts.iron_saw>"
+    shape:
+      - " O"
+      - "SF"
+    ingredients:
+      O:
+        type: IRON_INGOT
+      S:
+        type: STICK
+      F:
+        type: FLINT
+
+  copper_saw:
+    result:
+      type: STONE_AXE
+      customModelData: 4
+      damage: 123
+      displayName: "<lang:bts.copper_saw>"
+    shape:
+      - " O"
+      - "SF"
+    ingredients:
+      O:
+        type: COPPER_INGOT
+      S:
+        type: STICK
+      F:
+        type: FLINT
+
+  thermometer:
+    result:
+      type: RAW_COPPER
+      displayName: "<lang:bts.thermometer>"
+      customModelData: 3
+    shape:
+      - "G"
+      - "S"
+    ingredients:
+      G:
+        type: REDSTONE
+      S:
+        type: COPPER_INGOT
+
+
 remove:
   - iron_sword
   - stonecutter

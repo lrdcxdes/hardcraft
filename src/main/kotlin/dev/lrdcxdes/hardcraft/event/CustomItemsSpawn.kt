@@ -15,7 +15,7 @@ class CustomItemsSpawn : Listener {
     fun onItemSpawn(event: ItemSpawnEvent) {
         val item = event.entity.itemStack
 
-        val meta = item.itemMeta
+        val meta = item.itemMeta ?: return
         if (meta.persistentDataContainer.has(itemCheckedKey, PersistentDataType.BOOLEAN)) return
 
         when (item.type) {

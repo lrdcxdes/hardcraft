@@ -169,8 +169,14 @@ class Hardcraft : JavaPlugin() {
         // CustomItemsSpawn
         server.pluginManager.registerEvents(CustomItemsSpawn(), this)
 
+        // ThermometerClickListen
+        server.pluginManager.registerEvents(ThermometerClickListen(), this)
+
         // Chuma
         Chuma()
+
+        // SlimeDeathListen
+        server.pluginManager.registerEvents(SlimeListen(), this)
 
         // CustomTableListen
         server.pluginManager.registerEvents(CustomTableListen(), this)
@@ -183,6 +189,9 @@ class Hardcraft : JavaPlugin() {
 
         // SieveBowlListen
         server.pluginManager.registerEvents(SieveBowlListen(), this)
+
+        // SawListen
+        server.pluginManager.registerEvents(SawListen(), this)
 
         // Raids
 //        raids()

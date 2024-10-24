@@ -113,6 +113,21 @@ class Seasons {
         // Apply light modifications
         temp = applyLightModifiers(temp, block)
 
+        // Apply packed_ice or magma if under
+        if (block.type.name.contains("PACKED_ICE")) {
+            temp = -15
+        } else if (block.type.name.contains("MAGMA")) {
+            temp = 15
+        } else {
+            // if under block is packed_ice or magma, apply that temperature
+            val underBlock = block.getRelative(0, -1, 0)
+            if (underBlock.type.name.contains("PACKED_ICE")) {
+                temp += -15
+            } else if (underBlock.type.name.contains("MAGMA")) {
+                temp += 15
+            }
+        }
+
         // Cache and return
         blockTemperatureCache[block] = CacheEntry(temp, currentTime)
         return temp
