@@ -1744,6 +1744,18 @@ add:
       S:
         type: COPPER_INGOT
 
+  bone_arrow:
+    result:
+      type: ARROW
+      displayName: "<lang:bts.bone_arrow>"
+    shape:
+      - "B"
+      - "S"
+    ingredients:
+      B:
+        type: [ FLINT, IRON_NUGGET ]
+      S:
+        type: BONE
 
 remove:
   - iron_sword
