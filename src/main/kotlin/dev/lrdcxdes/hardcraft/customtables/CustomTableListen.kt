@@ -19,7 +19,15 @@ class CustomTableListen : Listener {
         val action = event.action
         if (action != org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK) return
         val block = event.clickedBlock ?: return
-        val table = tables[block.type] ?: return
+        val table = tables[block.type]
+        if (table == null) {
+            // check if Beehive
+            if (block.type == Material.BEEHIVE) {
+                val beehiveTable = BeehiveTable(event.player)
+                beehiveTable.open()
+            }
+            return
+        }
         // if shift then dont cancel event
         if (event.player.isSneaking) return
 
