@@ -1757,7 +1757,20 @@ add:
       S:
         type: BONE
 
+  bundle:
+    result:
+      type: BUNDLE
+    shape:
+      - "S"
+      - "L"
+    ingredients:
+      S:
+        type: STRING
+      L:
+        type: LEATHER
+
 remove:
+  - bundle
   - iron_sword
   - stonecutter
   - grindstone
