@@ -74,9 +74,9 @@ honey_bottle:
   spoilTime: 576000000   # 480 Minecraft days (9600 minutes)
   bestTemperature: 20
 
-melon_slice:
-  spoilTime: 57600000    # 48 Minecraft days (960 minutes)
-  bestTemperature: 4
+# melon_slice:
+#   spoilTime: 57600000    # 48 Minecraft days (960 minutes)
+#   bestTemperature: 4
 
 mushroom_stew:
   spoilTime: 38400000    # 32 Minecraft days (640 minutes)

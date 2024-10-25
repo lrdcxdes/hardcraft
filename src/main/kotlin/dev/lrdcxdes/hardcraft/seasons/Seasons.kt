@@ -13,7 +13,7 @@ class Seasons {
     private val world = Hardcraft.instance.server.worlds[0]
     private val dayKey = Hardcraft.instance.key("day")
     private var task: BukkitTask? = null
-    private var day: Long = 0
+    var day: Long = 0
     private var lastTime: Long = 0
 
     // Use ConcurrentHashMap for thread-safe caching
@@ -33,7 +33,7 @@ class Seasons {
     )
 
     val season: String
-        get() = when (val dayOfYear = (day % 365).toInt()) {
+        get() = when ((day % 365).toInt()) {
             in 0..89 -> "spring"
             in 90..179 -> "summer"
             in 180..269 -> "autumn"

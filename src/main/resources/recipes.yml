@@ -332,7 +332,7 @@ add:
     result:
       type: FLINT_AND_STEEL
       customModelData: 4
-      damage: 61
+      damage: 63
     shape:
       - "S "
       - " S"
@@ -922,15 +922,7 @@ add:
         type: ANY_MUSHROOM
       B:
         type: BOWL
-  melon:
-    result:
-      type: MELON_SLICE
-      amount: 9
-    shape:
-      - "M"
-    ingredients:
-      M:
-        type: MELON
+
   pumpkin:
     result:
       displayName: "<lang:bts.pumpkin_slice>"
@@ -1643,6 +1635,27 @@ add:
         displayName: "<lang:bts.pumpkin_slice>"
         customModelData: 3
 
+  melon_slice:
+    result:
+      type: MELON_SLICE
+      amount: 9
+    shape:
+      - "M"
+    ingredients:
+      M:
+        type: MELON
+
+  melon:
+    result:
+      type: MELON
+    shape:
+      - "PPP"
+      - "PPP"
+      - "PPP"
+    ingredients:
+      P:
+        type: MELON_SLICE
+
   bowl:
     result:
       type: BOWL
@@ -2099,3 +2112,5 @@ remove:
 
   - painting
   - leather
+
+  - pumpkin

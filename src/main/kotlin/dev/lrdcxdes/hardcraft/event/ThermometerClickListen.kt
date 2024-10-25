@@ -30,4 +30,29 @@ class ThermometerClickListen : Listener {
             }
         }
     }
+
+    private fun calculateDate(day: Long): String {
+        val year = day / 360
+        val month = (day % 360) / 30
+        val dayOfMonth = (day % 360) % 30
+        val monthStr = if (month < 10) "0$month" else month.toString()
+        val dayStr = if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth.toString()
+        return "$year-$monthStr-$dayStr"
+    }
+
+    @EventHandler
+    fun onClocksClick(event: PlayerInteractEvent) {
+        if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return
+        val item = event.item ?: return
+        if (item.type != Material.CLOCK) return
+        val meta = item.itemMeta
+        if (!meta.hasCustomModelData()) return
+        val modelData = meta.customModelData
+        if (modelData in 1..2) {
+            // its clock
+            val day = Hardcraft.instance.seasons.day  // day of global world
+            val date = calculateDate(day)
+            event.player.sendMessage("Current date: $date")
+        }
+    }
 }

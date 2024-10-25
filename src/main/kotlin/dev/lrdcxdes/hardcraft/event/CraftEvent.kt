@@ -34,10 +34,6 @@ class CraftEvent : Listener {
                     ?: return
         }
 
-        Hardcraft.instance.logger.info("clicked rawSlot ${event.rawSlot}")
-        Hardcraft.instance.logger.info("clicked slot ${event.slot}")
-        Hardcraft.instance.logger.info("item: ${event.currentItem?.type}")
-
         if (event.rawSlot == 0) {
             // check if input is wood
             val item = event.cursor

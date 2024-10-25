@@ -43,6 +43,13 @@ class EatFoodListener : Listener {
                 applyRawMeatEffect(player, random)
             }
 
+            Material.MELON_SLICE -> {
+                if (random < 50) {
+                    event.isCancelled = true
+                    event.item.amount -= 1
+                }
+            }
+
             Material.POTION -> {
                 val meta = event.item.itemMeta as PotionMeta
                 val color = meta.color?.asRGB() ?: 0

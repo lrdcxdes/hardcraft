@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.CopyOnWriteArraySet
 
 object Constants {
     val SOIL_TYPES = setOf(
@@ -40,7 +41,7 @@ object Constants {
 }
 
 class FernManager {
-    private val ferns = ConcurrentHashMap<Long, MutableSet<Block>>()
+    private val ferns = ConcurrentHashMap<Long, CopyOnWriteArraySet<Block>>()
     private val plugin = Hardcraft.instance
 
     fun addFern(block: Block) {
@@ -54,7 +55,7 @@ class FernManager {
                 FixedMetadataValue(plugin, 60L * (5 + plugin.random.nextInt(3)))
             )
         }
-        ferns.computeIfAbsent(chunkKey) { mutableSetOf() }.add(block)
+        ferns.computeIfAbsent(chunkKey) { CopyOnWriteArraySet() }.add(block)
     }
 
     fun removeFern(block: Block, removeMetadata: Boolean = true) {
@@ -93,8 +94,8 @@ class FernManager {
     fun init() {
         object : BukkitRunnable() {
             override fun run() {
-                ferns.values.forEach { blocks ->
-                    blocks.forEach { growFern(it) }
+                ferns.values.forEach { blockSet ->
+                    blockSet.forEach { growFern(it) }
                 }
             }
         }.runTaskTimerAsynchronously(plugin, 0, 20L * 60)
@@ -105,14 +106,14 @@ class FernManager {
 }
 
 class GardenManager {
-    private val gardens = ConcurrentHashMap<Long, MutableSet<Block>>()
+    private val gardens = ConcurrentHashMap<Long, CopyOnWriteArraySet<Block>>()
     private val world: World = Hardcraft.instance.server.getWorld("world")!!
     private var lastDayState: Boolean = world.isDayTime
     private val spawnSilverfishChance = 0.1
 
     fun addGarden(block: Block) {
         val chunkKey = (block.chunk.x.toLong() shl 32) or block.chunk.z.toLong()
-        gardens.computeIfAbsent(chunkKey) { mutableSetOf() }.add(block)
+        gardens.computeIfAbsent(chunkKey) { CopyOnWriteArraySet() }.add(block)
     }
 
     fun removeGarden(block: Block) {
@@ -283,6 +284,7 @@ class PlantsEventListener(
                                 gardenManager.addGarden(block)
                             }
                         }
+
                         else -> {}
                     }
                 }
