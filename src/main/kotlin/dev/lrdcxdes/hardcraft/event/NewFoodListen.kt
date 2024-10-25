@@ -5,6 +5,7 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -22,8 +23,15 @@ class NewFoodListen : Listener {
 
     @EventHandler
     fun onTryEat(event: PlayerInteractEvent) {
+        if (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) {
+            return
+        }
         // check if cacao beans
         if (event.item?.type == Material.COCOA_BEANS) {
+            if (event.clickedBlock?.type == Material.JUNGLE_LOG) {
+                return
+            }
+
             if (event.player.foodLevel < 20 && event.player.saturation < 5 && event.player.exhaustion < 4) {
                 // cancel event
                 event.isCancelled = true
