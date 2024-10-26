@@ -3,6 +3,7 @@ package dev.lrdcxdes.hardcraft.event
 import org.bukkit.Material
 import org.bukkit.entity.FallingBlock
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockPlaceEvent
 
@@ -38,8 +39,11 @@ class PhysicsPlaceListen : Listener {
         "FROGLIGHT",
     )
 
-    @EventHandler
+    @EventHandler( priority = EventPriority.HIGHEST )
     fun onPlace(event: BlockPlaceEvent) {
+        if (event.isCancelled) {
+            return
+        }
         // replace to falling block
         val block = event.block
         // only if block is solid
