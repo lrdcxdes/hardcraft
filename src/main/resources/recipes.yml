@@ -1769,6 +1769,60 @@ add:
       L:
         type: LEATHER
 
+  verdant_froglight:  # Defender |
+    result:
+      type: VERDANT_FROGLIGHT
+      displayName: "<lang:block.minecraft.verdant_froglight>"
+    shape:
+      - "FCF"
+      - "OBO"
+      - "FOF"
+    ingredients:
+      F:
+        type: COPPER_INGOT
+      C:
+        type: CHEST
+      O:
+        type: COBBLESTONE
+      B:
+        type: SMOKER
+
+  ochre_froglight:  # Defender ||
+    result:
+      type: OCHRE_FROGLIGHT
+      displayName: "<lang:block.minecraft.ochre_froglight>"
+    shape:
+      - "FCF"
+      - "OBO"
+      - "FOF"
+    ingredients:
+      F:
+        type: IRON_INGOT
+      C:
+        type: VERDANT_FROGLIGHT
+      O:
+        type: COBBLED_DEEPSLATE
+      B:
+        type: BLAST_FURNACE
+
+  crimson_froglight:  # Defender |||
+    result:
+      type: CRIMSON_FROGLIGHT
+      displayName: "<lang:block.minecraft.crimson_froglight>"
+    shape:
+      - "FCF"
+      - "OBO"
+      - "FOF"
+    ingredients:
+      F:
+        type: DIAMOND
+      C:
+        type: OCHRE_FROGLIGHT
+      O:
+        type: NETHERRACK
+      B:
+        type: FURNACE
+
 remove:
   - bundle
   - iron_sword
