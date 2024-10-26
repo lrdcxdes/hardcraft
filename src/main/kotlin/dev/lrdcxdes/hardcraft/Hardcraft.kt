@@ -93,6 +93,9 @@ class Hardcraft : JavaPlugin() {
         // MilkCowEvent
         server.pluginManager.registerEvents(MilkCowEvent(), this)
 
+        // TNTThrowListen
+        server.pluginManager.registerEvents(TNTThrowListen(), this)
+
         // CraftEvent
         server.pluginManager.registerEvents(CraftEvent(), this)
 

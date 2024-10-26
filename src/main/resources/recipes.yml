@@ -1805,10 +1805,10 @@ add:
       B:
         type: BLAST_FURNACE
 
-  crimson_froglight:  # Defender |||
+  pearlescent_froglight:  # Defender |||
     result:
-      type: CRIMSON_FROGLIGHT
-      displayName: "<lang:block.minecraft.crimson_froglight>"
+      type: pearlescent_froglight
+      displayName: "<lang:block.minecraft.pearlescent_froglight>"
     shape:
       - "FCF"
       - "OBO"
@@ -1823,7 +1823,55 @@ add:
       B:
         type: FURNACE
 
+  dynamite_one:
+    result:
+      type: GUNPOWDER
+      displayName: "<lang:bts.dynamite_one>"
+      customModelData: 3
+    shape:
+      - "GC"
+      - "S "
+    ingredients:
+      G:
+        type: GUNPOWDER
+      S:
+        type: PAPER
+      C:
+        type: STRING
+
+  dynamite_triple:
+    result:
+      type: GUNPOWDER
+      displayName: "<lang:bts.dynamite_triple>"
+      customModelData: 4
+    shape:
+      - "SG"
+      - "GG"
+    ingredients:
+      G:
+        type: GUNPOWDER
+        displayName: "<lang:bts.dynamite_one>"
+        customModelData: 3
+      S:
+        type: STRING
+
+  tnt:
+    result:
+      type: TNT
+    shape:
+      - "SGS"
+      - "GPG"
+      - "SGS"
+    ingredients:
+      G:
+        type: GUNPOWDER
+      P:
+        type: SAND
+      S:
+        type: PAPER
+
 remove:
+  - tnt
   - bundle
   - iron_sword
   - stonecutter
