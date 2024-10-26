@@ -22,10 +22,10 @@ class ThermometerClickListen : Listener {
             val block = event.clickedBlock
             if (block != null) {
                 val temp = Hardcraft.instance.seasons.getTemperature(block)
-                event.player.sendMessage("Temperature of clicked block: $temp")
+                event.player.sendMessage(Hardcraft.minimessage.deserialize("<lang:bts.thermometer_block>: $temp"))
             } else {
                 event.player.getTemperatureAsync {
-                    event.player.sendMessage("Temperature of player: $it")
+                    event.player.sendMessage(Hardcraft.minimessage.deserialize("<lang:bts.thermometer_player>: $it"))
                 }
             }
         }
@@ -48,6 +48,6 @@ class ThermometerClickListen : Listener {
         // its clock
         val day = Hardcraft.instance.seasons.day  // day of global world
         val date = calculateDate(day)
-        event.player.sendMessage("Current date: $date")
+        event.player.sendMessage(Hardcraft.minimessage.deserialize("<lang:bts.clock_time>: $date"))
     }
 }

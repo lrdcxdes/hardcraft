@@ -50,7 +50,7 @@ fun Creeper.defuse(player: Player) {
     }
 
     val redstoneAmount = DEFUSE_LOOT_RANGE.random()
-    player.sendMessage("You defused the creeper! You got $redstoneAmount redstone.")
+    player.sendMessage(Hardcraft.minimessage.deserialize("<tr:bts.creeper_defuse:$redstoneAmount>"))
 
     val item = ItemStack(Material.REDSTONE, redstoneAmount)
     val meta = item.itemMeta
@@ -72,6 +72,6 @@ fun Creeper.boom(player: Player) {
         return
     }
 
-    player.sendMessage("You failed to defuse the creeper! It exploded.")
+    player.sendMessage(Hardcraft.minimessage.deserialize("<lang:bts.creeper_defuse_fail>"))
     this.explode()
 }
