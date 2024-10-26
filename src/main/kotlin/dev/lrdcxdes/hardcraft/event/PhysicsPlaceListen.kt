@@ -1,6 +1,5 @@
 package dev.lrdcxdes.hardcraft.event
 
-import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.Material
 import org.bukkit.entity.FallingBlock
 import org.bukkit.event.EventHandler
@@ -35,7 +34,8 @@ class PhysicsPlaceListen : Listener {
         "DOOR",
         "COMMAND_BLOCK",
         Material.HOPPER,
-        "PISTON"
+        "PISTON",
+        "FROGLIGHT",
     )
 
     @EventHandler
