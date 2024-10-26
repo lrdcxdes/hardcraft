@@ -45,14 +45,9 @@ class ThermometerClickListen : Listener {
         if (event.action != Action.RIGHT_CLICK_AIR && event.action != Action.RIGHT_CLICK_BLOCK) return
         val item = event.item ?: return
         if (item.type != Material.CLOCK) return
-        val meta = item.itemMeta
-        if (!meta.hasCustomModelData()) return
-        val modelData = meta.customModelData
-        if (modelData in 1..2) {
-            // its clock
-            val day = Hardcraft.instance.seasons.day  // day of global world
-            val date = calculateDate(day)
-            event.player.sendMessage("Current date: $date")
-        }
+        // its clock
+        val day = Hardcraft.instance.seasons.day  // day of global world
+        val date = calculateDate(day)
+        event.player.sendMessage("Current date: $date")
     }
 }
