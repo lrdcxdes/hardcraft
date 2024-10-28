@@ -1,24 +1,28 @@
 package dev.lrdcxdes.hardcraft
 
-import com.mojang.brigadier.Command
 import dev.lrdcxdes.hardcraft.customtables.CustomTableListen
+import dev.lrdcxdes.hardcraft.economy.EconomyCommands
+import dev.lrdcxdes.hardcraft.economy.VaultImpl
 import dev.lrdcxdes.hardcraft.event.*
+import dev.lrdcxdes.hardcraft.friends.FriendsCommand
+import dev.lrdcxdes.hardcraft.friends.FriendsListener
+import dev.lrdcxdes.hardcraft.friends.FriendsManager
 import dev.lrdcxdes.hardcraft.plants.FernManager
 import dev.lrdcxdes.hardcraft.plants.GardenManager
 import dev.lrdcxdes.hardcraft.plants.PlantsEventListener
 import dev.lrdcxdes.hardcraft.seasons.Seasons
-import dev.lrdcxdes.hardcraft.seasons.getTemperatureAsync
+import dev.lrdcxdes.hardcraft.sql.DatabaseManager
 import dev.lrdcxdes.hardcraft.utils.Chuma
 import dev.lrdcxdes.hardcraft.utils.CustomCrafts
 import dev.lrdcxdes.hardcraft.utils.Darkphobia
 import dev.lrdcxdes.hardcraft.utils.TorchAndCampfire
-import io.papermc.paper.command.brigadier.Commands
-import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.milkbowl.vault.economy.Economy
 import org.bukkit.NamespacedKey
 import org.bukkit.World
-import org.bukkit.entity.Player
+import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
+
 
 class Hardcraft : JavaPlugin() {
     val random: java.util.Random = java.util.Random()
@@ -27,6 +31,8 @@ class Hardcraft : JavaPlugin() {
     lateinit var foodListener: FoodListener
     lateinit var seasons: Seasons
     lateinit var cc: CustomCrafts
+    private lateinit var friendsManager: FriendsManager
+    private var econ: Economy? = null
 
     override fun onEnable() {
         // Plugin startup logic
@@ -132,9 +138,43 @@ class Hardcraft : JavaPlugin() {
         // Raids
 //        raids()
 
-        // remove vanilla wind_charge recipe
-        server.removeRecipe(NamespacedKey.minecraft("wind_charge"))
+        database = DatabaseManager()
+        database.connect()
+        database.createTables()
 
+        // OnJoinDatabaseListen
+        server.pluginManager.registerEvents(OnJoinDatabaseListen(), this)
+
+        // Friends
+        friendsManager = FriendsManager()
+        getCommand("friends")?.setExecutor(FriendsCommand(friendsManager))
+        server.pluginManager.registerEvents(FriendsListener(friendsManager), this)
+
+        // Economy
+        vaultImpl = VaultImpl()
+
+        val economyCommands = EconomyCommands()
+        getCommand("economy")?.let {
+            it.setExecutor(economyCommands)
+            it.tabCompleter = economyCommands
+        }
+        getCommand("pay")?.let {
+            it.setExecutor(economyCommands)
+            it.tabCompleter = economyCommands
+        }
+        getCommand("balance")?.setExecutor(economyCommands)
+
+        if (server.pluginManager.getPlugin("Vault") == null) {
+            logger.severe(String.format("[%s] - Disabled due to no Vault dependency found!", name))
+            server.pluginManager.disablePlugin(this)
+            return
+        }
+
+        if (!setupEconomy()) {
+            logger.severe("No economy plugin")
+        }
+
+        // Other listeners
         server.pluginManager.registerEvents(EntityDamageEntityListener(), this)
         server.pluginManager.registerEvents(EntityDropListener(), this)
         server.pluginManager.registerEvents(MedusaListener(), this)
@@ -143,8 +183,17 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(entitySpawnListener, this)
     }
 
+    private lateinit var vaultImpl: VaultImpl
+
+    private fun setupEconomy(): Boolean {
+        server.servicesManager.register(Economy::class.java, vaultImpl, this, ServicePriority.Highest)
+        econ = vaultImpl
+        return true
+    }
+
     override fun onDisable() {
         // Plugin shutdown logic
+        database.disconnect()
     }
 
     fun key(s: String): NamespacedKey {
@@ -154,5 +203,6 @@ class Hardcraft : JavaPlugin() {
     companion object {
         val minimessage: MiniMessage = MiniMessage.miniMessage()
         lateinit var instance: Hardcraft
+        lateinit var database: DatabaseManager
     }
 }
