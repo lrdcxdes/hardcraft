@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.event
 
 import org.bukkit.Material
+import org.bukkit.block.BlockFace
 import org.bukkit.entity.FallingBlock
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -39,7 +40,16 @@ class PhysicsPlaceListen : Listener {
         "FROGLIGHT",
     )
 
-    @EventHandler( priority = EventPriority.HIGHEST )
+    // Check all adjacent blocks for honey/slime
+    private val relativePositions = listOf(
+        BlockFace.NORTH,
+        BlockFace.SOUTH,
+        BlockFace.EAST,
+        BlockFace.WEST,
+        BlockFace.UP
+    )
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     fun onPlace(event: BlockPlaceEvent) {
         if (event.isCancelled) {
             return
@@ -58,6 +68,17 @@ class PhysicsPlaceListen : Listener {
                 return
             }
         }
+        val downBlock = block.getRelative(0, -1, 0)
+        if (!downBlock.isEmpty) return
+
+        for (face in relativePositions) {
+            val relativeBlock = block.getRelative(face)
+            val type = relativeBlock.type
+            if (type == Material.HONEY_BLOCK || type == Material.SLIME_BLOCK) {
+                return
+            }
+        }
+
         val world = block.world
         val fallingBlock = world.spawn(
             block.location.add(0.5, 0.0, 0.5),
