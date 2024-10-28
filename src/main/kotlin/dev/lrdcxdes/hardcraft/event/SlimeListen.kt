@@ -21,7 +21,7 @@ class SlimeListen : Listener {
         if (event.entity.type.name == "SLIME") {
             // get passenger and kill him
             event.entity.passengers.forEach {
-                if (it.type == EntityType.ITEM_DISPLAY && Math.random() < 0.15) {
+                if (it.type == EntityType.ITEM_DISPLAY && Math.random() < 0.60) {
                     val itemStack = (it as ItemDisplay).itemStack
                     event.drops.add(itemStack)
                     it.remove()

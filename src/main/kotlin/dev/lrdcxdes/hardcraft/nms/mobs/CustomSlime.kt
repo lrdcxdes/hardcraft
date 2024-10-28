@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import net.kyori.adventure.text.Component
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.animal.Chicken
 import net.minecraft.world.entity.animal.Rabbit
@@ -11,6 +12,8 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.ItemDisplay
 import org.bukkit.inventory.ItemStack
 import org.joml.Matrix4f
+
+data class SlimeColor(val cmd: Int, val name: String)
 
 class CustomSlime {
     companion object {
@@ -40,26 +43,32 @@ class CustomSlime {
                 return
             }
 
+            val cmd = (Math.random() * 12).toInt() + 1
+
+            val name: String = when (cmd) {
+                1 -> "Blue Slime"
+                2 -> "Dark Purple Slime"
+                3 -> "Green Slime"
+                4 -> "Light Blue Slime"
+                5 -> "Lime Slime"
+                6 -> "Orange Slime"
+                7 -> "Pink Slime"
+                8 -> "Purple Slime"
+                9 -> "Red Slime"
+                10 -> "Yellow Slime"
+                11 -> "White Slime"
+                12 -> "Black Slime"
+                else -> "Green Slime"
+            }
+
+            entity.isCustomNameVisible = false
+            entity.customName(Component.text(name))
+
             // Slimes
             entity.addPassenger(entity.world.spawn(entity.location, ItemDisplay::class.java).apply {
                 setItemStack(ItemStack(Material.SLIME_BALL).apply {
                     itemMeta = itemMeta.apply {
-                        val rnd = (Math.random() * 100).toInt()
-
-                        val cmd = when {
-                            rnd < 15 -> 1
-                            rnd < 25 -> 2
-                            rnd < 40 -> 3
-                            rnd < 50 -> 4
-                            rnd < 65 -> 5
-                            rnd < 70 -> 6
-                            rnd < 75 -> 7
-                            rnd < 90 -> 8
-                            rnd < 95 -> 9
-                            else -> 10
-                        }
                         setCustomModelData(cmd)
-
                         itemName(Hardcraft.minimessage.deserialize("<lang:bts.color_crystal>"))
                     }
                 })
