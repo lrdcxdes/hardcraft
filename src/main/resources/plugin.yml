@@ -1,0 +1,26 @@
+name: hardcraft
+version: '0.7.6-alpha'
+main: dev.lrdcxdes.hardcraft.Hardcraft
+api-version: '1.21'
+load: POSTWORLD
+author: lrdcxdes
+description: Hardcraft core plugin
+
+
+commands:
+  economy:
+    aliases: [ eco ]
+    description: Admin command to manage player balance
+    usage: /economy <set|add|remove> <player> <amount>
+    permission: hardcraft.admin
+  pay:
+    description: Pay another player
+    usage: /pay <player> <amount>
+  balance:
+    description: Check your balance
+    aliases: [ bal ]
+    usage: /balance
+  friends:
+    description: Manage your friends list
+    usage: /friends <list|add|remove|accept|deny> [player]
+    aliases: [ friend, f ]
