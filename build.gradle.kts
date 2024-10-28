@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.lrdcxdes"
-version = "0.7.5-alpha"
+version = "0.7.6-alpha"
 
 repositories {
     mavenCentral()
@@ -16,14 +16,19 @@ repositories {
     maven("https://oss.sonatype.org/content/groups/public/") {
         name = "sonatype"
     }
+    maven("https://jitpack.io") {
+        name = "jitpack.io"
+    }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect")) // Added Kotlin reflection
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8") // Added JDK8 stdlib
     implementation("net.kyori:adventure-api:4.17.0")
+    implementation("com.zaxxer:HikariCP:6.0.0")
     paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
 }
 
