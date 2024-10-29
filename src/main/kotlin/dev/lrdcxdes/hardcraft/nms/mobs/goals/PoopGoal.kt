@@ -31,6 +31,7 @@ open class PoopGoal(
             amount = 1
             itemMeta = itemMeta.apply {
                 itemName(Hardcraft.minimessage.deserialize("<color:#562B00>Poop</color>"))
+                setCustomModelData(3)
             }
         }
         val stack = CraftItemStack.asNMSCopy(itemStack)
