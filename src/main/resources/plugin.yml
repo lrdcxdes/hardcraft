@@ -24,3 +24,7 @@ commands:
     description: Manage your friends list
     usage: /friends <list|add|remove|accept|deny> [player]
     aliases: [ friend, f ]
+  shop:
+    aliases: [ market, magazine ]
+    description: Open Shop
+    usage: /shop [all]
