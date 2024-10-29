@@ -4,6 +4,8 @@ import dev.lrdcxdes.hardcraft.Hardcraft
 import dev.lrdcxdes.hardcraft.nms.mobs.*
 import dev.lrdcxdes.hardcraft.nms.mobs.CustomSlime
 import dev.lrdcxdes.hardcraft.nms.mobs.CustomHorse
+import net.minecraft.world.entity.npc.VillagerProfession
+import net.minecraft.world.entity.npc.VillagerType
 import org.bukkit.Location
 import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.craftbukkit.entity.CraftEntity
@@ -90,7 +92,6 @@ class EntitySpawnListener : Listener {
                 val sheep = CustomSheep((loc.world as CraftWorld).handle, isFriendly)
                 sheep.isBaby = baby
                 sheep.spawn(loc)
-                // sheep drops
             }
 
             is Silverfish -> {
@@ -111,7 +112,12 @@ class EntitySpawnListener : Listener {
                 if ((entity as CraftEntity).handle is CustomVillager) {
                     return
                 }
+
                 val baby = !entity.isAdult
+                val level = entity.villagerLevel
+                val profession = entity.profession
+                val type = entity.villagerType
+
                 if (event != null) {
                     event.isCancelled = true
                 } else {
@@ -123,8 +129,48 @@ class EntitySpawnListener : Listener {
 
                 val villager = CustomVillager((loc.world as CraftWorld).handle, isFriendly)
                 villager.isBaby = baby
+                villager.apply {
+                    var data = villager.villagerData
+                    if (event != null && Math.random() < 0.15) {
+                        println("proknulo nitwin")
+                        data = data.setProfession(VillagerProfession.NITWIT)
+                    } else {
+                        println("isEvent: ${event != null}, ne proknulo")
+                        data = data.setProfession(
+                            when (profession) {
+                                Villager.Profession.NONE -> VillagerProfession.NONE
+                                Villager.Profession.NITWIT -> VillagerProfession.NITWIT
+                                Villager.Profession.CLERIC -> VillagerProfession.CLERIC
+                                Villager.Profession.FARMER -> VillagerProfession.FARMER
+                                Villager.Profession.MASON -> VillagerProfession.MASON
+                                Villager.Profession.ARMORER -> VillagerProfession.ARMORER
+                                Villager.Profession.BUTCHER -> VillagerProfession.BUTCHER
+                                Villager.Profession.CARTOGRAPHER -> VillagerProfession.CARTOGRAPHER
+                                Villager.Profession.FISHERMAN -> VillagerProfession.FISHERMAN
+                                Villager.Profession.FLETCHER -> VillagerProfession.FLETCHER
+                                Villager.Profession.LEATHERWORKER -> VillagerProfession.LEATHERWORKER
+                                Villager.Profession.LIBRARIAN -> VillagerProfession.LIBRARIAN
+                                Villager.Profession.SHEPHERD -> VillagerProfession.SHEPHERD
+                                Villager.Profession.TOOLSMITH -> VillagerProfession.TOOLSMITH
+                                else -> VillagerProfession.WEAPONSMITH
+                            }
+                        )
+                    }
+                    data = data.setLevel(level)
+                    data = data.setType(
+                        when (type) {
+                            Villager.Type.SNOW -> VillagerType.SNOW
+                            Villager.Type.DESERT -> VillagerType.DESERT
+                            Villager.Type.JUNGLE -> VillagerType.JUNGLE
+                            Villager.Type.PLAINS -> VillagerType.PLAINS
+                            Villager.Type.SWAMP -> VillagerType.SWAMP
+                            Villager.Type.SAVANNA -> VillagerType.SAVANNA
+                            else -> VillagerType.TAIGA
+                        }
+                    )
+                    villager.villagerData = data
+                }
                 villager.spawn(loc)
-                villager.drops
             }
 
             is Horse -> {

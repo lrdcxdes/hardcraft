@@ -1,6 +1,5 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
-import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.util.valueproviders.UniformInt
 import net.minecraft.world.entity.EntityType
