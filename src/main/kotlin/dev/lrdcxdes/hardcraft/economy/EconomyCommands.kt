@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.economy
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.utils.formatPrice
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -83,8 +84,8 @@ class EconomyCommands : CommandExecutor, TabCompleter {
                 Hardcraft.database.changePlayerBalance(sender.uniqueId.toString(), amount, "remove")
                 Hardcraft.database.changePlayerBalance(targetPlayer.uniqueId.toString(), amount, "add")
 
-                sender.sendMessage(Hardcraft.minimessage.deserialize("<lang:economy.pay.success-sender:${amount}:${targetPlayer.name}>"))
-                targetPlayer.sendMessage(Hardcraft.minimessage.deserialize("<lang:economy.pay.success-receiver:${amount}:${sender.name}>"))
+                sender.sendMessage(Hardcraft.minimessage.deserialize("<lang:economy.pay.success-sender:${amount.formatPrice()}:${targetPlayer.name}>"))
+                targetPlayer.sendMessage(Hardcraft.minimessage.deserialize("<lang:economy.pay.success-receiver:${amount.formatPrice()}:${sender.name}>"))
                 return true
             }
 
@@ -95,7 +96,7 @@ class EconomyCommands : CommandExecutor, TabCompleter {
                 }
 
                 val balance = Hardcraft.database.getBalance(sender.uniqueId.toString())
-                sender.sendMessage(Hardcraft.minimessage.deserialize("<lang:economy.balance.current:${balance}>"))
+                sender.sendMessage(Hardcraft.minimessage.deserialize("<lang:economy.balance.current:${balance.formatPrice()}>"))
                 return true
             }
         }
