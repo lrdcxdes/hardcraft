@@ -10,6 +10,7 @@ import org.bukkit.Material
 import org.bukkit.craftbukkit.entity.CraftSlime
 import org.bukkit.entity.Entity
 import org.bukkit.entity.ItemDisplay
+import org.bukkit.event.entity.CreatureSpawnEvent
 import org.bukkit.inventory.ItemStack
 import org.joml.Matrix4f
 
@@ -39,7 +40,11 @@ class CustomSlime {
             )
 
             // if already a passenger, ignore
-            if (entity.passengers.isNotEmpty()) {
+//            if (entity.passengers.isNotEmpty()) {
+//                return
+//            }
+
+            if (entity.customName() != null && entity.entitySpawnReason != CreatureSpawnEvent.SpawnReason.SLIME_SPLIT) {
                 return
             }
 
@@ -65,24 +70,24 @@ class CustomSlime {
             entity.customName(Component.text(name))
 
             // Slimes
-            entity.addPassenger(entity.world.spawn(entity.location, ItemDisplay::class.java).apply {
-                setItemStack(ItemStack(Material.SLIME_BALL).apply {
-                    itemMeta = itemMeta.apply {
-                        setCustomModelData(cmd)
-                        itemName(Hardcraft.minimessage.deserialize("<lang:bts.color_crystal>"))
-                    }
-                })
-
-                // translation y 0.2
-                // scale x 0.6, y 0.6, z 0.6
-
-                setTransformationMatrix(
-                    Matrix4f().apply {
-                        setTranslation(0.0f, 0.2f, 0.0f)
-                        scale(0.6f)
-                    }
-                )
-            })
+//            entity.addPassenger(entity.world.spawn(entity.location, ItemDisplay::class.java).apply {
+//                setItemStack(ItemStack(Material.SLIME_BALL).apply {
+//                    itemMeta = itemMeta.apply {
+//                        setCustomModelData(cmd)
+//                        itemName(Hardcraft.minimessage.deserialize("<lang:bts.color_crystal>"))
+//                    }
+//                })
+//
+//                // translation y 0.2
+//                // scale x 0.6, y 0.6, z 0.6
+//
+//                setTransformationMatrix(
+//                    Matrix4f().apply {
+//                        setTranslation(0.0f, 0.2f, 0.0f)
+//                        scale(0.6f)
+//                    }
+//                )
+//            })
         }
     }
 }
