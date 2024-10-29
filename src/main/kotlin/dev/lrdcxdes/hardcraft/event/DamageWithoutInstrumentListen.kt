@@ -15,6 +15,7 @@ import java.util.*
 
 class DamageWithoutInstrumentListen : Listener {
     private val plugin = Hardcraft.instance
+
     // Store active damage tasks for players
     private val activeDamageTasks: MutableMap<UUID, Int> = HashMap()
 
@@ -71,8 +72,7 @@ class DamageWithoutInstrumentListen : Listener {
                 // Apply damage
                 player.damage(DAMAGE_AMOUNT)
             }
-        }.runTaskTimer(plugin, 0L, DAMAGE_INTERVAL_TICKS).taskId
-
+        }.runTaskTimer(plugin, DAMAGE_INTERVAL_TICKS / 2, DAMAGE_INTERVAL_TICKS).taskId
 
         // Store task ID
         activeDamageTasks[playerId] = taskId
@@ -134,6 +134,6 @@ class DamageWithoutInstrumentListen : Listener {
     companion object {
         private const val HARDNESS_THRESHOLD = 0.7
         private const val DAMAGE_AMOUNT = 0.5 // 0.25 heart of damage
-        private const val DAMAGE_INTERVAL_TICKS = 20L // 1 second (20 ticks)
+        private const val DAMAGE_INTERVAL_TICKS = 4 * 20L // 4 second (80 ticks)
     }
 }
