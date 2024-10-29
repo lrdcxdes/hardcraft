@@ -127,7 +127,7 @@ class VaultImpl : Economy {
     }
 
     private fun has(uuid: UUID, amount: Double): Boolean {
-        return Hardcraft.database.has(uuid.toString(), amount)
+        return Hardcraft.database.havePlayer(uuid.toString(), amount)
     }
 
     @Deprecated("Deprecated in Java")
