@@ -1,20 +1,13 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
-import dev.lrdcxdes.hardcraft.Hardcraft
 import net.kyori.adventure.text.Component
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal
 import net.minecraft.world.entity.animal.Chicken
 import net.minecraft.world.entity.animal.Rabbit
 import net.minecraft.world.entity.animal.frog.Frog
-import org.bukkit.Material
 import org.bukkit.craftbukkit.entity.CraftSlime
 import org.bukkit.entity.Entity
-import org.bukkit.entity.ItemDisplay
 import org.bukkit.event.entity.CreatureSpawnEvent
-import org.bukkit.inventory.ItemStack
-import org.joml.Matrix4f
-
-data class SlimeColor(val cmd: Int, val name: String)
 
 class CustomSlime {
     companion object {
