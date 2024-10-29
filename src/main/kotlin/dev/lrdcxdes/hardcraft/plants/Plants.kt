@@ -281,7 +281,9 @@ class PlantsEventListener(
         val chunk = event.chunk
         val chunkKey = (chunk.x.toLong() shl 32) or chunk.z.toLong()
 
-        fernManager.removeChunk(chunkKey)
+        if (!Hardcraft.instance.server.isStopping) {
+            fernManager.removeChunk(chunkKey)
+        }
         gardenManager.removeChunk(chunkKey)
     }
 
