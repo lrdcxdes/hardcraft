@@ -27,7 +27,6 @@ import org.bukkit.plugin.java.JavaPlugin
 class Hardcraft : JavaPlugin() {
     val random: java.util.Random = java.util.Random()
     private lateinit var entitySpawnListener: EntitySpawnListener
-    lateinit var fernListener: FernListener
     lateinit var foodListener: FoodListener
     lateinit var seasons: Seasons
     lateinit var cc: CustomCrafts

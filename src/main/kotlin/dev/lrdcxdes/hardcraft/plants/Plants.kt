@@ -9,9 +9,11 @@ import org.bukkit.block.data.Ageable
 import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.block.BlockBreakEvent
 import org.bukkit.event.block.BlockGrowEvent
 import org.bukkit.event.block.BlockPlaceEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.world.ChunkLoadEvent
 import org.bukkit.event.world.ChunkUnloadEvent
 import org.bukkit.inventory.ItemStack
@@ -180,6 +182,18 @@ class PlantsEventListener(
             Material.FERN -> fernManager.addFern(event.blockPlaced)
             Material.LARGE_FERN -> event.isCancelled = true
             else -> handleGardenPlace(event)
+        }
+    }
+
+    @EventHandler
+    fun onRightClickFern(event: PlayerInteractEvent) {
+        if (event.action != Action.RIGHT_CLICK_BLOCK) return
+        val block = event.clickedBlock ?: return
+        if (block.type == Material.FERN) {
+            val nowTime = block.getMetadata("nowTime").firstOrNull()?.asLong() ?: return
+            val endTime = block.getMetadata("endTime").firstOrNull()?.asLong() ?: return
+
+            event.player.sendMessage("прошло: $nowTime, конец: $endTime, осталось: ${endTime - nowTime}")
         }
     }
 
