@@ -174,6 +174,9 @@ class Hardcraft : JavaPlugin() {
             logger.severe("No economy plugin")
         }
 
+        // DamageWithoutInstrumentListen
+        server.pluginManager.registerEvents(DamageWithoutInstrumentListen(), this)
+
         // Other listeners
         server.pluginManager.registerEvents(EntityDamageEntityListener(), this)
         server.pluginManager.registerEvents(EntityDropListener(), this)
