@@ -3,6 +3,8 @@ package dev.lrdcxdes.hardcraft
 import dev.lrdcxdes.hardcraft.customtables.CustomTableListen
 import dev.lrdcxdes.hardcraft.economy.EconomyCommands
 import dev.lrdcxdes.hardcraft.economy.VaultImpl
+import dev.lrdcxdes.hardcraft.economy.shop.Shop
+import dev.lrdcxdes.hardcraft.economy.shop.ShopCommand
 import dev.lrdcxdes.hardcraft.event.*
 import dev.lrdcxdes.hardcraft.friends.FriendsCommand
 import dev.lrdcxdes.hardcraft.friends.FriendsListener
@@ -25,6 +27,7 @@ import org.bukkit.plugin.java.JavaPlugin
 
 
 class Hardcraft : JavaPlugin() {
+    lateinit var shop: Shop
     val random: java.util.Random = java.util.Random()
     private lateinit var entitySpawnListener: EntitySpawnListener
     lateinit var foodListener: FoodListener
@@ -163,6 +166,11 @@ class Hardcraft : JavaPlugin() {
         }
         getCommand("balance")?.setExecutor(economyCommands)
 
+        // Shop
+        shop = Shop()
+        getCommand("shop")?.setExecutor(ShopCommand(shop))
+        server.pluginManager.registerEvents(shop, this)
+
         if (server.pluginManager.getPlugin("Vault") == null) {
             logger.severe(String.format("[%s] - Disabled due to no Vault dependency found!", name))
             server.pluginManager.disablePlugin(this)
@@ -175,6 +183,9 @@ class Hardcraft : JavaPlugin() {
 
         // DamageWithoutInstrumentListen
         server.pluginManager.registerEvents(DamageWithoutInstrumentListen(), this)
+
+        // PoopThrowEvent
+        server.pluginManager.registerEvents(PoopThrowEvent(), this)
 
         // Other listeners
         server.pluginManager.registerEvents(EntityDamageEntityListener(), this)
@@ -195,6 +206,7 @@ class Hardcraft : JavaPlugin() {
 
     override fun onDisable() {
         // Plugin shutdown logic
+        shop.onDisable()
         database.disconnect()
     }
 
