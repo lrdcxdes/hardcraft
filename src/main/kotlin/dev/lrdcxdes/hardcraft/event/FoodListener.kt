@@ -127,6 +127,9 @@ class FoodListener : Listener {
         ) {
             return
         }
+        if (Hardcraft.instance.shop.inventories.containsKey(event.whoClicked.uniqueId)) {
+            return
+        }
         val item = event.currentItem
         if (item != null && item.type.isEdible) {
             val isPlayerInv = event.view.topInventory == event.inventory
@@ -172,6 +175,9 @@ class FoodListener : Listener {
                 }
             }
         ) {
+            return
+        }
+        if (Hardcraft.instance.shop.inventories.containsKey(event.player.uniqueId)) {
             return
         }
         val temp = event.inventory.location?.block?.let {
