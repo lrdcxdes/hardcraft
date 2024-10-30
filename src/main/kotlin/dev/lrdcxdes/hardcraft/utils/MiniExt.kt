@@ -14,6 +14,7 @@ fun MiniMessage.deserialize(
     for (ph in placeholders) {
         t += ":'${ph.second}'"
     }
+    println("deserializing: $color$t>")
     return Hardcraft.minimessage.deserialize("$color$t>")
 }
 
@@ -24,7 +25,7 @@ fun MiniMessage.deserializeRaw(
 ): String {
     var t = "<lang:$key"
     for (ph in placeholders) {
-        t += ":'${ph.second}'"
+        t += ":${ph.second}"
     }
     return "$color$t>"
 }

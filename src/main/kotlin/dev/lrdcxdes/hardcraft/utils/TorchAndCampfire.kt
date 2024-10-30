@@ -40,16 +40,20 @@ class TorchAndCampfire {
                                 val time =
                                     block.getMetadata("torchTime").firstOrNull()?.asLong()!!
                                 if (time <= System.currentTimeMillis()) {
-                                    // save facing of current torch and replace default torch by the redstone torch islit false
-                                    block.removeMetadata("torchTime", Hardcraft.instance)
-                                    block.type = Material.AIR
-                                    // /playsound minecraft:block.cherry_wood_trapdoor.close master @s ~ ~ ~ 0.5 2.0
-                                    block.location.world.playSound(
-                                        block.location,
-                                        "minecraft:block.cherry_wood_trapdoor.close",
-                                        0.5f,
-                                        2.0f
-                                    )
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            // save facing of current torch and replace default torch by the redstone torch islit false
+                                            block.removeMetadata("torchTime", Hardcraft.instance)
+                                            block.type = Material.AIR
+                                            // /playsound minecraft:block.cherry_wood_trapdoor.close master @s ~ ~ ~ 0.5 2.0
+                                            block.location.world.playSound(
+                                                block.location,
+                                                "minecraft:block.cherry_wood_trapdoor.close",
+                                                0.5f,
+                                                2.0f
+                                            )
+                                        }
+                                    }.runTask(Hardcraft.instance)
                                 }
                             } else if (block.type == org.bukkit.Material.CAMPFIRE) {
                                 if (!block.hasMetadata("campfireTime")) {
@@ -65,18 +69,22 @@ class TorchAndCampfire {
                                 val time =
                                     block.getMetadata("campfireTime").firstOrNull()?.asLong()!!
                                 if (time <= System.currentTimeMillis()) {
-                                    val data = block.blockData as Campfire
-                                    data.isLit = false
-                                    block.blockData = data
+                                    object : BukkitRunnable() {
+                                        override fun run() {
+                                            val data = block.blockData as Campfire
+                                            data.isLit = false
+                                            block.blockData = data
 
-                                    block.removeMetadata("campfireTime", Hardcraft.instance)
+                                            block.removeMetadata("campfireTime", Hardcraft.instance)
 
-                                    block.location.world.playSound(
-                                        block.location,
-                                        "minecraft:block.cherry_wood_trapdoor.close",
-                                        0.5f,
-                                        2.0f
-                                    )
+                                            block.location.world.playSound(
+                                                block.location,
+                                                "minecraft:block.cherry_wood_trapdoor.close",
+                                                0.5f,
+                                                2.0f
+                                            )
+                                        }
+                                    }.runTask(Hardcraft.instance)
                                 }
                             }
                         }
@@ -84,5 +92,5 @@ class TorchAndCampfire {
                 }
             }
         }
-    }.runTaskTimer(Hardcraft.instance, 0, 20L * 15)
+    }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 60)
 }

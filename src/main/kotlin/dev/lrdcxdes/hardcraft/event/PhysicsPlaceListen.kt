@@ -54,6 +54,9 @@ class PhysicsPlaceListen : Listener {
         if (event.isCancelled) {
             return
         }
+        if (event.player.gameMode.isInvulnerable) {
+            return
+        }
         // replace to falling block
         val block = event.block
         // only if block is solid
