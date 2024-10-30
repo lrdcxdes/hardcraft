@@ -97,7 +97,10 @@ class Darkphobia : Listener {
             Sound.BLOCK_STONE_BREAK to SoundCategory.BLOCKS,
             Sound.BLOCK_STONE_STEP to SoundCategory.BLOCKS,
             Sound.ENTITY_PLAYER_ATTACK_NODAMAGE to SoundCategory.PLAYERS,
-            Sound.ENTITY_CREEPER_PRIMED to SoundCategory.HOSTILE
+            Sound.ENTITY_CREEPER_PRIMED to SoundCategory.HOSTILE,
+            Sound.AMBIENT_CRIMSON_FOREST_MOOD to SoundCategory.AMBIENT,
+            Sound.AMBIENT_BASALT_DELTAS_MOOD to SoundCategory.AMBIENT,
+            Sound.AMBIENT_WARPED_FOREST_MOOD to SoundCategory.AMBIENT,
         )
 
         val (sound, category) = sounds.random()
