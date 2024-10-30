@@ -32,6 +32,55 @@ class EntitySpawnListener : Listener {
         }
 
         when (entity) {
+            is ZombieVillager -> {
+                val baby = !entity.isAdult
+                val profession = entity.villagerProfession
+                val type = entity.villagerType
+
+                val villager = (entity as CraftEntity).handle as net.minecraft.world.entity.monster.ZombieVillager
+                villager.isBaby = baby
+                villager.apply {
+                    var data = villager.villagerData
+                    if (event != null && Math.random() < 0.15) {
+                        println("proknulo nitwin")
+                        data = data.setProfession(VillagerProfession.NITWIT)
+                    } else {
+                        println("isEvent: ${event != null}, ne proknulo")
+                        data = data.setProfession(
+                            when (profession) {
+                                Villager.Profession.NONE -> VillagerProfession.NONE
+                                Villager.Profession.NITWIT -> VillagerProfession.NITWIT
+                                Villager.Profession.CLERIC -> VillagerProfession.CLERIC
+                                Villager.Profession.FARMER -> VillagerProfession.FARMER
+                                Villager.Profession.MASON -> VillagerProfession.MASON
+                                Villager.Profession.ARMORER -> VillagerProfession.ARMORER
+                                Villager.Profession.BUTCHER -> VillagerProfession.BUTCHER
+                                Villager.Profession.CARTOGRAPHER -> VillagerProfession.CARTOGRAPHER
+                                Villager.Profession.FISHERMAN -> VillagerProfession.FISHERMAN
+                                Villager.Profession.FLETCHER -> VillagerProfession.FLETCHER
+                                Villager.Profession.LEATHERWORKER -> VillagerProfession.LEATHERWORKER
+                                Villager.Profession.LIBRARIAN -> VillagerProfession.LIBRARIAN
+                                Villager.Profession.SHEPHERD -> VillagerProfession.SHEPHERD
+                                Villager.Profession.TOOLSMITH -> VillagerProfession.TOOLSMITH
+                                else -> VillagerProfession.WEAPONSMITH
+                            }
+                        )
+                    }
+                    data = data.setType(
+                        when (type) {
+                            Villager.Type.SNOW -> VillagerType.SNOW
+                            Villager.Type.DESERT -> VillagerType.DESERT
+                            Villager.Type.JUNGLE -> VillagerType.JUNGLE
+                            Villager.Type.PLAINS -> VillagerType.PLAINS
+                            Villager.Type.SWAMP -> VillagerType.SWAMP
+                            Villager.Type.SAVANNA -> VillagerType.SAVANNA
+                            else -> VillagerType.TAIGA
+                        }
+                    )
+                    villager.villagerData = data
+                }
+            }
+
             is Zombie -> {
                 CustomZombie.setGoals(entity)
             }
