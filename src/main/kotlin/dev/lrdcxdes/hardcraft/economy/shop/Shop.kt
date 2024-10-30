@@ -219,7 +219,7 @@ class Shop : Listener {
         }
     }
 
-    val allItemsManager = AllItemsManager()
+    private val allItemsManager = AllItemsManager()
 
     private val configFile = plugin.dataFolder.resolve("shop.yml")
     private val config = YamlConfiguration.loadConfiguration(configFile)
@@ -306,6 +306,13 @@ class Shop : Listener {
     private fun refreshItemUI(llamaInv: InvLama) {
         for (item in nowItems) {
             refreshItemUI(llamaInv, item)
+        }
+
+        llamaInv.inv.decor = ItemStack(Material.KNOWLEDGE_BOOK).apply {
+            itemMeta = itemMeta.apply {
+                itemName(Hardcraft.minimessage.deserialize("<green><lang:shop.all-items.item>"))
+//                lore(Hardcraft.minimessage.deserialize())
+            }
         }
     }
 
@@ -671,10 +678,15 @@ class Shop : Listener {
                 return
             }
             event.isCancelled = true
+            
+            val itemClick = event.currentItem ?: return
+            if (itemClick.type == Material.KNOWLEDGE_BOOK) {
+                allItemsManager.openInventory(player, 1)
+            }
+
             if (event.slot < 2) {
                 return
             }
-            val itemClick = event.currentItem ?: return
             val item = items[itemClick.type] ?: return
 
             if (event.isLeftClick) {

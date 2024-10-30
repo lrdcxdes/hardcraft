@@ -55,7 +55,7 @@ categories:
     items:
       - STONE
   logs:
-    init_price: 0.5
+    init_price: 0.4
     volume: 480
     items:
       - OAK_LOG
@@ -67,7 +67,7 @@ categories:
       - MANGROVE_LOG
       - CHERRY_LOG
   planks:
-    init_price: 0.125
+    init_price: 0.4
     volume: 640
     items:
       - OAK_PLANKS
@@ -79,12 +79,12 @@ categories:
       - MANGROVE_PLANKS
       - CHERRY_PLANKS
   stick:
-    init_price: 0.0625
+    init_price: 0.1
     volume: 900
     items:
       - STICK
   bamboo:
-    init_price: 0.03125
+    init_price: 0.05
     volume: 1280
     items:
       - BAMBOO
@@ -114,12 +114,12 @@ categories:
     items:
       - ICE
   water:
-    init_price: 5.0
+    init_price: 4.0
     volume: 16
     items:
       - WATER_BUCKET
   lava:
-    init_price: 22.0
+    init_price: 5.0
     volume: 16
     items:
       - LAVA_BUCKET
@@ -134,12 +134,12 @@ categories:
     items:
       - NETHERRACK
   soul:
-    init_price: 0.2
+    init_price: 0.5
     volume: 128
     items:
       - SOUL_SAND
   soul_soil:
-    init_price: 0.3
+    init_price: 0.5
     volume: 128
     items:
       - SOUL_SOIL
@@ -148,23 +148,13 @@ categories:
     volume: 32
     items:
       - SHROOMLIGHT
-  end_stone:
-    init_price: 0.7
-    volume: 128
-    items:
-      - END_STONE
   coal:
     init_price: 0.6
     volume: 256
     items:
       - COAL
-  charcoal:
-    init_price: 0.4
-    volume: 256
-    items:
-      - CHARCOAL
   copper:
-    init_price: 0.5
+    init_price: 1.0
     volume: 128
     items:
       - COPPER_INGOT
@@ -178,53 +168,43 @@ categories:
     volume: 256
     items:
       - IRON_INGOT
-  diamond:
-    init_price: 10.0
-    volume: 64
-    items:
-      - DIAMOND
-  scrap:
-    init_price: 30.0
-    volume: 32
-    items:
-      - NETHERITE_SCRAP
   emerald:
     init_price: 5.0
-    volume: 32
+    volume: 100
     items:
       - EMERALD
   amethyst:
-    init_price: 2.0
+    init_price: 5.0
     volume: 64
     items:
       - AMETHYST_SHARD
-  lapiz:
-    init_price: 4.0
+  la_peace:
+    init_price: 1.0
     volume: 128
     items:
       - LAPIS_LAZULI
   quartz:
-    init_price: 0.5
+    init_price: 0.33
     volume: 128
     items:
       - QUARTZ
   rabbit_foot:
-    init_price: 6.0
-    volume: 16
+    init_price: 3.0
+    volume: 24
     items:
       - RABBIT_FOOT
   spider_eye:
-    init_price: 1.1
-    volume: 100
+    init_price: 0.4
+    volume: 128
     items:
       - SPIDER_EYE
   leather:
-    init_price: 4.0
+    init_price: 3.0
     volume: 64
     items:
       - LEATHER
   feather:
-    init_price: 0.25
+    init_price: 0.35
     volume: 64
     items:
       - FEATHER
@@ -235,32 +215,32 @@ categories:
       - SNOWBALL
   flint:
     init_price: 0.25
-    volume: 320
+    volume: 128
     items:
       - FLINT
   bone:
     init_price: 0.1
-    volume: 64
+    volume: 128
     items:
       - BONE
   gunpowder:
-    init_price: 1.0
-    volume: 32
+    init_price: 1.2
+    volume: 100
     items:
       - GUNPOWDER
   redstone:
-    init_price: 0.05
+    init_price: 0.1
     volume: 128
     items:
       - REDSTONE
   glowstone:
     init_price: 0.1
-    volume: 64
+    volume: 128
     items:
       - GLOWSTONE_DUST
   magma:
-    init_price: 5.0
-    volume: 16
+    init_price: 1.0
+    volume: 64
     items:
       - MAGMA_CREAM
   dragon_breath:
@@ -275,22 +255,22 @@ categories:
       - CLAY_BALL
   ink:
     init_price: 0.1
-    volume: 32
+    volume: 128
     items:
       - INK_SAC
   glow_ink:
-    init_price: 0.2
+    init_price: 1.0
     volume: 32
     items:
       - GLOW_INK_SAC
   slime:
-    init_price: 2.0
-    volume: 32
+    init_price: 1.0
+    volume: 128
     items:
       - SLIME_BALL
   pearl:
-    init_price: 1.0
-    volume: 16
+    init_price: 2.0
+    volume: 48
     items:
       - ENDER_PEARL
   phantom:
@@ -308,11 +288,6 @@ categories:
     volume: 8
     items:
       - NAUTILUS_SHELL
-  lilypad:
-    init_price: 3.0
-    volume: 16
-    items:
-      - LILY_PAD
   prismarine:
     init_price: 0.4
     volume: 64
@@ -329,8 +304,8 @@ categories:
     items:
       - POPPED_CHORUS_FRUIT
   blaze:
-    init_price: 2.0
-    volume: 32
+    init_price: 8.0
+    volume: 24
     items:
       - BLAZE_ROD
   ghast:
@@ -339,18 +314,18 @@ categories:
     items:
       - GHAST_TEAR
   armadillo_scute:
-    init_price: 5.0
-    volume: 8
+    init_price: 1.0
+    volume: 32
     items:
       - ARMADILLO_SCUTE
   turtle_scute:
-    init_price: 5.0
-    volume: 8
+    init_price: 3.0
+    volume: 64
     items:
-      - TURTLE_HELMET
+      - TURTLE_SCUTE
   honeycomb:
     init_price: 1.0
-    volume: 16
+    volume: 64
     items:
       - HONEYCOMB
   raiser:
@@ -406,114 +381,108 @@ categories:
       - NETHERITE_UPGRADE_SMITHING_TEMPLATE
   sapling:
     init_price: 3.0
-    volume: 8
+    volume: 32
     items:
       - OAK_SAPLING
   sapling2:
     init_price: 4.0
-    volume: 8
+    volume: 32
     items:
       - BIRCH_SAPLING
       - ACACIA_SAPLING
   sapling3:
-    init_price: 15.0
-    volume: 8
+    init_price: 8.0
+    volume: 32
     items:
       - SPRUCE_SAPLING
       - JUNGLE_SAPLING
       - DARK_OAK_SAPLING
   sapling4:
-    init_price: 13.0
-    volume: 8
+    init_price: 10.0
+    volume: 32
     items:
       - MANGROVE_PROPAGULE
       - CHERRY_SAPLING
   azalea:
     init_price: 7.0
-    volume: 8
+    volume: 32
     items:
       - AZALEA
       - FLOWERING_AZALEA
   mushroom:
-    init_price: 1.0
-    volume: 16
+    init_price: 0.55
+    volume: 128
     items:
       - BROWN_MUSHROOM
       - RED_MUSHROOM
   mushroom_block:
     init_price: 1.0
-    volume: 32
+    volume: 64
     items:
       - BROWN_MUSHROOM_BLOCK
       - RED_MUSHROOM_BLOCK
   mushroom_nether:
-    init_price: 3.0
-    volume: 16
+    init_price: 8.0
+    volume: 32
     items:
       - CRIMSON_FUNGUS
       - WARPED_FUNGUS
   nether_wart:
-    init_price: 1.0
-    volume: 12
+    init_price: 8.0
+    volume: 32
     items:
       - NETHER_WART
   paper:
     init_price: 0.5
-    volume: 64
+    volume: 128
     items:
       - PAPER
   sugar:
-    init_price: 0.1
+    init_price: 0.3
     volume: 64
     items:
       - SUGAR
   vine:
-    init_price: 0.025
+    init_price: 0.1
     volume: 256
     items:
       - VINE
       - CACTUS
-  chorus_flower:
-    init_price: 5.0
-    volume: 16
-    items:
-      - CHORUS_FLOWER
   rotter_flesh:
-    init_price: 0.1
+    init_price: 0.05
     volume: 128
     items:
       - ROTTEN_FLESH
   dried_kelp:
-    init_price: 1.2
+    init_price: 0.2
     volume: 320
     items:
       - DRIED_KELP
   fish:
-    init_price: 2.9
+    init_price: 1.0
     volume: 64
     items:
       - COD
   fish2:
-    init_price: 3.1
+    init_price: 1.2
     volume: 64
     items:
       - SALMON
   fish3:
-    init_price: 5.0
+    init_price: 1.5
     volume: 64
     items:
       - TROPICAL_FISH
       - PUFFERFISH
   honey_bottle:
-    init_price: 4.0
-    volume: 32
+    init_price: 1.3
+    volume: 64
     items:
       - HONEY_BOTTLE
   seeds:
     init_price: 1.2
     volume: 64
     items:
-      - PUMPKIN_SEEDS
       - COCOA_BEANS
   beetroot_seeds:
     init_price: 1.6
@@ -524,148 +493,149 @@ categories:
     init_price: 2.2
     volume: 42
     items:
+      - PUMPKIN_SEEDS
       - MELON_SEEDS
   glow_berries:
-    init_price: 2.7
-    volume: 32
+    init_price: 2.0
+    volume: 48
     items:
       - GLOW_BERRIES
       - SWEET_BERRIES
   wheat:
     init_price: 1.0
-    volume: 64
+    volume: 128
     items:
       - WHEAT
   carrot:
-    init_price: 5.0
-    volume: 16
+    init_price: 3.0
+    volume: 128
     items:
       - CARROT
   potato:
-    init_price: 10.0
-    volume: 8
+    init_price: 3.0
+    volume: 128
     items:
       - POTATO
   egg:
-    init_price: 16.0
+    init_price: 4.0
     volume: 64
     items:
       - EGG
-  spawn_egg:
-    init_price: 32.0
-    volume: 4
-    items:
-      - CHICKEN_SPAWN_EGG
-  spawn_egg2:
-    init_price: 48.0
-    volume: 4
-    items:
-      - PIG_SPAWN_EGG
-  spawn_egg3:
-    init_price: 56.0
-    volume: 4
-    items:
-      - COW_SPAWN_EGG
-  sheep_egg:
-    init_price: 50.0
-    volume: 4
-    items:
-      - SHEEP_SPAWN_EGG
-  axolotl_egg:
-    init_price: 32.0
-    volume: 4
-    items:
-      - AXOLOTL_SPAWN_EGG
-      - BEE_SPAWN_EGG
-  horse_egg:
-    init_price: 28.0
-    volume: 4
-    items:
-      - HORSE_SPAWN_EGG
-  zombie_egg:
-    init_price: 64.0
-    volume: 4
-    items:
-      - ZOMBIE_SPAWN_EGG
-      - SKELETON_SPAWN_EGG
-  spider_egg:
-    init_price: 56.0
-    volume: 4
-    items:
-      - SPIDER_SPAWN_EGG
-  creeper_egg:
-    init_price: 72.0
-    volume: 4
-    items:
-      - CREEPER_SPAWN_EGG
-  slime_egg:
-    init_price: 80.0
-    volume: 4
-    items:
-      - SLIME_SPAWN_EGG
-      - BLAZE_SPAWN_EGG
-  magma_egg:
-    init_price: 100.0
-    volume: 4
-    items:
-      - MAGMA_CUBE_SPAWN_EGG
-  enderman_egg:
-    init_price: 72.0
-    volume: 4
-    items:
-      - ENDERMAN_SPAWN_EGG
-  ghast_egg:
-    init_price: 170.0
-    volume: 4
-    items:
-      - GHAST_SPAWN_EGG
-  breeze_egg:
-    init_price: 80.0
-    volume: 4
-    items:
-      - STRIDER_SPAWN_EGG
-  piglin_egg:
-    init_price: 90.0
-    volume: 4
-    items:
-      - PIGLIN_SPAWN_EGG
-  village_egg:
-    init_price: 110.0
-    volume: 4
-    items:
-      - VILLAGER_SPAWN_EGG
-  tadpole_bucket:
-    init_price: 22.0
-    volume: 8
-    items:
-      - TADPOLE_BUCKET
+#  spawn_egg:
+#    init_price: 32.0
+#    volume: 4
+#    items:
+#      - CHICKEN_SPAWN_EGG
+#  spawn_egg2:
+#    init_price: 48.0
+#    volume: 4
+#    items:
+#      - PIG_SPAWN_EGG
+#  spawn_egg3:
+#    init_price: 56.0
+#    volume: 4
+#    items:
+#      - COW_SPAWN_EGG
+#  sheep_egg:
+#    init_price: 50.0
+#    volume: 4
+#    items:
+#      - SHEEP_SPAWN_EGG
+#  axolotl_egg:
+#    init_price: 32.0
+#    volume: 4
+#    items:
+#      - AXOLOTL_SPAWN_EGG
+#      - BEE_SPAWN_EGG
+#  horse_egg:
+#    init_price: 28.0
+#    volume: 4
+#    items:
+#      - HORSE_SPAWN_EGG
+#  zombie_egg:
+#    init_price: 64.0
+#    volume: 4
+#    items:
+#      - ZOMBIE_SPAWN_EGG
+#      - SKELETON_SPAWN_EGG
+#  spider_egg:
+#    init_price: 56.0
+#    volume: 4
+#    items:
+#      - SPIDER_SPAWN_EGG
+#  creeper_egg:
+#    init_price: 72.0
+#    volume: 4
+#    items:
+#      - CREEPER_SPAWN_EGG
+#  slime_egg:
+#    init_price: 80.0
+#    volume: 4
+#    items:
+#      - SLIME_SPAWN_EGG
+#      - BLAZE_SPAWN_EGG
+#  magma_egg:
+#    init_price: 100.0
+#    volume: 4
+#    items:
+#      - MAGMA_CUBE_SPAWN_EGG
+#  enderman_egg:
+#    init_price: 72.0
+#    volume: 4
+#    items:
+#      - ENDERMAN_SPAWN_EGG
+#  ghast_egg:
+#    init_price: 170.0
+#    volume: 4
+#    items:
+#      - GHAST_SPAWN_EGG
+#  breeze_egg:
+#    init_price: 80.0
+#    volume: 4
+#    items:
+#      - STRIDER_SPAWN_EGG
+#  piglin_egg:
+#    init_price: 90.0
+#    volume: 4
+#    items:
+#      - PIGLIN_SPAWN_EGG
+#  village_egg:
+#    init_price: 110.0
+#    volume: 4
+#    items:
+#      - VILLAGER_SPAWN_EGG
+#  tadpole_bucket:
+#    init_price: 22.0
+#    volume: 8
+#    items:
+#      - TADPOLE_BUCKET
   name_tag:
-    init_price: 8.0
-    volume: 16
+    init_price: 3.0
+    volume: 48
     items:
       - NAME_TAG
   saddle:
     init_price: 3.0
-    volume: 16
+    volume: 48
     items:
       - SADDLE
       - LEAD
   sponge:
-    init_price: 20.0
-    volume: 8
+    init_price: 8.0
+    volume: 20
     items:
       - WET_SPONGE
       - BELL
-  sculk:
-    init_price: 40.0
-    volume: 8
-    items:
-      - SCULK_SENSOR
-  sculk_catalyst:
-    init_price: 99.0
-    volume: 8
-    items:
-      - SCULK_CATALYST
+#  sculk:
+#    init_price: 40.0
+#    volume: 8
+#    items:
+#      - SCULK_SENSOR
+#  sculk_catalyst:
+#    init_price: 99.0
+#    volume: 8
+#    items:
+#      - SCULK_CATALYST
   echo_shard:
     init_price: 15.0
     volume: 16
@@ -676,20 +646,18 @@ categories:
     volume: 16
     items:
       - WITHER_SKELETON_SKULL
-      - CREEPER_HEAD
-      - DRAGON_HEAD
   shulker_shell:
     init_price: 15.0
     volume: 16
     items:
       - SHULKER_SHELL
   trident:
-    init_price: 32.0
+    init_price: 15.0
     volume: 16
     items:
       - TRIDENT
   elytra:
-    init_price: 140.0
+    init_price: 100.0
     volume: 8
     items:
       - ELYTRA
@@ -699,43 +667,54 @@ categories:
     items:
       - TOTEM_OF_UNDYING
   wind_charge:
-    init_price: 4.0
+    init_price: 0.3
     volume: 32
     items:
       - WIND_CHARGE
   breeze_rod:
-    init_price: 16.0
+    init_price: 1.2
     volume: 32
     items:
       - BREEZE_ROD
   heavy_core:
-    init_price: 140.0
-    volume: 2
+    init_price: 70.0
+    volume: 5
     items:
       - HEAVY_CORE
   bedrock:
-    init_price: 200.0
+    init_price: 500.0
     volume: 8
     items:
       - BEDROCK
   portal_frame:
-    init_price: 180.0
+    init_price: 500.0
     volume: 12
     items:
       - END_PORTAL_FRAME
-  spawner:
-    init_price: 300.0
-    volume: 8
+#  spawner:
+#    init_price: 300.0
+#    volume: 8
+#    items:
+#      - SPAWNER
+#  music_disc_relic:
+#    init_price: 8.0
+#    volume: 16
+#    items:
+#      - MUSIC_DISC_RELIC
+#      - MUSIC_DISC_PIGSTEP
+#  disc_fragment:
+#    init_price: 1.0
+#    volume: 18
+#    items:
+#      - DISC_FRAGMENT_5
+  arrow:
+    init_price: 0.175
+    volume: 256
     items:
-      - SPAWNER
-  music_disc_relic:
-    init_price: 8.0
-    volume: 16
+      - ARROW
+
+  book:
+    init_price: 4.5
+    volume: 128
     items:
-      - MUSIC_DISC_RELIC
-      - MUSIC_DISC_PIGSTEP
-  disc_fragment:
-    init_price: 1.0
-    volume: 18
-    items:
-      - DISC_FRAGMENT_5
+      - BOOK
