@@ -531,7 +531,8 @@ add:
         type: COPPER_INGOT
       R:
         type: REDSTONE
-      B: [ COBBLESTONE, COBBLED_DEEPSLATE ]
+      B:
+        type: [ COBBLESTONE, COBBLED_DEEPSLATE ]
   daylight_detector:
     result:
       type: DAYLIGHT_DETECTOR
