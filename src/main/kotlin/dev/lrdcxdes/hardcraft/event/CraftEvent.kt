@@ -48,7 +48,11 @@ class CraftEvent : Listener {
 
             val meta = saw.itemMeta as Damageable
             meta.damage += 1
-            saw.itemMeta = meta
+            if (meta.damage >= saw.type.maxDurability) {
+                saw.amount -= 1
+            } else {
+                saw.itemMeta = meta
+            }
         }
     }
 }
