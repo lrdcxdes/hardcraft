@@ -61,7 +61,7 @@ class EatFoodListener : Listener {
                     }
                 } else if (color == 0x3cc221) {  // Cactus juice
                     player.foodLevel = (player.foodLevel + 2).coerceAtMost(20)
-                    player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 20 * 10, 0))
+                    addPotionEffect(player, PotionEffectType.NAUSEA, 10, 0)
                 }
             }
 
@@ -81,11 +81,11 @@ class EatFoodListener : Listener {
         //🟫 00-24% - -100% востановлення їжї / отрава 2lvl на 6
 
         if (freshness < 0.25) {
-            addPotionEffect(player, PotionEffectType.POISON, 20 * 20, 1)
+            addPotionEffect(player, PotionEffectType.POISON, 20, 0)
         } else if (freshness < 0.5) {
-            addPotionEffect(player, PotionEffectType.POISON, 12 * 20, 1)
+            addPotionEffect(player, PotionEffectType.POISON, 12, 0)
         } else if (freshness < 0.75) {
-            addPotionEffect(player, PotionEffectType.POISON, 6 * 20, 1)
+            addPotionEffect(player, PotionEffectType.POISON, 6, 0)
         }
     }
 
