@@ -28,9 +28,9 @@ class CraftEvent : Listener {
         val player = event.whoClicked
 
         var saw: ItemStack = player.inventory.itemInMainHand
-        if (saw.type != Material.IRON_AXE) {
+        if (saw.type != Material.STONE_AXE) {
             saw =
-                player.inventory.contents.find { it?.type == Material.IRON_AXE && it.itemMeta?.customModelData in 4..5 }
+                player.inventory.contents.find { it?.type == Material.STONE_AXE && it.itemMeta?.customModelData in 4..5 }
                     ?: return
         }
 
