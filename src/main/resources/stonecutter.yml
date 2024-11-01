@@ -531,6 +531,13 @@ add:
       type: OAK_BUTTON
       amount: 4
 
+  oak_sign:
+    source:
+      type: OAK_PLANKS
+    result:
+      type: OAK_SIGN
+      amount: 1
+
   # Spruce
   spruce_planks_slab:
     source:
@@ -587,6 +594,13 @@ add:
     result:
       type: SPRUCE_BUTTON
       amount: 4
+
+  spruce_sign:
+    source:
+      type: SPRUCE_PLANKS
+    result:
+      type: SPRUCE_SIGN
+      amount: 1
 
   # Birch
   birch_planks_slab:
@@ -645,6 +659,13 @@ add:
       type: BIRCH_BUTTON
       amount: 4
 
+  birch_sign:
+    source:
+      type: BIRCH_PLANKS
+    result:
+      type: BIRCH_SIGN
+      amount: 1
+
   # Jungle
   jungle_planks_slab:
     source:
@@ -701,6 +722,13 @@ add:
     result:
       type: JUNGLE_BUTTON
       amount: 4
+
+  jungle_sign:
+    source:
+      type: JUNGLE_PLANKS
+    result:
+      type: JUNGLE_SIGN
+      amount: 1
 
   # Acacia
   acacia_planks_slab:
@@ -759,6 +787,13 @@ add:
       type: ACACIA_BUTTON
       amount: 4
 
+  acacia_sign:
+    source:
+      type: ACACIA_PLANKS
+    result:
+      type: ACACIA_SIGN
+      amount: 1
+
   # Dark Oak
   dark_oak_planks_slab:
     source:
@@ -815,6 +850,13 @@ add:
     result:
       type: DARK_OAK_BUTTON
       amount: 4
+
+  dark_oak_sign:
+    source:
+      type: DARK_OAK_PLANKS
+    result:
+      type: DARK_OAK_SIGN
+      amount: 1
 
   # Mangrove
   mangrove_planks_slab:
@@ -873,6 +915,13 @@ add:
       type: MANGROVE_BUTTON
       amount: 4
 
+  mangrove_sign:
+    source:
+      type: MANGROVE_PLANKS
+    result:
+      type: MANGROVE_SIGN
+      amount: 1
+
   # Cherry
   cherry_planks_slab:
     source:
@@ -929,6 +978,13 @@ add:
     result:
       type: CHERRY_BUTTON
       amount: 4
+
+  cherry_sign:
+    source:
+      type: CHERRY_PLANKS
+    result:
+      type: CHERRY_SIGN
+      amount: 1
 
   # Bamboo
   bamboo_planks_slab:
@@ -987,6 +1043,13 @@ add:
       type: BAMBOO_BUTTON
       amount: 4
 
+  bamboo_sign:
+    source:
+      type: BAMBOO_PLANKS
+    result:
+      type: BAMBOO_SIGN
+      amount: 1
+
   # Crimson
   crimson_planks_slab:
     source:
@@ -1043,6 +1106,13 @@ add:
     result:
       type: CRIMSON_BUTTON
       amount: 4
+
+  crimson_sign:
+    source:
+      type: CRIMSON_PLANKS
+    result:
+      type: CRIMSON_SIGN
+      amount: 1
 
   # Warped
   warped_planks_slab:
@@ -1101,6 +1171,13 @@ add:
       type: WARPED_BUTTON
       amount: 4
 
+  warped_sign:
+    source:
+      type: WARPED_PLANKS
+    result:
+      type: WARPED_SIGN
+      amount: 1
+
   stone_smooth_stone:
     source:
       type: STONE
@@ -1147,5 +1224,3 @@ add:
     result:
       type: NETHER_BRICK_FENCE
       amount: 2
-
-  #
