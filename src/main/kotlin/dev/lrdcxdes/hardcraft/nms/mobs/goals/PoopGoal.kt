@@ -30,7 +30,7 @@ open class PoopGoal(
         val itemStack = ItemStack(Material.BROWN_DYE).apply {
             amount = 1
             itemMeta = itemMeta.apply {
-                itemName(Hardcraft.minimessage.deserialize("<color:#562B00>Poop</color>"))
+                itemName(Hardcraft.minimessage.deserialize("<color:#562B00><lang:btn.poop></color>"))
                 setCustomModelData(3)
             }
         }
