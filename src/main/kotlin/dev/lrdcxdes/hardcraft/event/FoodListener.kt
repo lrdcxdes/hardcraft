@@ -98,7 +98,7 @@ class FoodListener : Listener {
         val lore: List<Component> =
             listOf(
                 Hardcraft.minimessage.deserialize(
-                    "<!italic><color:#AAAAAA>Fresh: <color:#FFAA00>${(freshness * 100).toInt()}%"
+                    "<!italic><color:#AAAAAA><lang:btn.freshness>: <color:#FFAA00>${(freshness * 100).toInt()}%"
                 ),
 //                Hardcraft.minimessage.deserialize(
 //                    "<gray>${"Best Temperature: %d".format(bestTemperature)}</gray>"
