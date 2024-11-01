@@ -30,7 +30,7 @@ class CraftEvent : Listener {
         var saw: ItemStack = player.inventory.itemInMainHand
         if (saw.type != Material.STONE_AXE) {
             saw =
-                player.inventory.contents.find { it?.type == Material.STONE_AXE && it.itemMeta?.customModelData in 4..5 }
+                player.inventory.contents.find { it?.type == Material.STONE_AXE && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData in 4..5 }
                     ?: return
         }
 
