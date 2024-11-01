@@ -1,23 +1,4 @@
 add:
-  example:
-    result:
-      displayName: "<red>Iron Sword" # Optional (default: null)
-      type: IRON_SWORD # Required
-      amount: 1 # Optional (default: 1)
-      customModelData: null # Optional (default: null)
-    shape: # Required
-      - " I "
-      - " I "
-      - " S "
-    ingredients:
-      I:
-        type: IRON_INGOT # Required
-        amount: 1 # Optional (default: 1)
-        customModelData: null # Optional (default: null)
-      S:
-        type: STICK # Required
-        amount: 1 # Optional (default: 1)
-        customModelData: null # Optional (default: null)
   stonecutter:
     result:
       type: STONECUTTER
