@@ -178,12 +178,14 @@ object RaceManager {
             Attribute.MOVEMENT_SPEED to 0.10000000149011612,
             Attribute.LUCK to 0.0,
             Attribute.SAFE_FALL_DISTANCE to 3.0,
+            Attribute.FALL_DAMAGE_MULTIPLIER to 1.0,
             Attribute.BLOCK_INTERACTION_RANGE to 4.5,
             Attribute.ENTITY_INTERACTION_RANGE to 3.0,
             Attribute.OXYGEN_BONUS to 0.0,
             Attribute.WATER_MOVEMENT_EFFICIENCY to 0.0,
             Attribute.ARMOR to 0.0,
-            Attribute.ARMOR_TOUGHNESS to 0.0
+            Attribute.ARMOR_TOUGHNESS to 0.0,
+            Attribute.MINING_EFFICIENCY to 0.0,
         ),
     )
 
@@ -205,7 +207,8 @@ object RaceManager {
                 Attribute.MOVEMENT_SPEED to 0.08500000126,
                 Attribute.BLOCK_INTERACTION_RANGE to 3.15,
                 Attribute.ENTITY_INTERACTION_RANGE to 2.1,
-                Attribute.ARMOR_TOUGHNESS to 1.15
+                Attribute.ARMOR_TOUGHNESS to 1.15,
+                Attribute.MINING_EFFICIENCY to 1.1,
             ),
         ),
         Race.COBOLD to RaceAttributes(
@@ -215,6 +218,7 @@ object RaceManager {
                 Attribute.MOVEMENT_SPEED to 0.11500000171,
                 Attribute.BLOCK_INTERACTION_RANGE to 2.925,
                 Attribute.ENTITY_INTERACTION_RANGE to 1.95,
+                Attribute.MINING_EFFICIENCY to 1.4,
             ),
         ),
         Race.GIANT to RaceAttributes(
@@ -229,7 +233,7 @@ object RaceManager {
         ),
         Race.VAMPIRE to RaceAttributes(
             baseAttributes = mapOf(
-                Attribute.SAFE_FALL_DISTANCE to 70.0,
+                Attribute.FALL_DAMAGE_MULTIPLIER to 0.3,
             ),
         ),
         Race.AMPHIBIAN to RaceAttributes(

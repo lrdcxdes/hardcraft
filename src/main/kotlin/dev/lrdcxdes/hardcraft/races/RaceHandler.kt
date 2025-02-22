@@ -20,6 +20,12 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
 
+fun Player.getRace(): Race? {
+    val container = persistentDataContainer
+    val raceName = container.get(NamespacedKey(Hardcraft.instance, "playerRace"), PersistentDataType.STRING)
+    return raceName?.let { Race.valueOf(it) } ?: return null
+}
+
 class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener {
     inner class RaceCommand: CommandExecutor {
         override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
@@ -36,12 +42,6 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
 
     init {
         cmd?.setExecutor(RaceCommand())
-    }
-
-    private fun Player.getRace(): Race? {
-        val container = persistentDataContainer
-        val raceName = container.get(NamespacedKey(plugin, "playerRace"), PersistentDataType.STRING)
-        return raceName?.let { Race.valueOf(it) } ?: return null
     }
 
     private fun Player.hasRace(): Boolean {

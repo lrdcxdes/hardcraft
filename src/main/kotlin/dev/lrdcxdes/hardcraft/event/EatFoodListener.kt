@@ -1,8 +1,13 @@
 package dev.lrdcxdes.hardcraft.event
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.races.Race
+import dev.lrdcxdes.hardcraft.races.getRace
 import dev.lrdcxdes.hardcraft.seasons.getTemperature
+import io.papermc.paper.datacomponent.DataComponentTypes
+import io.papermc.paper.datacomponent.item.Consumable
 import org.bukkit.Material
+import org.bukkit.Particle
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -16,11 +21,108 @@ class EatFoodListener : Listener {
         player.addPotionEffect(PotionEffect(type, 20 * duration, amplifier, false, false))
     }
 
+    private val meat = setOf(
+        Material.SALMON,
+        Material.COD,
+        Material.MUTTON,
+        Material.CHICKEN,
+        Material.BEEF,
+        Material.PORKCHOP,
+        Material.RABBIT,
+        Material.ROTTEN_FLESH,
+        Material.SPIDER_EYE,
+        Material.PUFFERFISH,
+        Material.COOKED_SALMON,
+        Material.COOKED_COD,
+        Material.COOKED_MUTTON,
+        Material.COOKED_CHICKEN,
+        Material.COOKED_BEEF,
+        Material.COOKED_PORKCHOP,
+        Material.COOKED_RABBIT,
+        Material.COOKED_SALMON
+    )
+
+    private val crops = setOf(
+        Material.POTATO,
+        Material.CARROT,
+        Material.BEETROOT,
+        Material.MELON_SLICE,
+        Material.PUMPKIN_PIE,
+        Material.APPLE,
+        Material.GOLDEN_APPLE,
+        Material.ENCHANTED_GOLDEN_APPLE,
+        Material.SWEET_BERRIES,
+        Material.GLOW_BERRIES,
+        Material.CHORUS_FRUIT,
+        Material.BREAD,
+        Material.DRIED_KELP
+    )
+
+    private val zazaEffects = listOf(
+        PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 0),
+        PotionEffect(PotionEffectType.LUCK, 60 * 20, 0),
+        PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 20, 0),
+        PotionEffect(PotionEffectType.STRENGTH, 20 * 20, 0),
+        PotionEffect(PotionEffectType.SPEED, 20 * 20, 0),
+        PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 20, 0),
+        PotionEffect(PotionEffectType.HASTE, 20 * 20, 0),
+    )
+
     @EventHandler
     fun onEat(event: PlayerItemConsumeEvent) {
         val player = event.player
         val item = event.item.type
         val random = Hardcraft.instance.random.nextInt(100)
+
+        val race = player.getRace()
+        if (race == Race.ELF) {
+            // if any meat
+            if (meat.contains(item)) {
+                event.isCancelled = true
+                player.sendMessage("§cElves can't eat meat")
+                return
+            }
+        } else if (race == Race.GOBLIN || race == Race.DRAGONBORN) {
+            // if any crops
+            if (crops.contains(item)) {
+                event.isCancelled = true
+                player.sendMessage("§cGoblins can't eat crops")
+                return
+            }
+        }
+
+        if (item.name.contains("SEEDS")) {
+            if (Hardcraft.instance.random.nextInt(100) > 20) {
+                event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0))
+            }
+            return
+        }
+        // if (event.item?.type == Material.FLOWER_BANNER_PATTERN && event.item?.itemMeta?.customModelData == 3) {
+        if (item == Material.FLOWER_BANNER_PATTERN && event.item.itemMeta?.customModelData == 3) {
+            val loc = event.player.eyeLocation.add(event.player.location.direction.multiply(0.1))
+
+            event.player.playSound(
+                loc,
+                "minecraft:entity.blaze.ambient",
+                0.2f,
+                2.0f
+            )
+
+            // smoke effect
+            loc.world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, loc, 10, 0.1, 0.1, 0.1, 0.1)
+
+            // random zaza effect
+            val effect = zazaEffects[Hardcraft.instance.random.nextInt(zazaEffects.size)]
+            event.player.addPotionEffect(effect)
+
+            event.player.foodLevel = (event.player.foodLevel - 3).coerceAtLeast(0)
+
+            // random if 3%
+            if (Hardcraft.instance.random.nextInt(100) < 3) {
+                event.player.playSound(event.player.location, "minecraft:music_disc.stal", 0.6f, 1.5f)
+            }
+            return
+        }
 
         when (item) {
             Material.CHORUS_FRUIT -> {

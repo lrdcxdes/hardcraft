@@ -1,90 +1,77 @@
 package dev.lrdcxdes.hardcraft.event
 
-import dev.lrdcxdes.hardcraft.Hardcraft
-import org.bukkit.Material
-import org.bukkit.Particle
+import dev.lrdcxdes.hardcraft.races.Race
+import dev.lrdcxdes.hardcraft.races.getRace
+import io.papermc.paper.datacomponent.DataComponentTypes
+import io.papermc.paper.datacomponent.item.Consumable
+import io.papermc.paper.datacomponent.item.FoodProperties
+import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityPickupItemEvent
+import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.potion.PotionEffect
-import org.bukkit.potion.PotionEffectType
+import org.bukkit.inventory.ItemStack
 
 class NewFoodListen : Listener {
-    private val zazaEffects = listOf(
-        PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 0),
-        PotionEffect(PotionEffectType.LUCK, 60 * 20, 0),
-        PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 20, 0),
-        PotionEffect(PotionEffectType.STRENGTH, 20 * 20, 0),
-        PotionEffect(PotionEffectType.SPEED, 20 * 20, 0),
-        PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 20, 0),
-        PotionEffect(PotionEffectType.HASTE, 20 * 20, 0),
-    )
+    @EventHandler
+    fun onPickup(event: EntityPickupItemEvent) {
+        if (event.entity !is Player) return
+        val item = event.item.itemStack
+        setItemComponents(item, event.entity as Player)
+    }
+
+    private fun setItemComponents(item: ItemStack, player: Player) {
+        if (item.type.name.contains("_SEEDS")) {
+            item.setData(
+                DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1F).animation(
+                    ItemUseAnimation.EAT
+                ).build()
+            )
+            item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(1).build())
+        } else if (item.type.name.contains("COAL")) {
+            val race = player.getRace()
+            if (race == Race.DWARF) {
+                item.setData(
+                    DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1.5F).animation(
+                        ItemUseAnimation.EAT
+                    ).build()
+                )
+                item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(4).build())
+            } else {
+                item.unsetData(
+                    DataComponentTypes.CONSUMABLE
+                )
+                item.unsetData(DataComponentTypes.FOOD)
+            }
+        } else if (item.type.name == "COCOA_BEANS") {
+            item.setData(
+                DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1F).animation(
+                    ItemUseAnimation.EAT
+                ).build()
+            )
+            item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(1).build())
+        } else if (item.type.name == "FLOWER_BANNER_PATTERN" && item.itemMeta?.customModelData == 3) {
+            item.setData(
+                DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(5F).animation(
+                    ItemUseAnimation.SPYGLASS
+                ).hasConsumeParticles(false).build()
+            )
+        }
+    }
 
     @EventHandler
-    fun onTryEat(event: PlayerInteractEvent) {
-        if (event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) {
-            return
-        }
-        // check if cacao beans
-        if (event.item?.type == Material.COCOA_BEANS) {
-            if (event.clickedBlock?.type == Material.JUNGLE_LOG) {
-                return
-            }
+    fun onInvClick(event: InventoryClickEvent) {
+        val item = event.currentItem ?: return
+        if (event.whoClicked !is Player) return
+        setItemComponents(item, event.whoClicked as Player)
+    }
 
-            if (event.player.foodLevel < 20 && event.player.saturation < 5 && event.player.exhaustion < 4) {
-                // cancel event
-                event.isCancelled = true
-
-                event.item!!.amount -= 1
-
-                // play eat sound
-                event.player.playSound(event.player.location, "minecraft:entity.generic.eat", 1.0f, 1.0f)
-
-                // set food level to 20
-                event.player.foodLevel += 1
-            }
-        } else if (event.item?.type?.name?.contains("SEEDS") == true) {
-            if (event.clickedBlock?.type?.equals(Material.FARMLAND) == true) {
-                return
-            }
-
-            // 20% chance to eat
-            if (event.player.foodLevel < 20 && event.player.saturation < 5 && event.player.exhaustion < 4) {
-                event.item!!.amount -= 1
-                event.player.playSound(event.player.location, "minecraft:entity.generic.eat", 1.0f, 1.0f)
-                if (Hardcraft.instance.random.nextInt(100) < 20) {
-                    event.player.foodLevel += 1
-                } else {
-                    event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0))
-                }
-            }
-        } else if (event.item?.type == Material.FLOWER_BANNER_PATTERN && event.item?.itemMeta?.customModelData == 3) {
-            event.item!!.amount -= 1
-            // /playsound minecraft:entity.blaze.ambient master lrdcxdes 0.2 2.0
-            // +0.5 block straight in front of your eyes
-            val loc = event.player.eyeLocation.add(event.player.location.direction.multiply(0.1))
-
-            event.player.playSound(
-                loc,
-                "minecraft:entity.blaze.ambient",
-                0.2f,
-                2.0f
-            )
-
-            // smoke effect
-            loc.world.spawnParticle(Particle.CAMPFIRE_SIGNAL_SMOKE, loc, 10, 0.1, 0.1, 0.1, 0.1)
-
-            // random zaza effect
-            val effect = zazaEffects[Hardcraft.instance.random.nextInt(zazaEffects.size)]
-            event.player.addPotionEffect(effect)
-
-            event.player.foodLevel = (event.player.foodLevel - 3).coerceAtLeast(0)
-
-            // random if 3%
-            if (Hardcraft.instance.random.nextInt(100) < 3) {
-                event.player.playSound(event.player.location, "minecraft:music_disc.stal", 0.6f, 1.5f)
-            }
-        }
+    @EventHandler
+    fun onInteract(event: PlayerInteractEvent) {
+        if (!event.action.name.contains("RIGHT")) return
+        val item = event.item ?: return
+        setItemComponents(item, event.player)
     }
 }
