@@ -11,6 +11,7 @@ import dev.lrdcxdes.hardcraft.friends.FriendsManager
 import dev.lrdcxdes.hardcraft.plants.FernManager
 import dev.lrdcxdes.hardcraft.plants.GardenManager
 import dev.lrdcxdes.hardcraft.plants.PlantsEventListener
+import dev.lrdcxdes.hardcraft.races.RaceHandler
 import dev.lrdcxdes.hardcraft.seasons.Seasons
 import dev.lrdcxdes.hardcraft.sql.DatabaseManager
 import dev.lrdcxdes.hardcraft.utils.Chuma
@@ -133,8 +134,8 @@ class Hardcraft : JavaPlugin() {
         // SawListen
         server.pluginManager.registerEvents(SawListen(), this)
 
-        // Raids
-//        raids()
+        // RaceHandler
+        server.pluginManager.registerEvents(RaceHandler(this, getCommand("race")), this)
 
         database = DatabaseManager()
         database.connect()

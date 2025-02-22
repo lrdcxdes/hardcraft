@@ -19,7 +19,7 @@ class SlowPlayerListener : Listener {
                 player.addPotionEffect(
                     PotionEffect(
                         PotionEffectType.MINING_FATIGUE,
-                        Integer.MAX_VALUE,
+                        -1,
                         1,
                         false,
                         false
@@ -29,7 +29,7 @@ class SlowPlayerListener : Listener {
                 player.addPotionEffect(
                     PotionEffect(
                         PotionEffectType.MINING_FATIGUE,
-                        Integer.MAX_VALUE,
+                        -1,
                         2,
                         false,
                         false
@@ -43,7 +43,7 @@ class SlowPlayerListener : Listener {
                 player.addPotionEffect(
                     PotionEffect(
                         PotionEffectType.MINING_FATIGUE,
-                        Integer.MAX_VALUE,
+                        -1,
                         1,
                         false,
                         false
@@ -54,7 +54,7 @@ class SlowPlayerListener : Listener {
                 player.addPotionEffect(
                     PotionEffect(
                         PotionEffectType.MINING_FATIGUE,
-                        Integer.MAX_VALUE,
+                        -1,
                         1,
                         false,
                         false

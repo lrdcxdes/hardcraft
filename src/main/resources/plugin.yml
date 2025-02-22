@@ -8,6 +8,10 @@ description: Hardcraft core plugin
 
 
 commands:
+  race:
+    description: Unset race
+    usage: /race
+    permission: hardcraft.admin
   economy:
     aliases: [ eco ]
     description: Admin command to manage player balance
