@@ -65,7 +65,7 @@ class Seasons {
 
     private fun updateBiomeTemperatures() {
         biomeTemperatureCache.clear()
-        Biome.entries.forEach { biome ->
+        Biome.values().forEach { biome ->
             biomeTemperatureCache[biome] = seasonTemperature + (biomeMap[biome] ?: 0)
         }
     }

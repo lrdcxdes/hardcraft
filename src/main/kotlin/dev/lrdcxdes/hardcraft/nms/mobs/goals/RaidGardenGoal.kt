@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.nms.mobs.goals
 
 import net.minecraft.core.BlockPos
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal
@@ -24,7 +25,7 @@ class RaidGardenGoal(
 
     override fun canUse(): Boolean {
         if (this.nextStartTick <= 0) {
-            if (!animal.level().gameRules.getBoolean(GameRules.RULE_MOBGRIEFING)) {
+            if (!(animal.level() as ServerLevel).gameRules.getBoolean(GameRules.RULE_MOBGRIEFING)) {
                 return false
             }
 

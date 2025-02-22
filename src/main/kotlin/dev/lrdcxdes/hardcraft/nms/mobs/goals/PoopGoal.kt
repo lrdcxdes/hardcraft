@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.nms.mobs.goals
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.PathfinderMob
 import net.minecraft.world.entity.ai.goal.Goal
@@ -35,7 +36,7 @@ open class PoopGoal(
             }
         }
         val stack = CraftItemStack.asNMSCopy(itemStack)
-        this.mob.spawnAtLocation(stack, 0f)
+        this.mob.spawnAtLocation(this.mob.level() as ServerLevel, stack, 0f)
         this.mob.forceDrops = false // CraftBukkit
         this.mob.gameEvent(GameEvent.ENTITY_PLACE)
     }

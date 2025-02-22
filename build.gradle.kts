@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
-    id("com.gradleup.shadow") version "8.3.3"
-    id("io.papermc.paperweight.userdev") version "1.7.3"
-    kotlin("plugin.serialization") version "2.0.21" // Added for Kotlin serialization
+    kotlin("jvm") version "2.1.10"
+    id("com.gradleup.shadow") version "9.0.0-beta8"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
+    kotlin("plugin.serialization") version "2.1.10" // Added for Kotlin serialization
 }
 
 group = "dev.lrdcxdes"
@@ -22,14 +22,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect")) // Added Kotlin reflection
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8") // Added JDK8 stdlib
-    implementation("net.kyori:adventure-api:4.17.0")
+    implementation("net.kyori:adventure-api:4.19.0")
     implementation("com.zaxxer:HikariCP:6.0.0")
-    paperweight.paperDevBundle("1.21.1-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
 }
 
 val targetJavaVersion = 21 // Changed to 21 for better compatibility
@@ -56,7 +55,7 @@ tasks {
         relocationPrefix = "dev.lrdcxdes.hardcraft"
 
         archiveClassifier.set("")  // Removed "all" classifier
-        destinationDirectory.set(file("C:\\Users\\lrdcxdes\\Desktop\\hardcraft\\plugins"))
+        destinationDirectory.set(file("C:\\Users\\lord\\Desktop\\hardcraft\\plugins"))
 
         // Relocate Kotlin libraries to avoid conflicts
         relocate("kotlin", "dev.lrdcxdes.hardcraft.lib.kotlin")

@@ -1,7 +1,6 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
 import dev.lrdcxdes.hardcraft.Hardcraft
-import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.PoopGoal
 import io.papermc.paper.event.entity.EntityToggleSitEvent
 import net.minecraft.advancements.CriteriaTriggers
@@ -47,7 +46,7 @@ import kotlin.math.*
 
 class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
 
-//    val DATA_TYPE_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId(
+    //    val DATA_TYPE_ID: EntityDataAccessor<Int> = SynchedEntityData.defineId(
 //        CustomChicken::class.java, EntityDataSerializers.INT
 //    )
 //    val DATA_FLAGS_ID: EntityDataAccessor<Byte> = SynchedEntityData.defineId(
@@ -407,7 +406,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
             }
 
             if (entityliving != null && this@CustomChicken.distanceTo(entityliving) <= 2.0f) {
-                this@CustomChicken.doHurtTarget(entityliving)
+                this@CustomChicken.doHurtTarget(this@CustomChicken.level() as ServerLevel, entityliving)
             } else if (this@CustomChicken.xRot > 0.0f && this@CustomChicken.onGround() && this@CustomChicken.deltaMovement.y.toFloat() != 0.0f && this@CustomChicken.level()
                     .getBlockState(
                         this@CustomChicken.blockPosition()
@@ -425,7 +424,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         override fun checkAndPerformAttack(target: LivingEntity) {
             if (this.canPerformAttack(target)) {
                 this.resetAttackCooldown()
-                mob.doHurtTarget(target)
+                mob.doHurtTarget(mob.level() as ServerLevel, target)
                 this@CustomChicken.playSound(SoundEvents.CHICKEN_AMBIENT, 1.0f, 1.0f)
             }
         }
@@ -463,8 +462,8 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         }
     }
 
-    inner class AlertableEntitiesSelector : Predicate<LivingEntity> {
-        override fun test(entityliving: LivingEntity): Boolean {
+    inner class AlertableEntitiesSelector : TargetingConditions.Selector {
+        override fun test(entityliving: LivingEntity, level: ServerLevel): Boolean {
             return if (entityliving is Chicken) false
             else (
                     if (entityliving !is Silverfish && entityliving !is Monster) (
@@ -483,13 +482,24 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     }
 
     private abstract inner class ChickenBehaviorGoal : Goal() {
-        private val alertableTargeting: TargetingConditions =
-            TargetingConditions.forCombat().range(12.0).ignoreLineOfSight().selector(
-                this@CustomChicken.AlertableEntitiesSelector()
-            )
+        private val alertableTargeting: TargetingConditions
+
+        init {
+            val var10001 = TargetingConditions.forCombat().range(12.0).ignoreLineOfSight()
+            val var10004: CustomChicken = this@CustomChicken
+            Objects.requireNonNull(var10004)
+            this.alertableTargeting = var10001.selector(var10004.AlertableEntitiesSelector())
+        }
+
+        protected fun hasShelter(): Boolean {
+            val blockPos =
+                BlockPos.containing(this@CustomChicken.x, this@CustomChicken.boundingBox.maxY, this@CustomChicken.z)
+            return !this@CustomChicken.level()
+                .canSeeSky(blockPos) && this@CustomChicken.getWalkTargetValue(blockPos) >= 0.0f
+        }
 
         protected fun alertable(): Boolean {
-            return this@CustomChicken.level().getNearbyEntities(
+            return getServerLevel(this@CustomChicken.level()).getNearbyEntities(
                 LivingEntity::class.java,
                 this.alertableTargeting,
                 this@CustomChicken,
@@ -614,57 +624,6 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         }
     }
 
-    private inner class DefendTrustedTargetGoal(
-        oclass: Class<LivingEntity>,
-        flag: Boolean,
-        flag1: Boolean,
-        predicate: Predicate<LivingEntity>?
-    ) :
-        NearestAttackableTargetGoal<LivingEntity>(this@CustomChicken, oclass, 10, flag, flag1, predicate) {
-        private var trustedLastHurtBy: LivingEntity? = null
-        private var trustedLastHurt: LivingEntity? = null
-        private var timestamp = 0
-
-        override fun canUse(): Boolean {
-            if (this.randomInterval > 0 && mob.getRandom().nextInt(this.randomInterval) != 0) {
-                return false
-            } else {
-                val iterator: Iterator<*> = this@CustomChicken.getTrustedUUIDs().iterator()
-
-                while (iterator.hasNext()) {
-                    val uuid = iterator.next() as UUID?
-
-                    if (uuid != null && this@CustomChicken.level() is ServerLevel) {
-                        val entity = (this@CustomChicken.level() as ServerLevel).getEntity(uuid)
-
-                        if (entity is LivingEntity) {
-                            this.trustedLastHurt = entity
-                            this.trustedLastHurtBy = entity.getLastHurtByMob()
-                            val i = entity.getLastHurtByMobTimestamp()
-
-                            return i != this.timestamp && this.canAttack(this.trustedLastHurtBy, this.targetConditions)
-                        }
-                    }
-                }
-
-                return false
-            }
-        }
-
-        override fun start() {
-            this.setTarget(this.trustedLastHurtBy)
-            this.target = this.trustedLastHurtBy
-            if (this.trustedLastHurt != null) {
-                this.timestamp = trustedLastHurt!!.getLastHurtByMobTimestamp()
-            }
-
-            this@CustomChicken.playSound(SoundEvents.FOX_AGGRO, 1.0f, 1.0f)
-            this@CustomChicken.setDefending(true)
-//            this@CustomChicken.wakeUp()
-            super.start()
-        }
-    }
-
     private class ChickenBreedGoal(chance: CustomChicken, chicken: Double) :
         BreedGoal(chance, chicken) {
         override fun start() {
@@ -749,15 +708,9 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     override fun finalizeSpawn(
         world: ServerLevelAccessor,
         difficulty: DifficultyInstance,
-        spawnReason: MobSpawnType,
+        spawnReason: EntitySpawnReason,
         entityData: SpawnGroupData?
     ): SpawnGroupData? {
-        val flag = false
-
-        if (flag) {
-            this.setAge(-24000)
-        }
-
         if (world is ServerLevel) {
             this.setTargetGoals()
         }
@@ -784,10 +737,11 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     }
 
     private fun setTargetGoals() {
-        targetSelector.addGoal(6, NearestAttackableTargetGoal(
-            this,
-            Mob::class.java, 10, false, false
-        ) { entityliving: LivingEntity? -> entityliving is Silverfish })
+        targetSelector.addGoal(
+            6, NearestAttackableTargetGoal(
+                this,
+                Mob::class.java, 10, false, false
+            ) { entityliving: LivingEntity, _: ServerLevel -> entityliving is Silverfish })
     }
 
     override fun registerGoals() {
@@ -796,30 +750,34 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         goalSelector.addGoal(1, FaceplantGoal())
         goalSelector.addGoal(2, ChickenPanicGoal(1.4))
         goalSelector.addGoal(3, ChickenBreedGoal(this, 1.0))
-        goalSelector.addGoal(4, AvoidEntityGoal(
-            this,
-            Player::class.java, 16.0f, 1.6, 1.4
-        ) { entityliving: LivingEntity ->
-            Predicate<Entity> { entity: Entity ->
-                !entity.isDiscrete && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(
-                    entity
-                )
-            }.test(
-                entityliving
-            ) && !this.isDefending()
-        })
-        goalSelector.addGoal(4, AvoidEntityGoal(
-            this,
-            Wolf::class.java, 8.0f, 1.6, 1.4
-        ) { entityliving -> !(entityliving as Wolf).isTame && !this.isDefending() })
-        goalSelector.addGoal(4, AvoidEntityGoal(
-            this,
-            Fox::class.java, 8.0f, 1.6, 1.4
-        ) { _ -> !this.isDefending() })
-        goalSelector.addGoal(4, AvoidEntityGoal(
-            this,
-            PolarBear::class.java, 8.0f, 1.6, 1.4
-        ) { _ -> !this.isDefending() })
+        goalSelector.addGoal(
+            4, AvoidEntityGoal(
+                this,
+                Player::class.java, 16.0f, 1.6, 1.4
+            ) { entityliving: LivingEntity ->
+                Predicate<Entity> { entity: Entity ->
+                    !entity.isDiscrete && EntitySelector.NO_CREATIVE_OR_SPECTATOR.test(
+                        entity
+                    )
+                }.test(
+                    entityliving
+                ) && !this.isDefending()
+            })
+        goalSelector.addGoal(
+            4, AvoidEntityGoal(
+                this,
+                Wolf::class.java, 8.0f, 1.6, 1.4
+            ) { entityliving -> !(entityliving as Wolf).isTame && !this.isDefending() })
+        goalSelector.addGoal(
+            4, AvoidEntityGoal(
+                this,
+                Fox::class.java, 8.0f, 1.6, 1.4
+            ) { _ -> !this.isDefending() })
+        goalSelector.addGoal(
+            4, AvoidEntityGoal(
+                this,
+                PolarBear::class.java, 8.0f, 1.6, 1.4
+            ) { _ -> !this.isDefending() })
         goalSelector.addGoal(5, StalkPreyGoal())
         goalSelector.addGoal(6, ChickenPounceGoal())
         goalSelector.addGoal(7, ChickenMeleeAttackGoal(1.2000000476837158, true))
@@ -841,13 +799,6 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         )
         goalSelector.addGoal(13, PerchAndSearchGoal())
 //        goalSelector.addGoal(14, RandomLookAroundGoal(this))
-//        targetSelector.addGoal(
-//            3, DefendTrustedTargetGoal(
-//                LivingEntity::class.java, false, false
-//            ) { entityliving: LivingEntity ->
-//                TRUSTED_TARGET_SELECTOR.test(entityliving)
-//            }
-//        )
     }
 
     override fun tick() {
@@ -919,7 +870,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
         val KEY: NamespacedKey = NamespacedKey(Hardcraft.instance, "CustomEntity")
 
         fun createAttributes(): AttributeSupplier.Builder {
-            return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25)
+            return createAnimalAttributes().add(Attributes.MOVEMENT_SPEED, 0.25)
                 .add(Attributes.MAX_HEALTH, 4.0).add(
                     Attributes.FOLLOW_RANGE, 32.0
                 ).add(Attributes.ATTACK_DAMAGE, 1.0)

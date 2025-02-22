@@ -2,7 +2,6 @@ package dev.lrdcxdes.hardcraft
 
 import dev.lrdcxdes.hardcraft.customtables.CustomTableListen
 import dev.lrdcxdes.hardcraft.economy.EconomyCommands
-import dev.lrdcxdes.hardcraft.economy.VaultImpl
 import dev.lrdcxdes.hardcraft.economy.shop.Shop
 import dev.lrdcxdes.hardcraft.economy.shop.ShopCommand
 import dev.lrdcxdes.hardcraft.event.*
@@ -19,10 +18,8 @@ import dev.lrdcxdes.hardcraft.utils.CustomCrafts
 import dev.lrdcxdes.hardcraft.utils.Darkphobia
 import dev.lrdcxdes.hardcraft.utils.TorchAndCampfire
 import net.kyori.adventure.text.minimessage.MiniMessage
-import net.milkbowl.vault.economy.Economy
 import org.bukkit.NamespacedKey
 import org.bukkit.World
-import org.bukkit.plugin.ServicePriority
 import org.bukkit.plugin.java.JavaPlugin
 
 
@@ -34,7 +31,6 @@ class Hardcraft : JavaPlugin() {
     lateinit var seasons: Seasons
     lateinit var cc: CustomCrafts
     private lateinit var friendsManager: FriendsManager
-    private var econ: Economy? = null
 
     override fun onEnable() {
         // Plugin startup logic
@@ -153,8 +149,6 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(FriendsListener(friendsManager), this)
 
         // Economy
-        vaultImpl = VaultImpl()
-
         val economyCommands = EconomyCommands()
         getCommand("economy")?.let {
             it.setExecutor(economyCommands)
@@ -171,16 +165,6 @@ class Hardcraft : JavaPlugin() {
         getCommand("shop")?.setExecutor(ShopCommand(shop))
         server.pluginManager.registerEvents(shop, this)
 
-        if (server.pluginManager.getPlugin("Vault") == null) {
-            logger.severe(String.format("[%s] - Disabled due to no Vault dependency found!", name))
-            server.pluginManager.disablePlugin(this)
-            return
-        }
-
-        if (!setupEconomy()) {
-            logger.severe("No economy plugin")
-        }
-
         // DamageWithoutInstrumentListen
         server.pluginManager.registerEvents(DamageWithoutInstrumentListen(), this)
 
@@ -194,14 +178,6 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(SkeletonListener(), this)
         server.pluginManager.registerEvents(CreeperListener(), this)
         server.pluginManager.registerEvents(entitySpawnListener, this)
-    }
-
-    private lateinit var vaultImpl: VaultImpl
-
-    private fun setupEconomy(): Boolean {
-        server.servicesManager.register(Economy::class.java, vaultImpl, this, ServicePriority.Highest)
-        econ = vaultImpl
-        return true
     }
 
     override fun onDisable() {

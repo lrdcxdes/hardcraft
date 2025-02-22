@@ -1,6 +1,5 @@
 package dev.lrdcxdes.hardcraft.nms.mobs
 
-import dev.lrdcxdes.hardcraft.nms.mobs.CustomCow.Companion
 import dev.lrdcxdes.hardcraft.nms.mobs.goals.RaidGardenGoal
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
@@ -41,7 +40,7 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
         override fun tick() {
             --this.lookForFriends
             if (this.lookForFriends <= 0) {
-                val world = silverfish.level()
+                val world = silverfish.level() as ServerLevel
                 val randomsource = silverfish.getRandom()
                 val blockposition = silverfish.blockPosition()
 
@@ -112,7 +111,7 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
             } else {
                 val randomsource = mob.getRandom()
 
-                if (mob.level().gameRules.getBoolean(GameRules.RULE_MOBGRIEFING) && randomsource.nextInt(
+                if ((mob.level() as ServerLevel).gameRules.getBoolean(GameRules.RULE_MOBGRIEFING) && randomsource.nextInt(
                         reducedTickDelay(10)
                     ) == 0
                 ) {
@@ -197,15 +196,15 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
         return AttributeStore.getAttributes("silverfish")
     }
 
-    override fun hurt(source: DamageSource, amount: Float): Boolean {
-        if (this.isInvulnerableTo(source)) {
+    override fun hurtServer(level: ServerLevel, damageSource: DamageSource, amount: Float): Boolean {
+        if (this.isInvulnerableTo(level, damageSource)) {
             return false
         } else {
-            if ((source.entity != null || source.`is`(DamageTypeTags.ALWAYS_TRIGGERS_SILVERFISH)) && this.friendsGoal != null) {
+            if ((damageSource.entity != null || damageSource.`is`(DamageTypeTags.ALWAYS_TRIGGERS_SILVERFISH)) && this.friendsGoal != null) {
                 friendsGoal!!.notifyHurt()
             }
 
-            return super.hurt(source, amount)
+            return super.hurtServer(level, damageSource, amount)
         }
     }
 
@@ -225,14 +224,14 @@ class CustomSilverfish(world: ServerLevel) : Silverfish(EntityType.SILVERFISH, w
         this.moreFoodTicks = ticks
     }
 
-    override fun customServerAiStep() {
+    override fun customServerAiStep(level: ServerLevel) {
         if (this.moreFoodTicks > 0) {
             this.moreFoodTicks -= random.nextInt(3)
             if (this.moreFoodTicks < 0) {
                 this.moreFoodTicks = 0
             }
         }
-        super.customServerAiStep()
+        super.customServerAiStep(level)
     }
 
     companion object {

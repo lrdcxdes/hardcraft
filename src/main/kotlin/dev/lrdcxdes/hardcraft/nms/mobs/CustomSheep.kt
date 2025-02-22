@@ -46,8 +46,8 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
             this.targetSelector.addGoal(1, (HurtByTargetGoal(this, *arrayOfNulls(0))).setAlertOthers())
             this.targetSelector.addGoal(2, NearestAttackableTargetGoal(
                 this, Player::class.java, 10, true, false
-            ) { entity: LivingEntity ->
-                this.isAngryAt(entity)
+            ) { entity: LivingEntity, level: ServerLevel ->
+                this.isAngryAt(entity, level)
             })
             this.targetSelector.addGoal(3, ResetUniversalAngerTargetGoal(this, true))
         }
@@ -142,7 +142,7 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
         this.moreFoodTicks = ticks
     }
 
-    override fun customServerAiStep() {
+    override fun customServerAiStep(level: ServerLevel) {
         if (this.moreFoodTicks > 0) {
             this.moreFoodTicks -= random.nextInt(3)
             if (this.moreFoodTicks < 0) {
@@ -157,7 +157,7 @@ class CustomSheep(world: ServerLevel, private val isFriendly: Boolean = false) :
 
     companion object {
         fun createAttributes(): AttributeSupplier.Builder {
-            return createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.25)
+            return createAnimalAttributes().add(Attributes.MOVEMENT_SPEED, 0.25)
                 .add(Attributes.MAX_HEALTH, 8.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.23000000417232513)
                 .add(Attributes.ATTACK_DAMAGE, 2.0)

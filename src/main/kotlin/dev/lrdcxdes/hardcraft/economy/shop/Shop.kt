@@ -134,6 +134,10 @@ class Shop : Listener {
                 }
             }
 
+            if (allItemsInvs.isEmpty()) {
+                return
+            }
+
             val lastInv = allItemsInvs.values.last()
             // Add next and previous page buttons
             lastInv.inv.setItem(53, nextPageButton)
@@ -777,7 +781,7 @@ class Shop : Listener {
             it.passengers.add(player)
             it.isCarryingChest = true
             it.setGravity(false)
-            it.getAttribute(Attribute.GENERIC_SCALE)?.baseValue = 0.01
+            it.getAttribute(Attribute.SCALE)?.baseValue = 0.01
             shopTeam.addEntity(it)
         }
 

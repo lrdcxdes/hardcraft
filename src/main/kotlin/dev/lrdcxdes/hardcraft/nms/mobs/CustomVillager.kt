@@ -43,18 +43,18 @@ class CustomVillager(world: ServerLevel, private val isFriendly: Boolean) : Vill
             this.targetSelector.addGoal(1, (HurtByTargetGoal(this, *arrayOfNulls(0))).setAlertOthers())
             this.targetSelector.addGoal(2, NearestAttackableTargetGoal(
                 this, Player::class.java, 10, true, false
-            ) { entity: LivingEntity ->
-                this.isAngryAt(entity)
+            ) { entity: LivingEntity, level: ServerLevel ->
+                this.isAngryAt(entity, level)
             })
             this.targetSelector.addGoal(3, NearestAttackableTargetGoal(
                 this, Zombie::class.java, 10, true, false
-            ) { entity: LivingEntity ->
-                this.isAngryAt(entity)
+            ) { entity: LivingEntity, level: ServerLevel ->
+                this.isAngryAt(entity, level)
             })
             this.targetSelector.addGoal(4, NearestAttackableTargetGoal(
                 this, Skeleton::class.java, 10, true, false
-            ) { entity: LivingEntity ->
-                this.isAngryAt(entity)
+            ) { entity: LivingEntity, level: ServerLevel ->
+                this.isAngryAt(entity, level)
             })
             this.targetSelector.addGoal(5, ResetUniversalAngerTargetGoal(this, true))
         }

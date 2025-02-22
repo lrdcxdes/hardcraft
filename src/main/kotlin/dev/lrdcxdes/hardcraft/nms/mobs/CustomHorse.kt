@@ -43,8 +43,8 @@ class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
             this.targetSelector.addGoal(1, (HurtByTargetGoal(this, *arrayOfNulls(0))).setAlertOthers())
             this.targetSelector.addGoal(2, NearestAttackableTargetGoal(
                 this, Player::class.java, 10, true, false
-            ) { entity: LivingEntity ->
-                this.isAngryAt(entity)
+            ) { entity: LivingEntity, server: ServerLevel ->
+                this.isAngryAt(entity, server)
             })
             this.targetSelector.addGoal(3, ResetUniversalAngerTargetGoal(this, true))
         }
@@ -123,8 +123,8 @@ class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
         this.moreFoodTicks = ticks
     }
 
-    override fun customServerAiStep() {
-        super.customServerAiStep()
+    override fun customServerAiStep(level: ServerLevel) {
+        super.customServerAiStep(level)
 
         if (this.moreFoodTicks > 0) {
             this.moreFoodTicks -= random.nextInt(3)
@@ -136,7 +136,7 @@ class CustomHorse(world: ServerLevel, private val isFriendly: Boolean = false) :
 
     companion object {
         fun createAttributes(): AttributeSupplier.Builder {
-            return createMobAttributes()
+            return createAnimalAttributes()
                 .add(Attributes.JUMP_STRENGTH, 0.7)
                 .add(Attributes.MAX_HEALTH, 53.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.22499999403953552)

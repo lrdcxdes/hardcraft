@@ -1,6 +1,5 @@
 package dev.lrdcxdes.hardcraft.economy.shop
 
-import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -9,7 +8,7 @@ import org.bukkit.entity.Player
 
 class ShopCommand(private val shop: Shop) :
     CommandExecutor, TabCompleter {
-    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
+    override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         val player = sender as? Player ?: return false
 
         player.sendMessage("Disabled (Use nitwit villager)")
@@ -36,7 +35,7 @@ class ShopCommand(private val shop: Shop) :
         sender: CommandSender,
         command: Command,
         label: String,
-        args: Array<out String>?
+        args: Array<out String>
     ): MutableList<String>? {
         if (args != null && args.isNotEmpty() && 2 > args.size) {
             return mutableListOf("all")
