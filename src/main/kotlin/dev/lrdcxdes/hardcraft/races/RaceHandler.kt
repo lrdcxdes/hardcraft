@@ -56,12 +56,18 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
         container.set(NamespacedKey(plugin, "playerRace"), PersistentDataType.STRING, race.name)
 
         // Применение атрибутов:
-        RaceManager.getAttributes(race)?.let { attributes ->
+        applyRaceAttributes(player, race)
+    }
+
+    private fun applyRaceAttributes(player: Player, race: Race) {
+        RaceManager.getDefaultAttributes().let { attributes ->
             for ((attribute, value) in attributes.baseAttributes) {
                 player.getAttribute(attribute)?.baseValue = value
             }
-            for (effect in attributes.potionEffects) {
-                player.addPotionEffect(effect)
+        }
+        RaceManager.getAttributes(race)?.let { attributes ->
+            for ((attribute, value) in attributes.baseAttributes) {
+                player.getAttribute(attribute)?.baseValue = value
             }
         }
     }
@@ -78,14 +84,7 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
         } else {
             // Восстанавливаем атрибуты выбранной расы
             val race = Race.valueOf(raceName)
-            RaceManager.getAttributes(race)?.let { attributes ->
-                for ((attribute, value) in attributes.baseAttributes) {
-                    player.getAttribute(attribute)?.baseValue = value
-                }
-                for (effect in attributes.potionEffects) {
-                    player.addPotionEffect(effect)
-                }
-            }
+            applyRaceAttributes(player, race)
         }
     }
 
