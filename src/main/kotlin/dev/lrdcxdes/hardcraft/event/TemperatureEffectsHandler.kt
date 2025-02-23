@@ -1,6 +1,8 @@
 package dev.lrdcxdes.hardcraft.event
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.races.Race
+import dev.lrdcxdes.hardcraft.races.getRace
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -31,16 +33,30 @@ class TemperatureEffectsHandler {
 
     private fun handlePlayerTemperature(player: Player) {
         plugin.seasons.getTemperature(player).let { temp ->
+            val race = player.getRace()
+
             when {
-                temp <= -7 -> player.freezeTicks = 200
-                temp >= 40 -> applyEffect(player, PotionEffectType.WITHER, 200, 0)
-                temp >= 33 -> applyEffect(player, PotionEffectType.NAUSEA, 201, 0)
+                temp <= -7 && race != Race.SNOLEM -> player.freezeTicks = 200
+                // Dragonborn immune to high temperature
+                (temp >= 40 && race != Race.DRAGONBORN) || (temp >= 30 && race == Race.SNOLEM) -> applyEffect(
+                    player,
+                    PotionEffectType.WITHER,
+                    200,
+                    0
+                )
+
+                (temp >= 33 && race != Race.DRAGONBORN) || (temp >= 23 && race == Race.SNOLEM) -> applyEffect(
+                    player,
+                    PotionEffectType.NAUSEA,
+                    201,
+                    0
+                )
             }
 
             // Handle damage
             when {
-                temp < -20 -> applyDamage(player, 1.0)
-                temp < -10 -> applyDamage(player, 0.5)
+                temp < -20 && race != Race.SNOLEM -> applyDamage(player, 1.0)
+                temp < -10 && race != Race.SNOLEM -> applyDamage(player, 0.5)
             }
 
             // 8 - +21
@@ -98,6 +114,10 @@ class PlayerTemperatureListener : Listener {
     fun onDamage(event: EntityDamageEvent) {
         if (event.entity is Player) {
             if (event.cause == EntityDamageEvent.DamageCause.FREEZE) {
+                event.isCancelled = true
+            // CIBLE immune to fire (cant burn)
+            } else if (event.cause.name.contains("FIRE") && (event.entity as Player).getRace() == Race.CIBLE) {
+                event.entity.isVisualFire = false
                 event.isCancelled = true
             }
         }

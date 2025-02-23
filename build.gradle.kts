@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "dev.lrdcxdes"
-version = "0.7.8-beta"
+version = "0.7.9-beta"
 
 repositories {
     mavenCentral()

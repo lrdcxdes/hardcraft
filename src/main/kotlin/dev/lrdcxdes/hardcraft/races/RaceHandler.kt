@@ -27,8 +27,13 @@ fun Player.getRace(): Race? {
 }
 
 class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener {
-    inner class RaceCommand: CommandExecutor {
-        override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+    inner class RaceCommand : CommandExecutor {
+        override fun onCommand(
+            sender: CommandSender,
+            command: Command,
+            label: String,
+            args: Array<out String>
+        ): Boolean {
             if (sender !is Player) {
                 sender.sendMessage("Only players can use this command")
                 return true
@@ -70,6 +75,12 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
                 player.getAttribute(attribute)?.baseValue = value
             }
         }
+
+        if (race == Race.AGAR) {
+            Agar.getKillerStacks(player).let { stacks ->
+                Agar.adjustAttributes(player, stacks, heal = false)
+            }
+        }
     }
 
     @EventHandler
@@ -98,7 +109,7 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
             for (race in Race.entries) {
                 val item = ItemStack(Material.PLAYER_HEAD)
                 val meta = item.itemMeta as SkullMeta
-                meta.setOwningPlayer(Bukkit.getOfflinePlayer(race.name))
+                // meta.setOwningPlayer(Bukkit.getOfflinePlayer(race.name))
                 meta.itemName(
                     Hardcraft.minimessage.deserialize(
                         "<color:#00ff00><hover:show_text:'Choose ${race.name}'>${race.name}</hover></color>"

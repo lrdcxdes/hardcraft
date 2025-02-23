@@ -4,8 +4,6 @@ import dev.lrdcxdes.hardcraft.Hardcraft
 import dev.lrdcxdes.hardcraft.races.Race
 import dev.lrdcxdes.hardcraft.races.getRace
 import dev.lrdcxdes.hardcraft.seasons.getTemperature
-import io.papermc.paper.datacomponent.DataComponentTypes
-import io.papermc.paper.datacomponent.item.Consumable
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.attribute.Attribute
@@ -57,7 +55,12 @@ class EatFoodListener : Listener {
         Material.GLOW_BERRIES,
         Material.CHORUS_FRUIT,
         Material.BREAD,
-        Material.DRIED_KELP
+        Material.DRIED_KELP,
+        Material.MELON_SEEDS,
+        Material.PUMPKIN_SEEDS,
+        Material.BEETROOT_SEEDS,
+        Material.WHEAT_SEEDS,
+        Material.COCOA_BEANS,
     )
 
     private val zazaEffects = listOf(
@@ -75,7 +78,7 @@ class EatFoodListener : Listener {
         val player = event.entity as Player
         val race = player.getRace()
         if (race == Race.SKELETON) {
-            if (event.foodLevel < 4) {
+            if (event.foodLevel < 8) {
                 event.isCancelled = true
             }
         } else if (race == Race.GIANT) {
@@ -99,26 +102,38 @@ class EatFoodListener : Listener {
             // if any meat
             if (meat.contains(item)) {
                 event.isCancelled = true
-                player.sendMessage("§cElves can't eat meat")
+                player.sendMessage("§cYour race doesn't digest it.")
                 return
             }
         } else if (race == Race.GOBLIN || race == Race.DRAGONBORN) {
             // if any crops
             if (crops.contains(item)) {
                 event.isCancelled = true
-                player.sendMessage("§cGoblins can't eat crops")
+                player.sendMessage("§cYour race doesn't digest it.")
                 return
             }
         } else if (race == Race.SKELETON) {
             // if anything but bone
             if (item != Material.BONE) {
                 event.isCancelled = true
-                player.sendMessage("§cSkeletons can only eat bones")
+                player.sendMessage("§cYour race doesn't digest it.")
                 return
             } else {
                 // add 2 health
-                player.health = (player.health + 2).coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+                player.heal(2.0)
                 return
+            }
+        } else if (race == Race.CIBLE) {
+            // if anything but coal/sticks
+            if (item.name.contains("COAL") && item != Material.STICK) {
+                event.isCancelled = true
+                player.sendMessage("§cYour race doesn't digest it.")
+                return
+            }
+        }
+        else if (race == Race.AGAR) {
+            if (item == Material.SLIME_BALL) {
+                player.heal(1.0)
             }
         }
 

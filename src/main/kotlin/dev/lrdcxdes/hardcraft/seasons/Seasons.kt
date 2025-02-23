@@ -63,6 +63,7 @@ class Seasons {
         }.runTaskTimerAsynchronously(Hardcraft.instance, 0, 20L * 10)
     }
 
+    @Suppress("UnstableApiUsage", "removal", "DEPRECATION")
     private fun updateBiomeTemperatures() {
         biomeTemperatureCache.clear()
         Biome.values().forEach { biome ->

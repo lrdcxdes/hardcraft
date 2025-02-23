@@ -1,5 +1,7 @@
 package dev.lrdcxdes.hardcraft.event
 
+import dev.lrdcxdes.hardcraft.races.Race
+import dev.lrdcxdes.hardcraft.races.getRace
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -14,6 +16,7 @@ class SlowPlayerListener : Listener {
         val hasPumpkin = player.inventory.helmet?.type == Material.CARVED_PUMPKIN
 
         if (player.location.y < 0) {
+            if (player.getRace() == Race.DWARF) return
             if (hasPumpkin) {
                 player.removePotionEffect(PotionEffectType.MINING_FATIGUE)
                 player.addPotionEffect(

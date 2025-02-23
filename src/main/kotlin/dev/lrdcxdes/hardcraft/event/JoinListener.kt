@@ -1,6 +1,8 @@
 package dev.lrdcxdes.hardcraft.event
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.groups.Group
+import dev.lrdcxdes.hardcraft.groups.getGroup
 import org.bukkit.Material
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -29,13 +31,16 @@ class JoinListener : Listener {
 
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        // check if not have rock
-        val haveRock = event.player.inventory.firstOrNull {
-            it != null && it.type == Material.WOODEN_AXE && it.itemMeta.customModelData == 4
-        } != null
+        val group = event.player.getGroup()
+        if (group == Group.CAVEMAN) {
+            // check if not have rock
+            val haveRock = event.player.inventory.firstOrNull {
+                it != null && it.type == Material.WOODEN_AXE && it.itemMeta.customModelData == 4
+            } != null
 
-        if (!haveRock) {
-            event.player.inventory.addItem(rock)
+            if (!haveRock) {
+                event.player.inventory.addItem(rock)
+            }
         }
 
         // give player all recipes
@@ -47,6 +52,9 @@ class JoinListener : Listener {
         val player = event.entity
         object : BukkitRunnable() {
             override fun run() {
+                val group = event.player.getGroup()
+                if (group != Group.CAVEMAN) return
+
                 val haveRock = player.inventory.firstOrNull {
                     it != null && it.type == Material.WOODEN_AXE && it.itemMeta.customModelData == 4
                 } != null

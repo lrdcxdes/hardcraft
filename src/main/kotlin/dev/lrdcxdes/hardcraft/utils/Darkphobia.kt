@@ -1,6 +1,9 @@
 package dev.lrdcxdes.hardcraft.utils
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.races.Race
+import dev.lrdcxdes.hardcraft.races.getRace
+import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -16,6 +19,7 @@ class Darkphobia : Listener {
 
     data class DarkphobiaState(
         var fearLevel: Double = 0.0,
+        var sunLevel: Double = 0.0,
         var soundTimer: Int = 0
     )
 
@@ -38,10 +42,24 @@ class Darkphobia : Listener {
 
         val state = players.getOrPut(player.name) { DarkphobiaState() }
 
-        // Update fear level based on light
-        val lightLevel = player.eyeLocation.block.lightLevel
-        state.fearLevel += if (lightLevel < 6) 5.0 else -20.0
-        state.fearLevel = state.fearLevel.coerceIn(0.0, 500.0)
+        val race = player.getRace()
+
+        // Update fear level based on
+        if (race != Race.VAMPIRE && race != Race.SKELETON) {
+            val lightLevel = player.eyeLocation.block.lightLevel
+            state.fearLevel += if (lightLevel < 6) 5.0 else -20.0
+            state.fearLevel = state.fearLevel.coerceIn(0.0, 500.0)
+        } else {
+            val sunLevel = player.location.block.lightFromSky
+            if (sunLevel < 13 || player.inventory.helmet?.type != Material.AIR) {
+                state.sunLevel -= 20.0
+            } else {
+                state.sunLevel += 5.0
+            }
+            state.sunLevel = state.sunLevel.coerceIn(0.0, 500.0)
+        }
+
+        println("Fear level: ${state.fearLevel}, Sun level: ${state.sunLevel}")
 
         // Apply effects based on fear level
         object : BukkitRunnable() {
@@ -78,6 +96,31 @@ class Darkphobia : Listener {
 
                 this < 180.0 -> {
                     state.soundTimer = 0
+                }
+
+                else -> {}
+            }
+        }
+
+        with(state.sunLevel) {
+            when {
+                this >= 480.0 -> {
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WITHER, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
+                }
+
+                this >= 300.0 -> {
+                    player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
+                }
+
+                this >= 180.0 -> {
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
+                }
+
+                this >= 120.0 -> {
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
                 }
 
                 else -> {}

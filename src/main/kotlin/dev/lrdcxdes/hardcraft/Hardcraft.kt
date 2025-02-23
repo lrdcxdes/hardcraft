@@ -5,13 +5,12 @@ import dev.lrdcxdes.hardcraft.economy.EconomyCommands
 import dev.lrdcxdes.hardcraft.economy.shop.Shop
 import dev.lrdcxdes.hardcraft.economy.shop.ShopCommand
 import dev.lrdcxdes.hardcraft.event.*
-import dev.lrdcxdes.hardcraft.friends.FriendsCommand
 import dev.lrdcxdes.hardcraft.friends.FriendsListener
-import dev.lrdcxdes.hardcraft.friends.FriendsManager
+import dev.lrdcxdes.hardcraft.groups.*
 import dev.lrdcxdes.hardcraft.plants.FernManager
 import dev.lrdcxdes.hardcraft.plants.GardenManager
 import dev.lrdcxdes.hardcraft.plants.PlantsEventListener
-import dev.lrdcxdes.hardcraft.races.RaceHandler
+import dev.lrdcxdes.hardcraft.races.*
 import dev.lrdcxdes.hardcraft.seasons.Seasons
 import dev.lrdcxdes.hardcraft.sql.DatabaseManager
 import dev.lrdcxdes.hardcraft.utils.Chuma
@@ -31,7 +30,6 @@ class Hardcraft : JavaPlugin() {
     lateinit var foodListener: FoodListener
     lateinit var seasons: Seasons
     lateinit var cc: CustomCrafts
-    private lateinit var friendsManager: FriendsManager
 
     override fun onEnable() {
         // Plugin startup logic
@@ -136,6 +134,33 @@ class Hardcraft : JavaPlugin() {
 
         // RaceHandler
         server.pluginManager.registerEvents(RaceHandler(this, getCommand("race")), this)
+        // GroupHandler
+        server.pluginManager.registerEvents(GroupHandler(this, getCommand("group")), this)
+        // ArmorListener
+        server.pluginManager.registerEvents(ArmorListener(), this)
+        // Elf
+        server.pluginManager.registerEvents(ElfListener(), this)
+        // Goblin
+        server.pluginManager.registerEvents(GoblinListener(this), this)
+        // Amphibian
+        server.pluginManager.registerEvents(AmphibiaListener(), this)
+        // Cible
+        server.pluginManager.registerEvents(Cible(), this)
+        // Snolem
+        server.pluginManager.registerEvents(Snolem(), this)
+
+        // Groups
+        server.pluginManager.registerEvents(Scientists(this), this)
+        server.pluginManager.registerEvents(Cleric(this), this)
+
+        server.pluginManager.registerEvents(Warrior(), this)
+        server.pluginManager.registerEvents(Paladin(), this)
+        server.pluginManager.registerEvents(Ranger(), this)
+        server.pluginManager.registerEvents(Rogue(), this)
+        server.pluginManager.registerEvents(Shaman(), this)
+        server.pluginManager.registerEvents(Druid(), this)
+        server.pluginManager.registerEvents(Wizard(), this)
+        server.pluginManager.registerEvents(Agar(), this)
 
         database = DatabaseManager()
         database.connect()
@@ -145,9 +170,7 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(OnJoinDatabaseListen(), this)
 
         // Friends
-        friendsManager = FriendsManager()
-        getCommand("friends")?.setExecutor(FriendsCommand(friendsManager))
-        server.pluginManager.registerEvents(FriendsListener(friendsManager), this)
+        server.pluginManager.registerEvents(FriendsListener(), this)
 
         // Economy
         val economyCommands = EconomyCommands()
