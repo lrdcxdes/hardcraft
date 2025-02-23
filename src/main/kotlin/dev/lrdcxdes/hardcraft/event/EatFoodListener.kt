@@ -8,9 +8,11 @@ import io.papermc.paper.datacomponent.DataComponentTypes
 import io.papermc.paper.datacomponent.item.Consumable
 import org.bukkit.Material
 import org.bukkit.Particle
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.entity.FoodLevelChangeEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffect
@@ -69,6 +71,24 @@ class EatFoodListener : Listener {
     )
 
     @EventHandler
+    fun onSkeletonFood(event: FoodLevelChangeEvent) {
+        val player = event.entity as Player
+        val race = player.getRace()
+        if (race == Race.SKELETON) {
+            if (event.foodLevel < 4) {
+                event.isCancelled = true
+            }
+        } else if (race == Race.GIANT) {
+            val nowFoodLevel = player.foodLevel
+            if (event.foodLevel > nowFoodLevel) {
+                val addedFoodLevel = event.foodLevel - nowFoodLevel
+                // -50% food level
+                event.foodLevel = (nowFoodLevel + addedFoodLevel / 2).coerceAtMost(20)
+            }
+        }
+    }
+
+    @EventHandler
     fun onEat(event: PlayerItemConsumeEvent) {
         val player = event.player
         val item = event.item.type
@@ -89,11 +109,26 @@ class EatFoodListener : Listener {
                 player.sendMessage("§cGoblins can't eat crops")
                 return
             }
+        } else if (race == Race.SKELETON) {
+            // if anything but bone
+            if (item != Material.BONE) {
+                event.isCancelled = true
+                player.sendMessage("§cSkeletons can only eat bones")
+                return
+            } else {
+                // add 2 health
+                player.health = (player.health + 2).coerceAtMost(player.getAttribute(Attribute.MAX_HEALTH)!!.value)
+                return
+            }
         }
 
         if (item.name.contains("SEEDS")) {
-            if (Hardcraft.instance.random.nextInt(100) > 20) {
+            val r = Hardcraft.instance.random.nextInt(100)
+            // 20% nausea, 30% poison
+            if (r < 20) {
                 event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0))
+            } else if (r < 50) {
+                event.player.addPotionEffect(PotionEffect(PotionEffectType.POISON, 5 * 20, 0))
             }
             return
         }

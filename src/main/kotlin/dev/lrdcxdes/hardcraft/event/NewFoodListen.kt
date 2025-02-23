@@ -6,6 +6,9 @@ import io.papermc.paper.datacomponent.DataComponentTypes
 import io.papermc.paper.datacomponent.item.Consumable
 import io.papermc.paper.datacomponent.item.FoodProperties
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation
+import org.bukkit.NamespacedKey
+import org.bukkit.Registry
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -56,8 +59,26 @@ class NewFoodListen : Listener {
             item.setData(
                 DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(5F).animation(
                     ItemUseAnimation.SPYGLASS
-                ).hasConsumeParticles(false).build()
+                ).hasConsumeParticles(false).sound(
+                    NamespacedKey.minecraft("entity.horse.breathe")
+                ).build()
             )
+        } else if (item.type.name == "BONE") {
+            val race = player.getRace()
+            if (race == Race.SKELETON) {
+                item.setData(
+                    DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1F).animation(
+                        ItemUseAnimation.EAT
+                    ).sound(
+                        NamespacedKey.minecraft("entity.skeleton.step")
+                    )
+                        .build()
+                )
+            } else {
+                item.unsetData(
+                    DataComponentTypes.CONSUMABLE
+                )
+            }
         }
     }
 
