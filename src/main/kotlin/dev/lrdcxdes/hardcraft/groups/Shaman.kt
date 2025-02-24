@@ -2,85 +2,21 @@ package dev.lrdcxdes.hardcraft.groups
 
 import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.Material
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Arrow
 import org.bukkit.entity.EntityType
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.event.player.PlayerJoinEvent
-import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.Damageable
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
-import org.bukkit.scheduler.BukkitRunnable
 
 class Shaman: Listener {
     // Shaman
     //Уникальные способности
     //Начинает с предметом: палка.
     //Может потратить 5 уровней для призыва цыплёнка.
-
-    private val stick: ItemStack = ItemStack(Material.STICK).apply {
-        val meta = itemMeta as Damageable
-        itemMeta = meta.apply {
-            itemName(Hardcraft.minimessage.deserialize("<lang:bts.shaman_stick>"))
-
-            meta.setCustomModelData(4)
-
-            addUnsafeEnchantment(
-                Enchantment.VANISHING_CURSE,
-                1
-            )
-            addEnchant(Enchantment.VANISHING_CURSE, 1, true)
-
-            // hide flags
-            addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-            addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
-        }
-    }
-
-    @EventHandler
-    fun onJoin(event: PlayerJoinEvent) {
-        val group = event.player.getGroup()
-        if (group == Group.SHAMAN) {
-            // check if not have rock
-            val haveStick = event.player.inventory.firstOrNull {
-                it != null && it.type == Material.STICK && it.itemMeta.customModelData == 4
-            } != null
-
-            if (!haveStick) {
-                event.player.inventory.addItem(stick)
-            }
-        }
-
-        // give player all recipes
-        event.player.discoverRecipes(Hardcraft.instance.cc.customRecipesKeys)
-    }
-
-    @EventHandler
-    fun onDeath(event: PlayerDeathEvent) {
-        val player = event.entity
-        object : BukkitRunnable() {
-            override fun run() {
-                val group = event.player.getGroup()
-                if (group != Group.SHAMAN) return
-
-                val haveStick = player.inventory.firstOrNull {
-                    it != null && it.type == Material.STICK && it.itemMeta.customModelData == 4
-                } != null
-
-                if (!haveStick) {
-                    player.inventory.addItem(stick)
-                }
-            }
-        }.runTaskLater(Hardcraft.instance, 1)
-    }
 
     enum class Cast {
         BABY_CHICKEN,

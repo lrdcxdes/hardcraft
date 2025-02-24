@@ -48,6 +48,8 @@ class Agar : Listener {
             }
             // Adjust jump height and other attributes based on stacks.
             adjustAttributes(killer, currentStacks)
+            // Play Rise UP sound
+            killer.playSound(killer.location, "minecraft:block.chest.locked", 1.0f, 2.0f)
         }
     }
 
@@ -73,6 +75,9 @@ class Agar : Listener {
                     slime.size = 1
                     CustomSlime.setGoals(slime)
                 }
+
+                // playSound for losing a stack
+                player.world.playSound(player.location, "minecraft:block.chest.locked", 1.0f, 0.5f)
             }
         }
     }
@@ -154,7 +159,7 @@ class Agar : Listener {
             val movementSpeed = 0.135 - (0.009 * stageIndex)
 
             // Фолл-дамедж: -0.7 -0.35 0 +0.05 +0.1 +0.15
-            val fallDamages = listOf(-0.7, -0.35, 0.0, 0.05, 0.1, 0.15)
+            val fallDamages = listOf(0.35, 0.7, 1.0, 1.05, 1.1, 1.15)
             val fallDamageMultiplier = fallDamages[stageIndex]
 
             // 2.5 3 3.5 4.5 6.5 7.5 SAFE_FALL_DISTANCE
@@ -170,6 +175,9 @@ class Agar : Listener {
             // Для сущностей: от 1.5 до 4.5
             val entityInteractionRange = 1.5 + (4.5 - 1.5) * (stageIndex / totalStages)
 
+            // Attack damage from 0.5 to 1.6
+            val attackDamage = 0.5 + (1.6 - 0.5) * (stageIndex / totalStages)
+
             // Здоровье – пусть остаётся линейно: 6 единиц на каждую стадию
             val maxHealth = 6.0 * stacks
 
@@ -182,6 +190,7 @@ class Agar : Listener {
             player.getAttribute(Attribute.MAX_HEALTH)?.baseValue = maxHealth
             player.getAttribute(Attribute.BLOCK_INTERACTION_RANGE)?.baseValue = blockInteractionRange
             player.getAttribute(Attribute.ENTITY_INTERACTION_RANGE)?.baseValue = entityInteractionRange
+            player.getAttribute(Attribute.ATTACK_DAMAGE)?.baseValue = attackDamage
 
             if (heal) {
                 // Полностью востанавливаем здоровье
