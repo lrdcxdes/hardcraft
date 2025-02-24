@@ -6,22 +6,51 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.entity.EntityPickupItemEvent
-import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.entity.PlayerDeathEvent
+import org.bukkit.event.player.PlayerExpChangeEvent
+import org.bukkit.event.player.PlayerItemConsumeEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.scheduler.BukkitTask
+import java.util.UUID
 
 class Goblin(private val plugin: Hardcraft) : Listener {
-    // Regeneration: Self-heal 2 HP every 60 seconds
-    //Group Synergy: +5% movement speed per nearby Goblin (max bonus up to +50%, i.e. multiplier up to 0.15000000223)
-    private val goblinsMaxHP = RaceManager.getAttributes(Race.GOBLIN)!!.baseAttributes[Attribute.MAX_HEALTH]!!
+    // every 1level gain -2% regen cd (max100%) (so from 1200 tick to 1 tick)
+    // every 2levels gain 1% dmg - max 65% (from 0.85 to 1.5)
+    // every 3levels you got 1 max heart - max 10hearts (20.0)
+    private val goblinsMaxHP = RaceManager.getAttributes(Race.GOBLIN)?.baseAttributes?.get(Attribute.MAX_HEALTH)!!
     private val goblinsSpeed = RaceManager.getDefaultAttributes().baseAttributes[Attribute.MOVEMENT_SPEED]!!
+    private val goblinsMaxDmg = RaceManager.getAttributes(Race.GOBLIN)?.baseAttributes?.get(Attribute.ATTACK_DAMAGE)!!
 
-    private val taskRegeneration = object : BukkitRunnable() {
-        override fun run() {
-            for (player in plugin.server.onlinePlayers) {
+    private fun calculateRegenInterval(level: Int): Long {
+        val baseInterval = 1200L // начальный интервал в тиках (60 секунд)
+        val reduction = (level * 2).coerceAtMost(100) // максимум 100%
+        val adjustedInterval = baseInterval * (100 - reduction) / 100
+        return adjustedInterval.coerceAtLeast(1L) // минимум 1 тик
+    }
+
+    data class Task(val task: BukkitTask, val lastLevel: Int)
+
+    private var regenTasks: MutableMap<UUID, Task> = mutableMapOf()
+
+    private fun startRegenerationTask(player: Player) {
+        if (regenTasks.containsKey(player.uniqueId)) {
+            val lastLevel = regenTasks[player.uniqueId]?.lastLevel ?: 0
+            if (lastLevel == player.level) return
+        }
+        regenTasks[player.uniqueId]?.task?.cancel() // Останавливаем текущую задачу, если она существует
+        val interval = calculateRegenInterval(player.level)
+
+        regenTasks[player.uniqueId] = Task(object : BukkitRunnable() {
+            override fun run() {
+                if (!player.isOnline) {
+                    cancel()
+                    return
+                }
+                if (player.isDead) return
                 if (player.getRace() != Race.GOBLIN) return
                 player.addPotionEffect(
                     PotionEffect(
@@ -31,8 +60,9 @@ class Goblin(private val plugin: Hardcraft) : Listener {
                     )
                 )
             }
-        }
+        }.runTaskTimer(plugin, 0, interval), player.level)
     }
+
 
     private val taskGroupSynergy = object : BukkitRunnable() {
         override fun run() {
@@ -65,45 +95,82 @@ class Goblin(private val plugin: Hardcraft) : Listener {
         attribute.baseValue = newSpeed
     }
 
-    // Когда гоблин подбирает/получает золото(слиток/кусочек/блок/руда) любым образом (подбор,инвентари) - он получает + к своему exp в зависимости от того какое золото и сколько его он подобрал
-
-    private val goldExp: Map<Material, Int> = mapOf(
-        Material.GOLD_NUGGET to 1,
-        Material.GOLD_INGOT to 6,
-        Material.GOLD_BLOCK to 6 * 9,
-        Material.GOLD_ORE to 3,
-        Material.DEEPSLATE_GOLD_ORE to 3,
-        Material.RAW_GOLD to 3,
-        Material.NETHER_GOLD_ORE to 1,
-    )
-
-    // Events
+    // Гоблины не могут получать exp
     @EventHandler
-    fun onGoldPickup(event: EntityPickupItemEvent) {
-        val player = event.entity as? Player ?: return
-        if (player.getRace() != Race.GOBLIN) return
-
-        val item = event.item.itemStack
-        val exp = goldExp[item.type] ?: return
-        player.giveExp(exp * item.amount)
-
-        event.item.itemStack = ItemStack(Material.AIR)
+    fun onExpChange(event: PlayerExpChangeEvent) {
+        if (event.amount > 0) {
+            event.amount = 0
+        }
     }
 
     @EventHandler
-    fun onInvClick(event: InventoryClickEvent) {
-        val item = event.currentItem ?: return
-        val player = event.whoClicked as? Player ?: return
+    fun onJoin(event: PlayerJoinEvent) {
+        val player = event.player
+        if (player.getRace() != Race.GOBLIN) return
+        startRegenerationTask(player)
+    }
+
+    @EventHandler
+    fun onConsumeGold(event: PlayerItemConsumeEvent) {
+        val player = event.player
+        if (player.getRace() != Race.GOBLIN) return
+        if (event.item.type != Material.GOLD_INGOT) return
+
+        val xp = when (player.level) {
+            in 0..10 -> 9 // 1 слиток = 9 опыта до 11 уровня
+            in 11..20 -> 6 // 1 слиток = 6 опыта до 21 уровня
+            in 21..30 -> 8 // 1 слиток = 8 опыта до 31 уровня
+            else -> 9 // 1 слиток = 9 опыта после 30 уровня
+        }
+        player.giveExp(xp, true)
+
+        applyAttributes(player)
+        startRegenerationTask(player)
+    }
+
+    private val limitMaxHP = goblinsMaxHP + 20.0
+    private val maxDmg = goblinsMaxHP + (goblinsMaxHP * 0.65)
+
+    private fun applyAttributes(player: Player) {
+        val level = player.level
+        var maxHP = goblinsMaxHP + level / 1.5
+        if (maxHP > limitMaxHP) {
+            maxHP = limitMaxHP
+        }
+        var damage = goblinsMaxDmg + level / 200.0
+        if (damage > maxDmg) {
+            damage = maxDmg
+        }
+        player.getAttribute(Attribute.MAX_HEALTH)?.baseValue = maxHP
+        player.getAttribute(Attribute.ATTACK_DAMAGE)?.baseValue = damage
+    }
+
+    @EventHandler
+    fun onDeath(event: PlayerDeathEvent) {
+        val player = event.player
         if (player.getRace() != Race.GOBLIN) return
 
-        val exp = goldExp[item.type] ?: return
-        player.giveExp(exp * item.amount)
+        // nug = level x 7
+        // drop_ingot = nug / 9
+        // drop_nug = nug - ingot * 9 (or nug % 9)
+        val nug = player.level * 7
+        val ingot = nug / 9
+        val dropNug = nug % 9
 
-        event.currentItem = ItemStack(Material.AIR)
+        event.setShouldDropExperience(false)
+        val toDrop = mutableListOf<ItemStack>()
+        if (dropNug > 0) {
+            toDrop.add(ItemStack(Material.GOLD_NUGGET, dropNug))
+        }
+        if (ingot > 0) {
+            toDrop.add(ItemStack(Material.GOLD_INGOT, ingot))
+        }
+        event.drops.addAll(
+            toDrop
+        )
     }
 
     init {
-        taskRegeneration.runTaskTimer(plugin, 0, 20L * 60L)
         taskGroupSynergy.runTaskTimer(plugin, 0, 20L * 5L)
     }
 }

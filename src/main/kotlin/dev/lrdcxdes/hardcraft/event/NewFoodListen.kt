@@ -115,6 +115,21 @@ class NewFoodListen : Listener {
                 )
                 // item.unsetData(DataComponentTypes.FOOD)
             }
+        } else if (item.type.name == "GOLD_INGOT") {
+            val race = player.getRace()
+            if (race == Race.GOBLIN) {
+                item.setData(
+                    DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1F).animation(
+                        ItemUseAnimation.EAT
+                    ).sound(
+                        NamespacedKey.minecraft("block.nether_gold_ore.hit")
+                    ).build()
+                )
+            } else {
+                item.unsetData(
+                    DataComponentTypes.CONSUMABLE
+                )
+            }
         }
     }
 
