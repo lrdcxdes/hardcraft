@@ -46,10 +46,9 @@ class Agar : Listener {
                 setKillerStacks(killer, currentStacks + 1)
                 // Adjust jump height and other attributes based on stacks.
                 adjustAttributes(killer, currentStacks + 1)
+                // Play Rise UP sound
+                killer.playSound(killer.location, "minecraft:block.chest.locked", 1.0f, 2.0f)
             }
-
-            // Play Rise UP sound
-            killer.playSound(killer.location, "minecraft:block.chest.locked", 1.0f, 2.0f)
         }
     }
 
