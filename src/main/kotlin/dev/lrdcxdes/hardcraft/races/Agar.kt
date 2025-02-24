@@ -41,13 +41,13 @@ class Agar : Listener {
         // Must be at full HP to gain a stack.
         val maxHealth = killer.getAttribute(Attribute.MAX_HEALTH)?.value ?: return
         if (killer.health >= maxHealth) {
-            var currentStacks = getKillerStacks(killer)
+            val currentStacks = getKillerStacks(killer)
             if (currentStacks < maxStacks) {
                 setKillerStacks(killer, currentStacks + 1)
-                currentStacks += 1
+                // Adjust jump height and other attributes based on stacks.
+                adjustAttributes(killer, currentStacks + 1)
             }
-            // Adjust jump height and other attributes based on stacks.
-            adjustAttributes(killer, currentStacks)
+
             // Play Rise UP sound
             killer.playSound(killer.location, "minecraft:block.chest.locked", 1.0f, 2.0f)
         }
