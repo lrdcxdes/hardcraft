@@ -115,7 +115,101 @@ class Brewer : Listener {
         Material.SEAGRASS to HerbProperties(
             Color.fromRGB(0, 255, 127),
             listOf(PotionEffect(PotionEffectType.DOLPHINS_GRACE, 100, 0))
-        )
+        ),
+        Material.MELON_SEEDS to HerbProperties(
+            Color.fromRGB(15, 15, 15),
+            listOf(PotionEffect(PotionEffectType.ABSORPTION, 80, 0))
+        ),
+        Material.PUMPKIN_SEEDS to HerbProperties(
+            Color.fromRGB(255, 239, 223),
+            listOf(PotionEffect(PotionEffectType.HASTE, 80, 0))
+        ),
+        Material.BAMBOO to HerbProperties(
+            Color.fromRGB(108, 214, 84),
+            listOf(PotionEffect(PotionEffectType.STRENGTH, 80, 0))
+        ),
+        Material.SWEET_BERRIES to HerbProperties(
+            Color.fromRGB(255, 96, 87),
+            listOf(PotionEffect(PotionEffectType.REGENERATION, 80, 0))
+        ),
+        Material.COCOA_BEANS to HerbProperties(
+            Color.fromRGB(102, 68, 54),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.BEETROOT_SEEDS to HerbProperties(
+            Color.fromRGB(116, 27, 71),
+            listOf(PotionEffect(PotionEffectType.REGENERATION, 80, 0))
+        ),
+        Material.KELP to HerbProperties(
+            Color.fromRGB(84, 148, 34),
+            listOf(PotionEffect(PotionEffectType.DOLPHINS_GRACE, 80, 0))
+        ),
+        Material.SEA_PICKLE to HerbProperties(
+            Color.fromRGB(87, 112, 71),
+            listOf(PotionEffect(PotionEffectType.DOLPHINS_GRACE, 80, 0))
+        ),
+        Material.SUGAR_CANE to HerbProperties(
+            Color.fromRGB(144, 238, 144),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.SUGAR to HerbProperties(
+            Color.fromRGB(255, 255, 255),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.CACTUS to HerbProperties(
+            Color.fromRGB(96, 164, 79),
+            listOf(
+                PotionEffect(PotionEffectType.SPEED, 80, 0),
+                PotionEffect(PotionEffectType.POISON, 80, 0)
+            )
+        ),
+        Material.MELON to HerbProperties(
+            Color.fromRGB(255, 140, 0),
+            listOf(PotionEffect(PotionEffectType.HEALTH_BOOST, 80, 0))
+        ),
+        Material.PUMPKIN to HerbProperties(
+            Color.fromRGB(231, 106, 0),
+            listOf(PotionEffect(PotionEffectType.HASTE, 80, 0))
+        ),
+        Material.ROSE_BUSH to HerbProperties(
+            Color.fromRGB(255, 0, 0),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.LILAC to HerbProperties(
+            Color.fromRGB(200, 162, 200),
+            listOf(PotionEffect(PotionEffectType.NIGHT_VISION, 80, 0))
+        ),
+        Material.PEONY to HerbProperties(
+            Color.fromRGB(255, 192, 203),
+            listOf(PotionEffect(PotionEffectType.INSTANT_HEALTH, 80, 0))
+        ),
+        Material.SUNFLOWER to HerbProperties(
+            Color.fromRGB(255, 215, 0),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.LILY_PAD to HerbProperties(
+            Color.fromRGB(0, 255, 127),
+            listOf(
+                PotionEffect(PotionEffectType.JUMP_BOOST, 80, 0),
+                PotionEffect(PotionEffectType.NAUSEA, 80, 0)
+            )
+        ),
+        Material.VINE to HerbProperties(
+            Color.fromRGB(0, 255, 0),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.TWISTING_VINES to HerbProperties(
+            Color.fromRGB(0, 255, 0),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.WEEPING_VINES to HerbProperties(
+            Color.fromRGB(0, 255, 0),
+            listOf(PotionEffect(PotionEffectType.SPEED, 80, 0))
+        ),
+        Material.WITHER_ROSE to HerbProperties(
+            Color.fromRGB(0, 0, 0),
+            listOf(PotionEffect(PotionEffectType.WITHER, 100, 0))
+        ),
     )
 
     // Карта для отслеживания открытых brewing stand’ов по UUID игрока
@@ -212,7 +306,7 @@ class Brewer : Listener {
                     startBrewing(event.view)
                 }
             }.runTaskLater(Hardcraft.instance, 1L)
-            player.sendMessage("Вы положили траву в брюинг-стенд!")
+            // player.sendMessage("Вы положили траву в брюинг-стенд!")
         }
         // Слот 3 – результат варки
         else if (rawSlot == 3) {
@@ -221,7 +315,11 @@ class Brewer : Listener {
 //            player.inventory.addItem(event.currentItem!!.clone())
 //            event.currentItem = null
 //            event.view.topInventory.setItem(3, null)
-            player.sendMessage("Вы получили мутированное зелье!")
+            // player.sendMessage("Вы получили мутированное зелье!")
+            player.world.playSound(
+                player.location,
+                "minecraft:block.brewing_stand.brew", 1.0f, 1.0f
+            )
             (0..2).forEach {
                 event.view.topInventory.setItem(
                     it,
@@ -261,13 +359,24 @@ class Brewer : Listener {
         for (item in ingredients) {
             val herb = herbs[item.type] ?: continue
             for (effect in herb.effects) {
-                val current = effectMap[effect.type]
+                var current = effectMap[effect.type]
                 if (current == null) {
                     effectMap[effect.type] = effect
                 } else {
                     // Если эффект уже присутствует – выбираем тот, что сильнее или длительнее
-                    if (effect.duration > current.duration || effect.amplifier > current.amplifier) {
-                        effectMap[effect.type] = effect
+                    effectMap[effect.type] = PotionEffect(
+                        effect.type,
+                        effect.duration + current.duration,
+                        current.amplifier
+                    )
+                    current = effectMap[effect.type]
+
+                    if (effect.amplifier > current!!.amplifier) {
+                        effectMap[effect.type] = PotionEffect(
+                            effect.type,
+                            current.duration,
+                            effect.amplifier
+                        )
                     }
                 }
             }

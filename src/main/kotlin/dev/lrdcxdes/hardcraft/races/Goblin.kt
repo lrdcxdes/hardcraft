@@ -9,6 +9,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityPickupItemEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 
 class Goblin(private val plugin: Hardcraft) : Listener {
@@ -21,7 +23,13 @@ class Goblin(private val plugin: Hardcraft) : Listener {
         override fun run() {
             for (player in plugin.server.onlinePlayers) {
                 if (player.getRace() != Race.GOBLIN) return
-                player.heal(4.0)
+                player.addPotionEffect(
+                    PotionEffect(
+                        PotionEffectType.REGENERATION,
+                        20 * 3,
+                        0,
+                    )
+                )
             }
         }
     }
