@@ -68,15 +68,15 @@ class Chef : Listener {
             return
         }
 
-        if (event.currentItem?.itemMeta?.persistentDataContainer?.has(
+        val player = event.whoClicked as Player
+
+        if (player.inventory.itemInMainHand.itemMeta.persistentDataContainer.has(
                 Hardcraft.instance.key("rmBowl"),
                 PersistentDataType.BYTE
-            ) == true
+            )
         ) {
             return
         }
-
-        val player = event.whoClicked as Player
 
         val rawSlot = event.rawSlot
 
