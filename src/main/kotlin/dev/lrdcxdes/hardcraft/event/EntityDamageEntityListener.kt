@@ -44,9 +44,9 @@ class EntityDamageEntityListener : Listener {
                         entity.addPotionEffect(PotionEffect(PotionEffectType.POISON, 5 * 20, 0))
                     }
                 } else if (race == Race.VAMPIRE) {
-                    // Life Steal: heal 30% of the damage dealt (VAMPIRE)
+                    // Life Steal: heal 50% of the damage dealt (VAMPIRE)
                     val damage = event.damage
-                    val heal = damage * 0.3
+                    val heal = damage * 0.5
                     damager.heal(heal)
                 } else if (race == Race.SNOLEM) {
                     // 35% chance to slow the target for 3 seconds (SNOLEM)

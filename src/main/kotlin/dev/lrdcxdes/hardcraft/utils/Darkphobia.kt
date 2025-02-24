@@ -51,7 +51,8 @@ class Darkphobia : Listener {
             state.fearLevel = state.fearLevel.coerceIn(0.0, 500.0)
         } else {
             val sunLevel = player.location.block.lightFromSky
-            if (sunLevel < 13 || player.inventory.helmet?.type != Material.AIR) {
+            // println("Sun level: $sunLevel, Helmet: ${player.inventory.helmet?.type}")
+            if (sunLevel < 13 || (player.inventory.helmet != null && player.inventory.helmet!!.type != Material.AIR)) {
                 state.sunLevel -= 20.0
             } else {
                 state.sunLevel += 5.0
@@ -59,7 +60,7 @@ class Darkphobia : Listener {
             state.sunLevel = state.sunLevel.coerceIn(0.0, 500.0)
         }
 
-        println("Fear level: ${state.fearLevel}, Sun level: ${state.sunLevel}")
+        // println("Fear level: ${state.fearLevel}, Sun level: ${state.sunLevel}")
 
         // Apply effects based on fear level
         object : BukkitRunnable() {
