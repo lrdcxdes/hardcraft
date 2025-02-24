@@ -147,6 +147,22 @@ add:
     result:
       type: CHERRY_BOAT
 
+  stripped_pale_log:
+    source:
+      type: PALE_LOG
+    result:
+      type: STRIPPED_PALE_LOG
+  pale_door:
+    source:
+      type: PALE_LOG
+    result:
+      type: PALE_DOOR
+  pale_boat:
+    source:
+      type: PALE_LOG
+    result:
+      type: PALE_BOAT
+
   stripped_bamboo:
     source:
       type: BAMBOO_BLOCK
@@ -442,6 +458,37 @@ add:
       type: STRIPPED_CHERRY_LOG
     result:
       type: CHERRY_SLAB
+      amount: 2
+
+  pale_planks:
+    source:
+      type: STRIPPED_PALE_LOG
+    result:
+      type: PALE_PLANKS
+
+  pale_stairs:
+    source:
+      type: STRIPPED_PALE_LOG
+    result:
+      type: PALE_STAIRS
+
+  pale_crafting_table:
+    source:
+      type: STRIPPED_PALE_LOG
+    result:
+      type: CRAFTING_TABLE
+
+  pale_chest:
+    source:
+      type: STRIPPED_PALE_LOG
+    result:
+      type: CHEST
+
+  pale_slab:
+    source:
+      type: STRIPPED_PALE_LOG
+    result:
+      type: PALE_SLAB
       amount: 2
 
   bamboo_planks:
@@ -985,6 +1032,70 @@ add:
     result:
       type: CHERRY_SIGN
       amount: 1
+
+  # Pale
+  pale_planks_slab:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: PALE_SLAB
+      amount: 2
+
+  pale_planks_sticks:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: STICK
+      amount: 4
+
+  pale_planks_fence:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: PALE_FENCE
+      amount: 3
+
+  pale_planks_scaffolding:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: SCAFFOLDING
+      amount: 6
+
+  pale_planks_gate:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: PALE_FENCE_GATE
+      amount: 2
+
+  pale_planks_trapdoor:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: PALE_TRAPDOOR
+      amount: 2
+
+  pale_planks_pressure_plate:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: PALE_PRESSURE_PLATE
+      amount: 4
+
+  pale_planks_button:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: PALE_BUTTON
+      amount: 4
+
+  pale_sign:
+    source:
+      type: PALE_PLANKS
+    result:
+      type: PALE_SIGN
+    amount: 1
 
   # Bamboo
   bamboo_planks_slab:
