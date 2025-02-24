@@ -61,7 +61,7 @@ class Bard : Listener {
         val effects = if (debuff) negativeEffects else positiveEffects
         val effect = effects[Hardcraft.instance.random.nextInt(effects.size)]
 
-        for (entity in player.getNearbyEntities(5.0, 5.0, 5.0)) {
+        for (entity in player.getNearbyEntities(7.0, 7.0, 7.0)) {
             if (entity is LivingEntity) {
                 if (entity == player) continue
                 if (!debuff && entity is Monster) continue

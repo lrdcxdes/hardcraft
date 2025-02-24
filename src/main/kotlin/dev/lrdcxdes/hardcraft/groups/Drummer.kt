@@ -96,7 +96,7 @@ class Drummer : Listener {
             Cast.FIRE_RESISTANCE -> positiveEffects[3]
         }
 
-        for (entity in player.getNearbyEntities(5.0, 5.0, 5.0)) {
+        for (entity in player.getNearbyEntities(15.0, 15.0, 15.0)) {
             if (entity is LivingEntity) {
                 if (entity == player) continue
                 if (entity is Monster) continue
