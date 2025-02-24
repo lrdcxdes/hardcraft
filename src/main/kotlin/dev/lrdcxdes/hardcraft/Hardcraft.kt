@@ -141,7 +141,7 @@ class Hardcraft : JavaPlugin() {
         // Elf
         server.pluginManager.registerEvents(ElfListener(), this)
         // Goblin
-        server.pluginManager.registerEvents(GoblinListener(this), this)
+        server.pluginManager.registerEvents(Goblin(this), this)
         // Amphibian
         server.pluginManager.registerEvents(AmphibiaListener(), this)
         // Cible
