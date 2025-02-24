@@ -24,10 +24,10 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class Drummer : Listener {
     private val positiveEffects: List<PotionEffect> = listOf(
-        PotionEffect(PotionEffectType.SPEED, 6, 0),
-        PotionEffect(PotionEffectType.REGENERATION, 6, 0),
-        PotionEffect(PotionEffectType.RESISTANCE, 6, 0),
-        PotionEffect(PotionEffectType.FIRE_RESISTANCE, 6, 0),
+        PotionEffect(PotionEffectType.SPEED, 20, 0),
+        PotionEffect(PotionEffectType.REGENERATION, 20, 0),
+        PotionEffect(PotionEffectType.RESISTANCE, 20, 0),
+        PotionEffect(PotionEffectType.FIRE_RESISTANCE, 20, 0),
     )
 
     enum class Cast {
