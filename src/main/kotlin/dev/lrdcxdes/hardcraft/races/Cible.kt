@@ -18,7 +18,7 @@ class Cible : Listener {
             org.bukkit.potion.PotionEffect(
                 org.bukkit.potion.PotionEffectType.LEVITATION,
                 40,
-                1
+                0
             )
         )
     }
