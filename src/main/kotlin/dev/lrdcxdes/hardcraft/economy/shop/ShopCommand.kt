@@ -37,7 +37,7 @@ class ShopCommand(private val shop: Shop) :
         label: String,
         args: Array<out String>
     ): MutableList<String>? {
-        if (args != null && args.isNotEmpty() && 2 > args.size) {
+        if (args.isNotEmpty() && 2 > args.size) {
             return mutableListOf("all")
         }
         return null

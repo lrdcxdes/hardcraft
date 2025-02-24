@@ -85,21 +85,6 @@ class NewFoodListen : Listener {
             }
         } else if (item.type.name == "ARROW") {
             setArrow(item, player)
-        } else if (item.type.name == "STICK") {
-            val race = player.getRace()
-            if (race == Race.CIBLE) {
-                item.setData(
-                    DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1F).animation(
-                        ItemUseAnimation.EAT
-                    ).build()
-                )
-                item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(1).build())
-            } else {
-                item.unsetData(
-                    DataComponentTypes.CONSUMABLE
-                )
-                item.unsetData(DataComponentTypes.FOOD)
-            }
         } else if (item.type.name == "SLIME_BALL") {
             val race = player.getRace()
             if (race == Race.AGAR) {
@@ -129,6 +114,89 @@ class NewFoodListen : Listener {
                 item.unsetData(
                     DataComponentTypes.CONSUMABLE
                 )
+            }
+        } // bard
+        else if (item.type.name == "STICK" && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 5) {
+            val group = player.getGroup()
+            if (group == Group.BARD) {
+                item.setData(
+                    DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(7F).animation(
+                        ItemUseAnimation.CROSSBOW
+                    ).sound(
+                        NamespacedKey.minecraft("block.note_block.banjo")
+                    ).hasConsumeParticles(false).build()
+                )
+                item.setData(
+                    DataComponentTypes.MAX_STACK_SIZE, 1
+                )
+                item.setData(
+                    DataComponentTypes.MAX_DAMAGE, 50
+                )
+                item.setData(
+                    DataComponentTypes.DAMAGE, 0
+                )
+            } else {
+                item.unsetData(
+                    DataComponentTypes.CONSUMABLE
+                )
+                item.unsetData(
+                    DataComponentTypes.MAX_DAMAGE
+                )
+                item.unsetData(
+                    DataComponentTypes.DAMAGE
+                )
+                item.unsetData(
+                    DataComponentTypes.MAX_STACK_SIZE
+                )
+            }
+        } // drummer
+        else if (item.type.name == "STICK" && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 6) {
+            val group = player.getGroup()
+            if (group == Group.DRUMMER) {
+                item.setData(
+                    DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(0.3F).animation(
+                        ItemUseAnimation.CROSSBOW
+                    ).sound(
+                        NamespacedKey.minecraft("block.note_block.snare")
+                    ).hasConsumeParticles(false).build()
+                )
+                item.setData(
+                    DataComponentTypes.MAX_STACK_SIZE, 1
+                )
+                item.setData(
+                    DataComponentTypes.MAX_DAMAGE, 1000
+                )
+                item.setData(
+                    DataComponentTypes.DAMAGE, 0
+                )
+            } else {
+                item.unsetData(
+                    DataComponentTypes.CONSUMABLE
+                )
+                item.unsetData(
+                    DataComponentTypes.MAX_STACK_SIZE
+                )
+                item.unsetData(
+                    DataComponentTypes.DAMAGE
+                )
+                item.unsetData(
+                    DataComponentTypes.MAX_DAMAGE
+                )
+            }
+        } else if (item.type.name == "STICK") {
+            val race = player.getRace()
+            if (race == Race.CIBLE) {
+                item.setData(
+                    DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1F).animation(
+                        ItemUseAnimation.EAT
+                    ).build()
+                )
+                item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(1).build())
+            } else {
+                item.unsetData(
+                    DataComponentTypes.CONSUMABLE
+                )
+                item.unsetData(DataComponentTypes.FOOD)
             }
         }
     }

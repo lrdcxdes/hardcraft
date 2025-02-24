@@ -164,6 +164,8 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(Caveman(), this)
         server.pluginManager.registerEvents(Brewer(), this)
         server.pluginManager.registerEvents(Chef(), this)
+        server.pluginManager.registerEvents(Bard(), this)
+        server.pluginManager.registerEvents(Drummer(), this)
 
         database = DatabaseManager()
         database.connect()

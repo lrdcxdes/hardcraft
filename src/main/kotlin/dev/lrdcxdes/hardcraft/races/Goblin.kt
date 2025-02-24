@@ -10,6 +10,7 @@ import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.PlayerExpChangeEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerLevelChangeEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
@@ -98,9 +99,18 @@ class Goblin(private val plugin: Hardcraft) : Listener {
     // Гоблины не могут получать exp
     @EventHandler
     fun onExpChange(event: PlayerExpChangeEvent) {
+        if (event.player.getRace() != Race.GOBLIN) return
         if (event.amount > 0) {
             event.amount = 0
         }
+    }
+
+    @EventHandler
+    fun onLevelChange(event: PlayerLevelChangeEvent) {
+        if (event.player.getRace() != Race.GOBLIN) return
+        applyAttributes(event.player)
+        startRegenerationTask(event.player)
+        println("level changed to ${event.newLevel}")
     }
 
     @EventHandler
@@ -124,12 +134,12 @@ class Goblin(private val plugin: Hardcraft) : Listener {
         }
         player.giveExp(xp, true)
 
-        applyAttributes(player)
-        startRegenerationTask(player)
+//        applyAttributes(player)
+//        startRegenerationTask(player)
     }
 
     private val limitMaxHP = goblinsMaxHP + 20.0
-    private val maxDmg = goblinsMaxHP + (goblinsMaxHP * 0.65)
+    private val maxDmg = goblinsMaxDmg + (goblinsMaxDmg * 0.764706)
 
     private fun applyAttributes(player: Player) {
         val level = player.level
@@ -137,7 +147,9 @@ class Goblin(private val plugin: Hardcraft) : Listener {
         if (maxHP > limitMaxHP) {
             maxHP = limitMaxHP
         }
-        var damage = goblinsMaxDmg + level / 200.0
+        // damage from 0.85 to 1.5 (from 0 level to 100 level)
+        var damage = goblinsMaxDmg + level / 153.8
+
         if (damage > maxDmg) {
             damage = maxDmg
         }
