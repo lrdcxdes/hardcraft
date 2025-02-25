@@ -105,7 +105,7 @@ class Chef : Listener {
                 return
             } else if (!isHerb(cursorItem)) {
                 event.isCancelled = true
-                player.sendMessage("Можно класть только еду!")
+                player.sendMessage(Hardcraft.minimessage.deserialize("<red><lang:btn.chef_only_herbs>"))
                 return
             }
 

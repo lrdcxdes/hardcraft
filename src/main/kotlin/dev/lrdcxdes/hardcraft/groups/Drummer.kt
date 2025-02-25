@@ -6,6 +6,7 @@ import io.papermc.paper.datacomponent.item.Consumable
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.Particle
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Monster
@@ -46,10 +47,13 @@ class Drummer : Listener {
         if (item.type == Material.STICK && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 6) {
             // lmb = change cast (cycle)
             if (event.action.isLeftClick) {
-                val currentOrdinal = event.player.persistentDataContainer.get(
+                var currentOrdinal = event.player.persistentDataContainer.get(
                     Hardcraft.instance.key("castDrummer"),
                     PersistentDataType.INTEGER
                 ) ?: Cast.SPEED.ordinal
+                if (currentOrdinal !in 0..Cast.entries.size) {
+                    currentOrdinal = 0
+                }
                 val current = Cast.entries[currentOrdinal]
                 val next = when (current) {
                     Cast.SPEED -> Cast.REGENERATION
@@ -64,7 +68,7 @@ class Drummer : Listener {
                 )
 
                 event.player.sendMessage(
-                    "Current cast: ${next.name}"
+                    Hardcraft.minimessage.deserialize("<lang:btn.current_cast>: <green>${next.name}")
                 )
             }
         }
@@ -89,7 +93,10 @@ class Drummer : Listener {
             event.isCancelled = true
         }
 
-        val effect = when (Cast.entries[player.persistentDataContainer.get(Hardcraft.instance.key("castDrummer"), PersistentDataType.INTEGER) ?: Cast.SPEED.ordinal]) {
+        val effect = when (Cast.entries[player.persistentDataContainer.get(
+            Hardcraft.instance.key("castDrummer"),
+            PersistentDataType.INTEGER
+        ) ?: Cast.SPEED.ordinal]) {
             Cast.SPEED -> positiveEffects[0]
             Cast.REGENERATION -> positiveEffects[1]
             Cast.RESISTANCE -> positiveEffects[2]
@@ -101,6 +108,15 @@ class Drummer : Listener {
                 if (entity == player) continue
                 if (entity is Monster) continue
                 entity.addPotionEffect(effect)
+                entity.world.spawnParticle(
+                    Particle.HAPPY_VILLAGER,
+                    entity.location,
+                    1,
+                    0.5,
+                    0.5,
+                    0.5,
+                    0.0
+                )
             }
         }
     }

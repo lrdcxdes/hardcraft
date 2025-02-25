@@ -281,7 +281,9 @@ class Brewer : Listener {
                 return
             } else if (!isHerb(cursorItem)) {
                 event.isCancelled = true
-                player.sendMessage("Можно класть только травы или семена!")
+                player.sendMessage(Hardcraft.minimessage.deserialize(
+                    "<red><lang:btn.brewer_only_herbs>"
+                ))
                 return
             }
 

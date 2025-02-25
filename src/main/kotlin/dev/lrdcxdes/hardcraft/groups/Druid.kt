@@ -9,7 +9,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.persistence.PersistentDataType
 
-class Druid: Listener {
+class Druid : Listener {
     // Druid
     //Уникальные способности
     //Может призывать мобов с помощью любой книги, затрачивая на это голод.
@@ -50,7 +50,7 @@ class Druid: Listener {
         if (item.type == Material.BOOK) {
             if (lastCast[event.player.name] != null && System.currentTimeMillis() - lastCast[event.player.name]!! < 1000) {
                 event.player.sendMessage(
-                    "Cooldown: ${(1000 - (System.currentTimeMillis() - lastCast[event.player.name]!!)) / 1000} seconds"
+                    Hardcraft.minimessage.deserialize("<red><lang:btn.cooldown>: ${(1000 - (System.currentTimeMillis() - lastCast[event.player.name]!!)) / 1000} s.")
                 )
                 return
             }
@@ -77,7 +77,7 @@ class Druid: Listener {
                 )
 
                 event.player.sendMessage(
-                    "Current cast: ${next.name}"
+                    Hardcraft.minimessage.deserialize("<lang:btn.current_cast>: <green>${next.name}")
                 )
             } else {
                 val currentOrdinal = event.player.persistentDataContainer.get(
@@ -94,9 +94,19 @@ class Druid: Listener {
                             this.age = -24000
                         }
                     }
-                    event.player.sendMessage("Casted ${cast.name}")
+                    event.player.world.playSound(
+                        event.player.location,
+                        "entity.fox.aggro",
+                        1F,
+                        1F
+                    )
                 } else {
-                    event.player.sendMessage("Not enough hunger")
+                    event.player.playSound(
+                        event.player.location,
+                        "minecraft:entity.villager.no",
+                        1F,
+                        2F
+                    )
                 }
 
                 lastCast[event.player.name] = System.currentTimeMillis()

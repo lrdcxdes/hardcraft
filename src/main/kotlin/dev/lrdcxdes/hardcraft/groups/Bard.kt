@@ -6,6 +6,7 @@ import io.papermc.paper.datacomponent.item.Consumable
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.Particle
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Monster
@@ -66,6 +67,15 @@ class Bard : Listener {
                 if (entity == player) continue
                 if (!debuff && entity is Monster) continue
                 entity.addPotionEffect(effect)
+                entity.world.spawnParticle(
+                    Particle.HAPPY_VILLAGER,
+                    entity.location,
+                    1,
+                    0.5,
+                    0.5,
+                    0.5,
+                    0.0
+                )
             }
         }
     }

@@ -80,7 +80,33 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
             Agar.getKillerStacks(player).let { stacks ->
                 Agar.adjustAttributes(player, stacks, heal = false)
             }
+        } else if (race == Race.GOBLIN) {
+            Goblin.applyAttributes(player)
         }
+
+        // Skin
+        val nowSkinRace = player.persistentDataContainer.getOrDefault(
+            NamespacedKey(plugin, "playerRaceSkin"),
+            PersistentDataType.STRING,
+            ""
+        )
+        if (nowSkinRace == race.name) return
+
+        // skin
+        val skin = RaceManager.getRandomSkin(race) ?: return
+        val profile = player.playerProfile
+        val textures = profile.textures
+        textures.setSkin(
+            skin.url, skin.model
+        )
+        profile.setTextures(textures)
+        player.playerProfile = profile
+
+        player.persistentDataContainer.set(
+            NamespacedKey(plugin, "playerRaceSkin"),
+            PersistentDataType.STRING,
+            race.name
+        )
     }
 
     @EventHandler

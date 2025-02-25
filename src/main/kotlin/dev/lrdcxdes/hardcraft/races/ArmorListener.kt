@@ -59,7 +59,7 @@ class ArmorListener : Listener {
             Triple(Attribute.MOVEMENT_SPEED, listOf("CHAINMAIL"), 15.0) to "add",
             Triple(Attribute.ATTACK_DAMAGE, listOf("DIAMOND", "NETHERITE"), 20.0) to "subtract"
         ),
-        Race.COBOLD to listOf(
+        Race.KOBOLD to listOf(
             Triple(Attribute.MOVEMENT_SPEED, listOf("IRON", "DIAMOND", "NETHERITE"), 40.0) to "subtract",
             Triple(Attribute.ATTACK_DAMAGE, listOf("IRON", "DIAMOND", "NETHERITE"), 35.0) to "subtract"
         ),

@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.races
 
+import org.bukkit.entity.EntityType
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractEvent
@@ -20,7 +21,13 @@ class Snolem : Listener {
             if (player.totalExperience >= 15 && player.foodLevel >= 6) {
                 player.totalExperience -= 15
                 player.foodLevel -= 6
-                player.world.spawnEntity(player.location, org.bukkit.entity.EntityType.SNOW_GOLEM)
+                player.world.spawnEntity(player.location, EntityType.SNOW_GOLEM)
+                player.world.playSound(
+                    player.location,
+                    "minecraft:block.snow_step",
+                    1.0f,
+                    1.0f
+                )
 
                 lastSnowGolem[player.name] = System.currentTimeMillis()
             }

@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.ProjectileHitEvent
 
-class Ranger: Listener {
+class Ranger : Listener {
     // Ranger
     //Уникальные способности
     //При успешном попадании стрелой, возвращает стрелу обратно.
@@ -25,6 +25,13 @@ class Ranger: Listener {
             for ((_, value) in map) {
                 player.world.dropItem(player.location, value)
             }
+
+            player.playSound(
+                player.location,
+                "ui.hud.bubble_pop",
+                2F,
+                2F
+            )
         }
     }
 }

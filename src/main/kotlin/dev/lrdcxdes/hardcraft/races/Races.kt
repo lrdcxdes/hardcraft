@@ -1,9 +1,12 @@
 package dev.lrdcxdes.hardcraft.races
 
 import org.bukkit.attribute.Attribute
+import org.bukkit.profile.PlayerTextures.SkinModel
+import java.net.URI
+import java.net.URL
 
 enum class Race {
-    HUMAN, ELF, DWARF, COBOLD, GIANT, VAMPIRE, AMPHIBIAN, SKELETON, GOBLIN, DRAGONBORN,
+    HUMAN, ELF, DWARF, KOBOLD, GIANT, VAMPIRE, AMPHIBIAN, SKELETON, GOBLIN, DRAGONBORN,
     SNOLEM, AGAR, CIBLE
 }
 
@@ -66,7 +69,7 @@ object RaceManager {
                 Attribute.FALL_DAMAGE_MULTIPLIER to 0.85,
             ),
         ),
-        Race.COBOLD to RaceAttributes(
+        Race.KOBOLD to RaceAttributes(
             baseAttributes = mapOf(
                 Attribute.SCALE to 0.65,
                 Attribute.MAX_HEALTH to 14.0,
@@ -166,6 +169,18 @@ object RaceManager {
         ),
     )
 
+    data class SkinAttributes(
+        val url: URL,
+        val model: SkinModel,
+    )
+
+    private val skins: Map<Race, List<SkinAttributes>> = mutableMapOf(
+        Race.HUMAN to listOf(
+            SkinAttributes(URI("https://example.com/elf1.png").toURL(), SkinModel.SLIM),
+        )
+    )
+
     fun getAttributes(race: Race): RaceAttributes? = races[race]
     fun getDefaultAttributes(): RaceAttributes = defaultAttributes
+    fun getRandomSkin(race: Race): SkinAttributes? = skins[race]?.random()
 }

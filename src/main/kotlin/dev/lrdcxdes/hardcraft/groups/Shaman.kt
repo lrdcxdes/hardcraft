@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
-class Shaman: Listener {
+class Shaman : Listener {
     // Shaman
     //Уникальные способности
     //Начинает с предметом: палка.
@@ -34,7 +34,7 @@ class Shaman: Listener {
         if (item.type == Material.STICK) {
             if (lastCast[event.player.name] != null && System.currentTimeMillis() - lastCast[event.player.name]!! < 5000) {
                 event.player.sendMessage(
-                    "Cooldown: ${(5000 - (System.currentTimeMillis() - lastCast[event.player.name]!!)) / 1000} seconds"
+                    Hardcraft.minimessage.deserialize("<red><lang:btn.cooldown>: ${(5000 - (System.currentTimeMillis() - lastCast[event.player.name]!!)) / 1000} s.")
                 )
                 return
             }
@@ -59,7 +59,7 @@ class Shaman: Listener {
                 )
 
                 event.player.sendMessage(
-                    "Current cast: ${next.name}"
+                    Hardcraft.minimessage.deserialize("<lang:btn.current_cast>: <green>${next.name}")
                 )
             } else {
                 val currentOrdinal = event.player.persistentDataContainer.get(
@@ -78,7 +78,12 @@ class Shaman: Listener {
                             }
                         }
                     } else {
-                        event.player.sendMessage("Not enough levels")
+                        event.player.playSound(
+                            event.player.location,
+                            "minecraft:entity.villager.no",
+                            1F,
+                            2F
+                        )
                     }
                 } else if (cast == Cast.POISON_DART) {
                     // poison dart
@@ -95,7 +100,12 @@ class Shaman: Listener {
                             2f
                         )
                     } else {
-                        event.player.sendMessage("Not enough levels")
+                        event.player.playSound(
+                            event.player.location,
+                            "minecraft:entity.villager.no",
+                            1F,
+                            2F
+                        )
                     }
 
                     lastCast[event.player.name] = System.currentTimeMillis()

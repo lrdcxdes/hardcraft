@@ -41,6 +41,12 @@ class Cible : Listener {
                 player.launchProjectile(
                     org.bukkit.entity.SmallFireball::class.java
                 )
+                player.world.playSound(
+                    player.location,
+                    org.bukkit.Sound.ENTITY_BLAZE_SHOOT,
+                    1F,
+                    1F
+                )
                 lastFireball[player.name] = System.currentTimeMillis()
             }
         }

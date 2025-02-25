@@ -22,9 +22,6 @@ class Goblin(private val plugin: Hardcraft) : Listener {
     // every 1level gain -2% regen cd (max100%) (so from 1200 tick to 1 tick)
     // every 2levels gain 1% dmg - max 65% (from 0.85 to 1.5)
     // every 3levels you got 1 max heart - max 10hearts (20.0)
-    private val goblinsMaxHP = RaceManager.getAttributes(Race.GOBLIN)?.baseAttributes?.get(Attribute.MAX_HEALTH)!!
-    private val goblinsSpeed = RaceManager.getDefaultAttributes().baseAttributes[Attribute.MOVEMENT_SPEED]!!
-    private val goblinsMaxDmg = RaceManager.getAttributes(Race.GOBLIN)?.baseAttributes?.get(Attribute.ATTACK_DAMAGE)!!
 
     private fun calculateRegenInterval(level: Int): Long {
         val baseInterval = 1200L // начальный интервал в тиках (60 секунд)
@@ -110,7 +107,6 @@ class Goblin(private val plugin: Hardcraft) : Listener {
         if (event.player.getRace() != Race.GOBLIN) return
         applyAttributes(event.player)
         startRegenerationTask(event.player)
-        println("level changed to ${event.newLevel}")
     }
 
     @EventHandler
@@ -133,29 +129,8 @@ class Goblin(private val plugin: Hardcraft) : Listener {
             else -> 9 // 1 слиток = 9 опыта после 30 уровня
         }
         player.giveExp(xp, true)
-
-//        applyAttributes(player)
-//        startRegenerationTask(player)
     }
 
-    private val limitMaxHP = goblinsMaxHP + 20.0
-    private val maxDmg = goblinsMaxDmg + (goblinsMaxDmg * 0.764706)
-
-    private fun applyAttributes(player: Player) {
-        val level = player.level
-        var maxHP = goblinsMaxHP + level / 1.5
-        if (maxHP > limitMaxHP) {
-            maxHP = limitMaxHP
-        }
-        // damage from 0.85 to 1.5 (from 0 level to 100 level)
-        var damage = goblinsMaxDmg + level / 153.8
-
-        if (damage > maxDmg) {
-            damage = maxDmg
-        }
-        player.getAttribute(Attribute.MAX_HEALTH)?.baseValue = maxHP
-        player.getAttribute(Attribute.ATTACK_DAMAGE)?.baseValue = damage
-    }
 
     @EventHandler
     fun onDeath(event: PlayerDeathEvent) {
@@ -184,5 +159,31 @@ class Goblin(private val plugin: Hardcraft) : Listener {
 
     init {
         taskGroupSynergy.runTaskTimer(plugin, 0, 20L * 5L)
+    }
+
+    companion object {
+        private val goblinsMaxHP = RaceManager.getAttributes(Race.GOBLIN)?.baseAttributes?.get(Attribute.MAX_HEALTH)!!
+        private val goblinsSpeed = RaceManager.getDefaultAttributes().baseAttributes[Attribute.MOVEMENT_SPEED]!!
+        private val goblinsMaxDmg =
+            RaceManager.getAttributes(Race.GOBLIN)?.baseAttributes?.get(Attribute.ATTACK_DAMAGE)!!
+
+        private val limitMaxHP = goblinsMaxHP + 20.0
+        private val maxDmg = goblinsMaxDmg + (goblinsMaxDmg * 0.764706)
+
+        fun applyAttributes(player: Player) {
+            val level = player.level
+            var maxHP = goblinsMaxHP + level / 1.5
+            if (maxHP > limitMaxHP) {
+                maxHP = limitMaxHP
+            }
+            // damage from 0.85 to 1.5 (from 0 level to 100 level)
+            var damage = goblinsMaxDmg + level / 153.8
+
+            if (damage > maxDmg) {
+                damage = maxDmg
+            }
+            player.getAttribute(Attribute.MAX_HEALTH)?.baseValue = maxHP
+            player.getAttribute(Attribute.ATTACK_DAMAGE)?.baseValue = damage
+        }
     }
 }

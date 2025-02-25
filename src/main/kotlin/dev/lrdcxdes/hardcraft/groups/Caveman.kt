@@ -34,7 +34,9 @@ class Caveman : Listener {
         val lastThrow = cooldowns[player.uniqueId] ?: 0L
         if (now - lastThrow < cooldownTime) {
             // Optionally, send feedback: player.sendMessage("You must wait before throwing again!")
-            player.sendMessage("You must wait before throwing again!")
+            player.sendMessage(Hardcraft.minimessage.deserialize(
+                "<red><lang:btn.you_must_wait>"
+            ))
             return
         }
 

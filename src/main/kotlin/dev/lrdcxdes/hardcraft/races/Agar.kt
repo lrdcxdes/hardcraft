@@ -62,7 +62,7 @@ class Agar : Listener {
 
         // Lose one stack if the player loses at least 3 hearts (6 points) in one hit.
         val diff = player.getAttribute(Attribute.MAX_HEALTH)?.value!! - (player.health - event.finalDamage)
-        println("hp: ${player.health}, damage: ${event.finalDamage}, diff: $diff")
+
         if (diff >= 6.0) {
             if (currentStacks > 1) {
                 event.isCancelled = true

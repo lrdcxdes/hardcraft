@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.groups
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import org.bukkit.Particle
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -10,7 +11,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitRunnable
 
-class Cleric(private val plugin: Hardcraft): Listener {
+class Cleric(private val plugin: Hardcraft) : Listener {
     // Каждые 40 секунд лечит все ближайшие цели на 1 HP.
     // При смерти накладывает эффект «Тьма» (30 секунд) на убийцу.
 
@@ -23,6 +24,15 @@ class Cleric(private val plugin: Hardcraft): Listener {
                     for (entity in nearbyEntities) {
                         val target = entity as Player
                         target.heal(2.0)
+                        target.spawnParticle(
+                            Particle.HEART,
+                            target.location.add(0.0, 1.0, 0.0),
+                            1,
+                            1.0,
+                            1.0,
+                            1.0,
+                            0.0
+                        )
                     }
                 }
             }
@@ -39,6 +49,15 @@ class Cleric(private val plugin: Hardcraft): Listener {
         if (player.getGroup() == Group.CLERIC) {
             val killer = player.killer
             killer?.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 600, 0))
+            player.spawnParticle(
+                Particle.SMOKE,
+                player.location.add(0.0, 1.0, 0.0),
+                10,
+                0.5,
+                0.5,
+                0.5,
+                0.0
+            )
         }
     }
 }

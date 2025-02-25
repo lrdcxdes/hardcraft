@@ -7,7 +7,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.meta.PotionMeta
 
-class Rogue: Listener {
+class Rogue : Listener {
     //Уникальные способности
     //Может бросать любую стрелу.
 
@@ -22,6 +22,12 @@ class Rogue: Listener {
             arrow.basePotionType = (event.item as PotionMeta).basePotionType
             // Default arrow velocity like from bow
             // arrow.velocity = event.player.location.direction.multiply(2)
+            event.player.world.playSound(
+                event.player.location,
+                "minecraft:entity.arrow.shoot",
+                1F,
+                1F
+            )
         }
     }
 }

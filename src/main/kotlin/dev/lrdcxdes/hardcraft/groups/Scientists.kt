@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.groups
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import org.bukkit.Particle
 import org.bukkit.attribute.Attribute
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -17,6 +18,21 @@ class Scientists(private val plugin: Hardcraft): Listener {
             for (player in plugin.server.onlinePlayers) {
                 if (player.getGroup() == Group.SCIENTIST) {
                     player.giveExp(5)
+                    player.playSound(
+                        player.location,
+                        "minecraft:entity.experience_orb.pickup",
+                        1F,
+                        2F
+                    )
+                    player.spawnParticle(
+                        Particle.ENCHANT,
+                        player.location,
+                        5,
+                        0.5,
+                        0.5,
+                        0.5,
+                        0.1
+                    )
                 }
             }
         }
