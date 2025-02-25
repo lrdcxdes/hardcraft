@@ -1,6 +1,8 @@
 package dev.lrdcxdes.hardcraft.races
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import net.skinsrestorer.api.property.InputDataResult
+import net.skinsrestorer.api.storage.PlayerStorage
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -19,6 +21,8 @@ import org.bukkit.inventory.InventoryHolder
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
+import java.util.*
+
 
 fun Player.getRace(): Race? {
     val container = persistentDataContainer
@@ -93,14 +97,44 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
         if (nowSkinRace == race.name) return
 
         // skin
-        val skin = RaceManager.getRandomSkin(race) ?: return
-        val profile = player.playerProfile
-        val textures = profile.textures
-        textures.setSkin(
-            skin.url, skin.model
-        )
-        profile.setTextures(textures)
-        player.playerProfile = profile
+        var coolSkin = false
+        var result: Optional<InputDataResult>? = null
+        val badSkins = mutableListOf<RaceManager.SkinAttributes>()
+        while (!coolSkin) {
+            val skin = RaceManager.getRandomSkin(race, badSkins) ?: return
+            try {
+                result = Hardcraft.skins.skinStorage.findOrCreateSkinData(skin.url.toString())
+                if (result == null || result.isEmpty) {
+                    badSkins.add(skin)
+                    println("Skin not found")
+                    return
+                } else {
+                    coolSkin = true
+                }
+            } catch (e: Exception) {
+                // pass
+                badSkins.add(skin)
+            }
+        }
+
+        val playerStorage: PlayerStorage = Hardcraft.skins.playerStorage
+        val skinIden = result!!.get().identifier
+
+        println("Skin found: $skinIden")
+
+        // Associate the skin with the player
+        playerStorage.setSkinIdOfPlayer(player.uniqueId, skinIden)
+
+        // Instantly apply skin to the player without requiring the player to rejoin
+        Hardcraft.skins.getSkinApplier(Player::class.java).applySkin(player)
+
+//        val profile = player.playerProfile
+//        val textures = profile.textures
+//        textures.setSkin(
+//            skin.url, skin.model
+//        )
+//        profile.setTextures(textures)
+//        player.playerProfile = profile
 
         player.persistentDataContainer.set(
             NamespacedKey(plugin, "playerRaceSkin"),

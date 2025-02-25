@@ -307,5 +307,5 @@ object RaceManager {
 
     fun getAttributes(race: Race): RaceAttributes? = races[race]
     fun getDefaultAttributes(): RaceAttributes = defaultAttributes
-    fun getRandomSkin(race: Race): SkinAttributes? = skins[race]?.random()
+    fun getRandomSkin(race: Race, ignoreSkins: MutableList<SkinAttributes>? = null): SkinAttributes? = skins[race]?.filter { it !in ignoreSkins ?: emptyList() }?.random()
 }

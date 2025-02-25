@@ -18,6 +18,8 @@ import dev.lrdcxdes.hardcraft.utils.CustomCrafts
 import dev.lrdcxdes.hardcraft.utils.Darkphobia
 import dev.lrdcxdes.hardcraft.utils.TorchAndCampfire
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.skinsrestorer.api.SkinsRestorer
+import net.skinsrestorer.api.SkinsRestorerProvider
 import org.bukkit.NamespacedKey
 import org.bukkit.World
 import org.bukkit.plugin.java.JavaPlugin
@@ -34,6 +36,15 @@ class Hardcraft : JavaPlugin() {
     override fun onEnable() {
         // Plugin startup logic
         instance = this
+
+        // SkinsRestorer
+        if (server.pluginManager.getPlugin("SkinsRestorer") == null) {
+            logger.warning("SkinsRestorer not found!")
+            server.pluginManager.disablePlugin(this)
+            return
+        }
+
+        skins = SkinsRestorerProvider.get()
 
         // CustomEntities
         entitySpawnListener = EntitySpawnListener()
@@ -222,6 +233,7 @@ class Hardcraft : JavaPlugin() {
     companion object {
         val minimessage: MiniMessage = MiniMessage.miniMessage()
         lateinit var instance: Hardcraft
+        lateinit var skins: SkinsRestorer
         lateinit var database: DatabaseManager
     }
 }

@@ -19,6 +19,9 @@ repositories {
     maven("https://jitpack.io") {
         name = "jitpack.io"
     }
+    maven("https://repo.codemc.org/repository/maven-public/") {
+        name = "codemc"
+    }
 }
 
 dependencies {
@@ -28,6 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8") // Added JDK8 stdlib
     implementation("net.kyori:adventure-api:4.19.0")
     implementation("com.zaxxer:HikariCP:6.0.0")
+    compileOnly("net.skinsrestorer:skinsrestorer-api:15.5.3")
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
 }
 

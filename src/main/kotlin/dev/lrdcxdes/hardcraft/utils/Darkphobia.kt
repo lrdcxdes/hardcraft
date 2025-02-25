@@ -50,9 +50,9 @@ class Darkphobia : Listener {
             state.fearLevel += if (lightLevel < 6) 5.0 else -20.0
             state.fearLevel = state.fearLevel.coerceIn(0.0, 500.0)
         } else {
-            val sunLevel = player.location.block.lightFromSky
+            val sunLevel = player.eyeLocation.block.lightFromSky
             // println("Sun level: $sunLevel, Helmet: ${player.inventory.helmet?.type}")
-            if (sunLevel < 13 || (player.inventory.helmet != null && player.inventory.helmet!!.type != Material.AIR)) {
+            if (!player.world.isDayTime || sunLevel < 13 || (player.inventory.helmet != null && player.inventory.helmet!!.type != Material.AIR)) {
                 state.sunLevel -= 20.0
             } else {
                 state.sunLevel += 5.0
