@@ -121,6 +121,7 @@ class EatFoodListener : Listener {
             } else {
                 // add 2 health
                 player.heal(2.0)
+                player.foodLevel += 1
                 return
             }
         } else if (race == Race.CIBLE) {

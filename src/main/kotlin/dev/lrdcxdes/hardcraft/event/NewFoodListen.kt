@@ -78,12 +78,12 @@ class NewFoodListen : Listener {
                     )
                         .build()
                 )
-                item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(1).build())
+                // item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(1).build())
             } else {
                 item.unsetData(
                     DataComponentTypes.CONSUMABLE
                 )
-                item.unsetData(DataComponentTypes.FOOD)
+                // item.unsetData(DataComponentTypes.FOOD)
             }
         } else if (item.type.name == "ARROW") {
             setArrow(item, player)
