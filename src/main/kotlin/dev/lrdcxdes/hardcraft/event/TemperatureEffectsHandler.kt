@@ -36,7 +36,7 @@ class TemperatureEffectsHandler {
             val race = player.getRace()
 
             when {
-                temp <= -7 && race != Race.SNOLEM -> player.freezeTicks = 200
+                temp <= -10 && race != Race.SNOLEM -> player.freezeTicks = 200
                 // Dragonborn immune to high temperature
                 (temp >= 40 && race != Race.DRAGONBORN) || (temp >= 30 && race == Race.SNOLEM) -> applyEffect(
                     player,
@@ -56,7 +56,7 @@ class TemperatureEffectsHandler {
             // Handle damage
             when {
                 temp < -20 && race != Race.SNOLEM -> applyDamage(player, 1.0)
-                temp < -10 && race != Race.SNOLEM -> applyDamage(player, 0.5)
+                temp < -15 && race != Race.SNOLEM -> applyDamage(player, 0.5)
             }
 
             // 8 - +21
