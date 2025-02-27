@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.groups
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import dev.lrdcxdes.hardcraft.races.RaceHandler
 import dev.lrdcxdes.hardcraft.races.getRace
 import org.bukkit.Bukkit
 import org.bukkit.Material
@@ -29,8 +30,13 @@ fun Player.getGroup(): Group? {
 }
 
 class GroupHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener {
-    inner class GroupCommand: CommandExecutor {
-        override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+    inner class GroupCommand : CommandExecutor {
+        override fun onCommand(
+            sender: CommandSender,
+            command: Command,
+            label: String,
+            args: Array<out String>
+        ): Boolean {
             if (sender !is Player) {
                 sender.sendMessage("Only players can use this command")
                 return true
@@ -109,10 +115,15 @@ class GroupHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listene
 
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
-        if (event.inventory.holder == groupHolder && !(event.player as Player).hasGroup()) {
+        if ((event.player as? Player)?.hasGroup() == true) return
+        val holder = event.inventory.holder ?: return
+        if (holder == groupHolder) {
             Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                 showGroupSelection(event.player as Player)
             }, 1L)
+        } else if (RaceHandler.checkHolder(holder) && event.reason == InventoryCloseEvent.Reason.PLUGIN) {
+            // Вызываем метод для показа GUI или отправляем сообщение с выбором
+            showGroupSelection(event.player as Player)
         }
     }
 

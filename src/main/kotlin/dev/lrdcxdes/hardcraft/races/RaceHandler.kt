@@ -343,7 +343,7 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
                             meta.persistentDataContainer.get(NamespacedKey(plugin, "race"), PersistentDataType.STRING)
                         if (raceName != null) {
                             assignRace(event.whoClicked as Player, Race.valueOf(raceName))
-                            event.whoClicked.closeInventory()
+                            event.whoClicked.closeInventory(InventoryCloseEvent.Reason.PLUGIN)
                         }
                     }
                 }
@@ -354,7 +354,7 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
     // Re-open the race selection GUI on close if the player hasn’t chosen a race.
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
-        if (event.reason == InventoryCloseEvent.Reason.OPEN_NEW) return
+        if (event.reason == InventoryCloseEvent.Reason.OPEN_NEW || event.reason == InventoryCloseEvent.Reason.PLUGIN) return
         if (event.inventory.holder is PaginatedRaceHolder && !(event.player as Player).hasRace()) {
             Bukkit.getScheduler().runTaskLater(plugin, Runnable {
                 // Reopen the same page that was closed.
@@ -364,4 +364,10 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
         }
     }
 
+    // add type RaceHolder to cmpanion to use it in other files
+    companion object {
+        fun checkHolder(holder: InventoryHolder): Boolean {
+            return holder is PaginatedRaceHolder
+        }
+    }
 }
