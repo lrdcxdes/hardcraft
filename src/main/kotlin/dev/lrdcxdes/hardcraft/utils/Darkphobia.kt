@@ -74,25 +74,25 @@ class Darkphobia : Listener {
         with(state.fearLevel) {
             when {
                 this >= 480.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 140, 0))
-                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0))
-                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.HUNGER, 140, 0, false, false))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0, false, false))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
                     playSounds(player, state)
                 }
 
                 this >= 300.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0))
-                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0, false, false))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
                     playSounds(player, state)
                 }
 
                 this >= 180.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
                     playSounds(player, state)
                 }
 
                 this >= 120.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
                 }
 
                 this < 180.0 -> {
@@ -106,22 +106,22 @@ class Darkphobia : Listener {
         with(state.sunLevel) {
             when {
                 this >= 480.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.WITHER, 140, 0))
-                    player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0))
-                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WITHER, 140, 0, true, true))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0, false, false))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
                 }
 
                 this >= 300.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0))
-                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0, false, false))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
                 }
 
                 this >= 180.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
                 }
 
                 this >= 120.0 -> {
-                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0))
+                    player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
                 }
 
                 else -> {}

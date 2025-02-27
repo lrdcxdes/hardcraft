@@ -25,6 +25,7 @@ class SlowPlayerListener : Listener {
                         -1,
                         1,
                         false,
+                        false,
                         false
                     )
                 )
@@ -34,6 +35,7 @@ class SlowPlayerListener : Listener {
                         PotionEffectType.MINING_FATIGUE,
                         -1,
                         2,
+                        false,
                         false,
                         false
                     )
@@ -49,6 +51,7 @@ class SlowPlayerListener : Listener {
                         -1,
                         1,
                         false,
+                        false,
                         false
                     )
                 )
@@ -59,6 +62,7 @@ class SlowPlayerListener : Listener {
                         PotionEffectType.MINING_FATIGUE,
                         -1,
                         1,
+                        false,
                         false,
                         false
                     )

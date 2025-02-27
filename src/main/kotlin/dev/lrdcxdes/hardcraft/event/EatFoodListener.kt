@@ -64,13 +64,13 @@ class EatFoodListener : Listener {
     )
 
     private val zazaEffects = listOf(
-        PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 0),
-        PotionEffect(PotionEffectType.LUCK, 60 * 20, 0),
-        PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 20, 0),
-        PotionEffect(PotionEffectType.STRENGTH, 20 * 20, 0),
-        PotionEffect(PotionEffectType.SPEED, 20 * 20, 0),
-        PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 20, 0),
-        PotionEffect(PotionEffectType.HASTE, 20 * 20, 0),
+        PotionEffect(PotionEffectType.REGENERATION, 20 * 20, 0, false, false, true),
+        PotionEffect(PotionEffectType.LUCK, 60 * 20, 0, false, false, true),
+        PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 20, 0, false, false, true),
+        PotionEffect(PotionEffectType.STRENGTH, 20 * 20, 0, false, false, true),
+        PotionEffect(PotionEffectType.SPEED, 20 * 20, 0, false, false, true),
+        PotionEffect(PotionEffectType.NIGHT_VISION, 20 * 20, 0, false, false, true),
+        PotionEffect(PotionEffectType.HASTE, 20 * 20, 0, false, false, true),
     )
 
     @EventHandler
@@ -142,9 +142,9 @@ class EatFoodListener : Listener {
             val r = Hardcraft.instance.random.nextInt(100)
             // 20% nausea, 30% poison
             if (r < 20) {
-                event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0))
+                event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0, false, false, true))
             } else if (r < 50) {
-                event.player.addPotionEffect(PotionEffect(PotionEffectType.POISON, 5 * 20, 0))
+                event.player.addPotionEffect(PotionEffect(PotionEffectType.POISON, 5 * 20, 0, false, false, true))
             }
             return
         }

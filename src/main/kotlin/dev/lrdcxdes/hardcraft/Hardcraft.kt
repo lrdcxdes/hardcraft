@@ -159,6 +159,8 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(Cible(), this)
         // Snolem
         server.pluginManager.registerEvents(Snolem(), this)
+        // Skeleton
+        server.pluginManager.registerEvents(Skeleton(), this)
 
         // Groups
         server.pluginManager.registerEvents(Scientists(this), this)

@@ -88,7 +88,7 @@ class TemperatureEffectsHandler {
     private fun applyEffect(player: Player, type: PotionEffectType, duration: Int, amplifier: Int) {
         object : BukkitRunnable() {
             override fun run() {
-                player.addPotionEffect(PotionEffect(type, duration, amplifier))
+                player.addPotionEffect(PotionEffect(type, duration, amplifier, false, false, true))
             }
         }.runTask(plugin)
     }
