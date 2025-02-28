@@ -201,7 +201,19 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
             )
             // Use minimessage to deserialize a lore string.
             // (Assuming your language key is formatted like "<lang:btn.race_lore_human>" etc.)
-            infoMeta.lore(listOf(Hardcraft.minimessage.deserialize("<lang:btn.race_lore_${currentRace.name.lowercase()}>")))
+            // infoMeta.lore(listOf(Hardcraft.minimessage.deserialize("<lang:btn.race_lore_${currentRace.name.lowercase()}>")))
+
+            infoMeta.lore(
+                listOf(
+                    // The "Permanent" label in bold red as the first line
+                    Hardcraft.minimessage.deserialize("<bold><red>Permanent</red></bold>"),
+                    // A brief universal description about race info
+                    Hardcraft.minimessage.deserialize("<gray>Race Information</gray>"),
+                    Hardcraft.minimessage.deserialize("<white>Discover the unique traits, abilities, and lore for every race available on our server.</white>"),
+                    // Information directing players to the wiki for more details
+                    Hardcraft.minimessage.deserialize("<gold>Learn more at <click:open_url:'https://wiki.btnmc.net'>wiki.btnmc.net</click></gold>")
+                )
+            )
 
             // Store the URL in persistent data (you might use it later in your click handler)
             infoMeta.persistentDataContainer.set(
@@ -316,7 +328,11 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
             when (event.rawSlot) {
                 40 -> { // Info item
                     // Wiki button: send the wiki URL to the player.
-                    (event.whoClicked as Player).sendMessage("Visit: wiki.btnmc.net")
+                    (event.whoClicked as Player).sendMessage(
+                        Hardcraft.minimessage.deserialize(
+                            "<color:#AECCE4><click:open_url:https://wiki.btnmc.net/racesandclasses/races>Click here to learn more about races!</click>"
+                        )
+                    )
                     // Alternatively, you might use a clickable message if your plugin supports it.
                 }
 

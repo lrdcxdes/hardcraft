@@ -850,7 +850,7 @@ class CustomChicken(world: Level) : Chicken(EntityType.CHICKEN, world) {
     fun spawn(loc: Location) {
         this.moveTo(loc.x, loc.y, loc.z)
 
-        this.getBukkitEntity().persistentDataContainer.set(KEY, PersistentDataType.BOOLEAN, true)
+        this.bukkitEntity.persistentDataContainer.set(KEY, PersistentDataType.BOOLEAN, true)
 
         this.persist = true
         (loc.world as CraftWorld).handle.addFreshEntity(this, CreatureSpawnEvent.SpawnReason.CUSTOM)
