@@ -1,6 +1,8 @@
 package dev.lrdcxdes.hardcraft.groups
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -12,6 +14,7 @@ import org.bukkit.event.inventory.InventoryType
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.inventory.InventoryView
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.MenuType
 import org.bukkit.inventory.meta.PotionMeta
@@ -220,8 +223,9 @@ class Brewer : Listener {
     private fun createBrewerMenu(player: Player): InventoryView {
         val view = MenuType.BREWING_STAND.builder().location(
             player.location.clone().apply { y = -61.0 }
+        ).title(
+            Component.text("㈇").color(TextColor.color(255, 255, 255))
         ).build(player)
-        view.fuelLevel = Int.MAX_VALUE
         views[player.uniqueId] = view
         return view
     }
@@ -417,6 +421,8 @@ class Brewer : Listener {
             meta.addCustomEffect(effect, true)
         }
         meta.persistentDataContainer.set(Hardcraft.instance.key("rmBottle"), PersistentDataType.BYTE, 1)
+        // hide potion effects from lore
+        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
         potion.itemMeta = meta
         return potion
     }

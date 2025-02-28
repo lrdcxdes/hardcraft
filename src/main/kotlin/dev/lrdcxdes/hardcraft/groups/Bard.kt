@@ -85,7 +85,7 @@ class Bard : Listener {
         itemMeta = meta.apply {
             itemName(Hardcraft.minimessage.deserialize("<lang:bts.bard_stick>"))
 
-            meta.setCustomModelData(5)
+            meta.setCustomModelData(4)
             addUnsafeEnchantment(
                 Enchantment.VANISHING_CURSE,
                 1

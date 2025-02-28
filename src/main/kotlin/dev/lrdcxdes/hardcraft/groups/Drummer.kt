@@ -126,7 +126,7 @@ class Drummer : Listener {
         itemMeta = meta.apply {
             itemName(Hardcraft.minimessage.deserialize("<lang:bts.drummer_stick>"))
 
-            meta.setCustomModelData(6)
+            meta.setCustomModelData(5)
             addUnsafeEnchantment(
                 Enchantment.VANISHING_CURSE,
                 1
