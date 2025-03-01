@@ -147,21 +147,21 @@ add:
     result:
       type: CHERRY_BOAT
 
-  stripped_pale_log:
+  stripped_pale_oak_log:
     source:
-      type: PALE_LOG
+      type: PALE_OAK_LOG
     result:
-      type: STRIPPED_PALE_LOG
-  pale_door:
+      type: STRIPPED_PALE_OAK_LOG
+  pale_oak_door:
     source:
-      type: PALE_LOG
+      type: PALE_OAK_LOG
     result:
-      type: PALE_DOOR
-  pale_boat:
+      type: PALE_OAK_DOOR
+  pale_oak_boat:
     source:
-      type: PALE_LOG
+      type: PALE_OAK_LOG
     result:
-      type: PALE_BOAT
+      type: PALE_OAK_BOAT
 
   stripped_bamboo:
     source:
@@ -460,35 +460,35 @@ add:
       type: CHERRY_SLAB
       amount: 2
 
-  pale_planks:
+  pale_oak_planks:
     source:
-      type: STRIPPED_PALE_LOG
+      type: STRIPPED_PALE_OAK_LOG
     result:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
 
-  pale_stairs:
+  pale_oak_stairs:
     source:
-      type: STRIPPED_PALE_LOG
+      type: STRIPPED_PALE_OAK_LOG
     result:
-      type: PALE_STAIRS
+      type: PALE_OAK_STAIRS
 
-  pale_crafting_table:
+  pale_oak_crafting_table:
     source:
-      type: STRIPPED_PALE_LOG
+      type: STRIPPED_PALE_OAK_LOG
     result:
       type: CRAFTING_TABLE
 
-  pale_chest:
+  pale_oak_chest:
     source:
-      type: STRIPPED_PALE_LOG
+      type: STRIPPED_PALE_OAK_LOG
     result:
       type: CHEST
 
-  pale_slab:
+  pale_oak_slab:
     source:
-      type: STRIPPED_PALE_LOG
+      type: STRIPPED_PALE_OAK_LOG
     result:
-      type: PALE_SLAB
+      type: PALE_OAK_SLAB
       amount: 2
 
   bamboo_planks:
@@ -1034,67 +1034,67 @@ add:
       amount: 1
 
   # Pale
-  pale_planks_slab:
+  pale_oak_planks_slab:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
-      type: PALE_SLAB
+      type: PALE_OAK_SLAB
       amount: 2
 
-  pale_planks_sticks:
+  pale_oak_planks_sticks:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
       type: STICK
       amount: 4
 
-  pale_planks_fence:
+  pale_oak_planks_fence:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
-      type: PALE_FENCE
+      type: PALE_OAK_FENCE
       amount: 3
 
-  pale_planks_scaffolding:
+  pale_oak_planks_scaffolding:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
       type: SCAFFOLDING
       amount: 6
 
-  pale_planks_gate:
+  pale_oak_planks_gate:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
-      type: PALE_FENCE_GATE
+      type: PALE_OAK_FENCE_GATE
       amount: 2
 
-  pale_planks_trapdoor:
+  pale_oak_planks_trapdoor:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
-      type: PALE_TRAPDOOR
+      type: PALE_OAK_TRAPDOOR
       amount: 2
 
-  pale_planks_pressure_plate:
+  pale_oak_planks_pressure_plate:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
-      type: PALE_PRESSURE_PLATE
+      type: PALE_OAK_PRESSURE_PLATE
       amount: 4
 
-  pale_planks_button:
+  pale_oak_planks_button:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
-      type: PALE_BUTTON
+      type: PALE_OAK_BUTTON
       amount: 4
 
-  pale_sign:
+  pale_oak_sign:
     source:
-      type: PALE_PLANKS
+      type: PALE_OAK_PLANKS
     result:
-      type: PALE_SIGN
+      type: PALE_OAK_SIGN
     amount: 1
 
   # Bamboo

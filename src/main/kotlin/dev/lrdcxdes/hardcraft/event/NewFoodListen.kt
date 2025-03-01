@@ -118,7 +118,7 @@ class NewFoodListen : Listener {
                 )
             }
         } // bard
-        else if (item.type.name == "STICK" && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 5) {
+        else if (item.type.name == "STICK" && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 4) {
             val group = player.getGroup()
             if (group == Group.BARD) {
                 item.setData(
@@ -152,7 +152,7 @@ class NewFoodListen : Listener {
                 )
             }
         } // drummer
-        else if (item.type.name == "STICK" && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 6) {
+        else if (item.type.name == "STICK" && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 5) {
             val group = player.getGroup()
             if (group == Group.DRUMMER) {
                 item.setData(

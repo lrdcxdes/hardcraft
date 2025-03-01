@@ -19,7 +19,7 @@ class Rogue : Listener {
             val arrow = event.player.launchProjectile(Arrow::class.java)
             arrow.shooter = event.player
             arrow.itemStack = event.item.clone().apply { amount = 1 }
-            arrow.basePotionType = (event.item as PotionMeta).basePotionType
+            arrow.basePotionType = (event.item as? PotionMeta)?.basePotionType
             // Default arrow velocity like from bow
             // arrow.velocity = event.player.location.direction.multiply(2)
             event.player.world.playSound(

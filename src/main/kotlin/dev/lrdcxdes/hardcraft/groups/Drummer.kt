@@ -44,7 +44,7 @@ class Drummer : Listener {
         if (group != Group.DRUMMER) return
 
         val item = event.item ?: return
-        if (item.type == Material.STICK && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 6) {
+        if (item.type == Material.STICK && item.itemMeta.hasCustomModelData() && item.itemMeta.customModelData == 5) {
             // lmb = change cast (cycle)
             if (event.action.isLeftClick) {
                 var currentOrdinal = event.player.persistentDataContainer.get(
@@ -79,7 +79,7 @@ class Drummer : Listener {
         val player = event.player
         if (player.getGroup() != Group.DRUMMER) return
         val item = event.item
-        if (item.type != Material.STICK || !item.itemMeta.hasCustomModelData() || item.itemMeta.customModelData != 6) {
+        if (item.type != Material.STICK || !item.itemMeta.hasCustomModelData() || item.itemMeta.customModelData != 5) {
             return
         }
         val maxDamage = item.getData(DataComponentTypes.MAX_DAMAGE) ?: 100
@@ -165,7 +165,7 @@ class Drummer : Listener {
         if (group == Group.DRUMMER) {
             // check if not have rock
             val haveStick = event.player.inventory.firstOrNull {
-                it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 6
+                it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 5
             } != null
 
             if (!haveStick) {
@@ -186,7 +186,7 @@ class Drummer : Listener {
                 if (group != Group.DRUMMER) return
 
                 val haveStick = player.inventory.firstOrNull {
-                    it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 6
+                    it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 5
                 } != null
 
                 if (!haveStick) {

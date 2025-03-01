@@ -43,7 +43,7 @@ class Bard : Listener {
         val player = event.player
         if (player.getGroup() != Group.BARD) return
         val item = event.item
-        if (item.type != Material.STICK || !item.itemMeta.hasCustomModelData() || item.itemMeta.customModelData != 5) {
+        if (item.type != Material.STICK || !item.itemMeta.hasCustomModelData() || item.itemMeta.customModelData != 4) {
             return
         }
         val maxDamage = item.getData(DataComponentTypes.MAX_DAMAGE) ?: 100
@@ -123,7 +123,7 @@ class Bard : Listener {
         if (group == Group.BARD) {
             // check if not have rock
             val haveStick = event.player.inventory.firstOrNull {
-                it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 5
+                it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 4
             } != null
 
             if (!haveStick) {
@@ -144,7 +144,7 @@ class Bard : Listener {
                 if (group != Group.BARD) return
 
                 val haveStick = player.inventory.firstOrNull {
-                    it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 5
+                    it != null && it.type == Material.STICK && it.itemMeta.hasCustomModelData() && it.itemMeta.customModelData == 4
                 } != null
 
                 if (!haveStick) {

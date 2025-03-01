@@ -22,6 +22,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.InventoryHolder
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import org.bukkit.persistence.PersistentDataType
@@ -207,9 +208,12 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
                 listOf(
                     // The "Permanent" label in bold red as the first line
                     Hardcraft.minimessage.deserialize("<bold><red>Permanent</red></bold>"),
+                    Hardcraft.minimessage.deserialize("<gray>You can't just switch"),
+                    Hardcraft.minimessage.deserialize("<gray>races for no reason."),
                     // A brief universal description about race info
                     Hardcraft.minimessage.deserialize("<gray>Race Information</gray>"),
-                    Hardcraft.minimessage.deserialize("<white>Discover the unique traits, abilities, and lore for every race available on our server.</white>"),
+                    Hardcraft.minimessage.deserialize("<white>Discover the unique traits, abilities,</white>"),
+                    Hardcraft.minimessage.deserialize("<white>and lore for every race available on our server."),
                     // Information directing players to the wiki for more details
                     Hardcraft.minimessage.deserialize("<gold>Learn more at <click:open_url:'https://wiki.btnmc.net'>wiki.btnmc.net</click></gold>")
                 )
@@ -221,6 +225,8 @@ class RaceHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listener
                 PersistentDataType.STRING,
                 "wiki.btnmc.net"
             )
+
+            infoItem.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
 
             infoItem.itemMeta = infoMeta
             inventory.setItem(40, infoItem)

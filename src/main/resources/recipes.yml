@@ -1943,7 +1943,7 @@ remove:
   - cherry_door
   - crimson_door
   - warped_door
-  - pale_door
+  - pale_oak_door
 
   # Boats
   - oak_boat
@@ -1955,7 +1955,7 @@ remove:
   - mangrove_boat
   - bamboo_raft
   - cherry_boat
-  - pale_boat
+  - pale_oak_boat
 
   # Chest Boats
   - oak_chest_boat
@@ -1967,7 +1967,7 @@ remove:
   - mangrove_chest_boat
   - bamboo_chest_raft
   - cherry_chest_boat
-  - pale_chest_boat
+  - pale_oak_chest_boat
 
   # Planks
   - oak_planks
@@ -1981,7 +1981,7 @@ remove:
   - cherry_planks
   - crimson_planks
   - warped_planks
-  - pale_planks
+  - pale_oak_planks
 
   # Stairs
   - oak_stairs
@@ -1995,7 +1995,7 @@ remove:
   - cherry_stairs
   - crimson_stairs
   - warped_stairs
-  - pale_stairs
+  - pale_oak_stairs
 
   # Slabs
   - oak_slab
@@ -2009,7 +2009,7 @@ remove:
   - cherry_slab
   - crimson_slab
   - warped_slab
-  - pale_slab
+  - pale_oak_slab
 
   # Fences
   - oak_fence
@@ -2023,7 +2023,7 @@ remove:
   - cherry_fence
   - crimson_fence
   - warped_fence
-  - pale_fence
+  - pale_oak_fence
 
   # Fence Gates
   - oak_fence_gate
@@ -2037,7 +2037,7 @@ remove:
   - cherry_fence_gate
   - crimson_fence_gate
   - warped_fence_gate
-  - pale_fence_gate
+  - pale_oak_fence_gate
 
   # Buttons
   - oak_button
@@ -2051,7 +2051,7 @@ remove:
   - cherry_button
   - crimson_button
   - warped_button
-  - pale_button
+  - pale_oak_button
 
   # Pressure Plates
   - oak_pressure_plate
@@ -2065,7 +2065,7 @@ remove:
   - cherry_pressure_plate
   - crimson_pressure_plate
   - warped_pressure_plate
-  - pale_pressure_plate
+  - pale_oak_pressure_plate
 
   # Signs
   - oak_sign
@@ -2079,7 +2079,7 @@ remove:
   - cherry_sign
   - crimson_sign
   - warped_sign
-  - pale_sign
+  - pale_oak_sign
 
   # Hanging Signs
 #  - oak_hanging_sign
@@ -2106,7 +2106,7 @@ remove:
   - cherry_trapdoor
   - crimson_trapdoor
   - warped_trapdoor
-  - pale_trapdoor
+  - pale_oak_trapdoor
 
   # Other Wooden Items
   #  - crafting_table
@@ -2222,6 +2222,10 @@ remove:
   - netherite_chestplate
   - netherite_leggings
   - netherite_boots
+  - golden_helmet
+  - golden_chestplate
+  - golden_leggings
+  - golden_boots
   - turtle_helmet
   - elytra
 
