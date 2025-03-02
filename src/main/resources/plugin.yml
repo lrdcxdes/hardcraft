@@ -28,11 +28,21 @@ commands:
     description: Check your balance
     aliases: [ bal ]
     usage: /balance
-  friends:
-    description: Manage your friends list
-    usage: /friends <list|add|remove|accept|deny> [player]
-    aliases: [ friend, f ]
-  shop:
-    aliases: [ market, magazine ]
-    description: Open Shop
-    usage: /shop [all]
+  call:
+    description: Request teleport to another player
+    aliases: [ tpa ]
+    usage: /tpa <player>
+  tpaccept:
+    description: Accept teleport request
+    usage: /tpaccept
+  tpdeny:
+    description: Deny teleport request
+    usage: /tpdeny
+#  friends:
+#    description: Manage your friends list
+#    usage: /friends <list|add|remove|accept|deny> [player]
+#    aliases: [ friend, f ]
+#  shop:
+#    aliases: [ market, magazine ]
+#    description: Open Shop
+#    usage: /shop [all]

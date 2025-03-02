@@ -138,16 +138,6 @@ class EatFoodListener : Listener {
             }
         }
 
-        if (item.name.contains("SEEDS")) {
-            val r = Hardcraft.instance.random.nextInt(100)
-            // 20% nausea, 30% poison
-            if (r < 20) {
-                event.player.addPotionEffect(PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0, false, false, true))
-            } else if (r < 50) {
-                event.player.addPotionEffect(PotionEffect(PotionEffectType.POISON, 5 * 20, 0, false, false, true))
-            }
-            return
-        }
         // if (event.item?.type == Material.FLOWER_BANNER_PATTERN && event.item?.itemMeta?.customModelData == 3) {
         if (item == Material.FLOWER_BANNER_PATTERN && event.item.itemMeta?.customModelData == 3) {
             val loc = event.player.eyeLocation.add(event.player.location.direction.multiply(0.1))

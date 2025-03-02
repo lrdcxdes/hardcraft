@@ -6,6 +6,7 @@ import dev.lrdcxdes.hardcraft.utils.formatPrice2
 import dev.lrdcxdes.hardcraft.utils.globalMessageManager
 import dev.lrdcxdes.hardcraft.utils.sendMessage
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.attribute.Attribute
@@ -682,7 +683,7 @@ class Shop : Listener {
                 return
             }
             event.isCancelled = true
-            
+
             val itemClick = event.currentItem ?: return
             if (itemClick.type == Material.KNOWLEDGE_BOOK) {
                 allItemsManager.openInventory(player, 1)
@@ -766,12 +767,12 @@ class Shop : Listener {
             it.isInvulnerable = true
             it.isInvisible = true
             it.isCollidable = false
-            val title = globalMessageManager.getMessage(
-                "shop.title",
-                color = "<color:#FFB347>"
-            )
+//            val title = globalMessageManager.getMessage(
+//                "shop.title",
+//                color = "<color:#FFB347>"
+//            )
             it.customName(
-                title
+                Component.text("七七七七七七七七㈋").color(TextColor.color(255, 255, 255))
             )
             it.isCustomNameVisible = true
             it.isPersistent = true

@@ -7,6 +7,7 @@ import dev.lrdcxdes.hardcraft.races.getRace
 import io.papermc.paper.datacomponent.DataComponentTypes
 import io.papermc.paper.datacomponent.item.Consumable
 import io.papermc.paper.datacomponent.item.FoodProperties
+import io.papermc.paper.datacomponent.item.consumable.ConsumeEffect
 import io.papermc.paper.datacomponent.item.consumable.ItemUseAnimation
 import org.bukkit.NamespacedKey
 import org.bukkit.Registry
@@ -19,6 +20,8 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerPickupArrowEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 
 class NewFoodListen : Listener {
     @EventHandler
@@ -30,10 +33,29 @@ class NewFoodListen : Listener {
 
     private fun setItemComponents(item: ItemStack, player: Player) {
         if (item.type.name.contains("_SEEDS")) {
+            // // 20% nausea, 30% poison
             item.setData(
                 DataComponentTypes.CONSUMABLE, Consumable.consumable().consumeSeconds(1F).animation(
                     ItemUseAnimation.EAT
-                ).build()
+                )
+                    .addEffects(
+                        listOf(
+                            ConsumeEffect.applyStatusEffects(
+                                listOf(
+                                    PotionEffect(PotionEffectType.NAUSEA, 5 * 20, 0, false, false, true),
+
+                                ),
+                                0.2F
+                            ),
+                            ConsumeEffect.applyStatusEffects(
+                                listOf(
+                                    PotionEffect(PotionEffectType.POISON, 5 * 20, 0, false, false, true)
+                                ),
+                                0.3F
+                            )
+                        )
+                    )
+                    .build()
             )
             item.setData(DataComponentTypes.FOOD, FoodProperties.food().nutrition(1).build())
         } else if (item.type.name.contains("COAL")) {

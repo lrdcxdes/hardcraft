@@ -30,8 +30,9 @@ object RaceManager {
             Attribute.WATER_MOVEMENT_EFFICIENCY to 0.0,
             Attribute.ARMOR to 0.0,
             Attribute.ARMOR_TOUGHNESS to 0.0,
-            Attribute.MINING_EFFICIENCY to 0.0,
-            Attribute.JUMP_STRENGTH to 0.45
+            Attribute.MINING_EFFICIENCY to 12.0,
+            Attribute.JUMP_STRENGTH to 0.45,
+            Attribute.SUBMERGED_MINING_SPEED to 0.2
         ),
     )
 
@@ -64,7 +65,7 @@ object RaceManager {
                 Attribute.BLOCK_INTERACTION_RANGE to 3.15,
                 Attribute.ENTITY_INTERACTION_RANGE to 2.1,
                 Attribute.ARMOR_TOUGHNESS to 1.15,
-                Attribute.MINING_EFFICIENCY to 1.1,
+                Attribute.MINING_EFFICIENCY to 14.0,
                 Attribute.ATTACK_DAMAGE to 0.85,
                 Attribute.FALL_DAMAGE_MULTIPLIER to 0.85,
             ),
@@ -76,7 +77,7 @@ object RaceManager {
                 Attribute.MOVEMENT_SPEED to 0.11500000171,
                 Attribute.BLOCK_INTERACTION_RANGE to 2.925,
                 Attribute.ENTITY_INTERACTION_RANGE to 1.95,
-                Attribute.MINING_EFFICIENCY to 1.4,
+                Attribute.MINING_EFFICIENCY to 16.0,
                 Attribute.ATTACK_DAMAGE to 0.65,
                 Attribute.FALL_DAMAGE_MULTIPLIER to 0.65,
             ),
@@ -103,6 +104,7 @@ object RaceManager {
             baseAttributes = mapOf(
                 Attribute.OXYGEN_BONUS to Double.MAX_VALUE,
                 Attribute.WATER_MOVEMENT_EFFICIENCY to 2.0,
+                Attribute.SUBMERGED_MINING_SPEED to 1.0
             ),
         ),
         Race.SKELETON to RaceAttributes(

@@ -88,7 +88,7 @@ class GroupHandler(private val plugin: Hardcraft, cmd: PluginCommand?) : Listene
             val inventory = plugin.server.createInventory(
                 this,
                 36,
-                Hardcraft.minimessage.deserialize("<color:#ff0000>Choose your group</color>")
+                Hardcraft.minimessage.deserialize("<white>七七七七七七七七㈊")
             )
             for (group in Group.entries) {
                 val item = ItemStack(Material.PLAYER_HEAD)

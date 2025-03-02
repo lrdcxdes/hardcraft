@@ -6,6 +6,7 @@ import dev.lrdcxdes.hardcraft.economy.shop.Shop
 import dev.lrdcxdes.hardcraft.economy.shop.ShopCommand
 import dev.lrdcxdes.hardcraft.event.*
 import dev.lrdcxdes.hardcraft.friends.FriendsListener
+import dev.lrdcxdes.hardcraft.friends.TeleportCommand
 import dev.lrdcxdes.hardcraft.groups.*
 import dev.lrdcxdes.hardcraft.plants.FernManager
 import dev.lrdcxdes.hardcraft.plants.GardenManager
@@ -96,7 +97,7 @@ class Hardcraft : JavaPlugin() {
         server.pluginManager.registerEvents(EatFoodListener(), this)
 
         // HungerPlaceListen
-        server.pluginManager.registerEvents(HungerPlaceListen(), this)
+        // server.pluginManager.registerEvents(HungerPlaceListen(), this)
 
         // PhysicsPlaceListen
         server.pluginManager.registerEvents(PhysicsPlaceListen(), this)
@@ -189,6 +190,12 @@ class Hardcraft : JavaPlugin() {
 
         // Friends
         server.pluginManager.registerEvents(FriendsListener(), this)
+
+        val teleportCommand = TeleportCommand()
+        server.pluginManager.registerEvents(teleportCommand, this)
+        getCommand("tpa")?.setExecutor(teleportCommand)
+        getCommand("tpaccept")?.setExecutor(teleportCommand)
+        getCommand("tpdeny")?.setExecutor(teleportCommand)
 
         // Economy
         val economyCommands = EconomyCommands()
