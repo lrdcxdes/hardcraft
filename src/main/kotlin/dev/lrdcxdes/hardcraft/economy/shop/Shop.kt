@@ -366,15 +366,15 @@ class Shop : Listener {
                     color = "<color:#87CEFA>"
                 ),
                 Component.empty(),
-                globalMessageManager.getMessage("shop.actions.left-click"),
-                globalMessageManager.getMessage("shop.actions.right-click"),
+                globalMessageManager.getMessage("shop.actions.left_click"),
+                globalMessageManager.getMessage("shop.actions.right_click"),
                 globalMessageManager.getMessage(
-                    "shop.actions.shift-left-click",
+                    "shop.actions.shift_left_click",
                     "max" to maxBuy.toString(),
                     "price" to bulkBuyPrice.formatPrice()
                 ),
                 globalMessageManager.getMessage(
-                    "shop.actions.shift-right-click",
+                    "shop.actions.shift_right_click",
                     "max" to maxSell.toString(),
                     "price" to bulkSellPrice.formatPrice()
                 )
@@ -767,10 +767,6 @@ class Shop : Listener {
             it.isInvulnerable = true
             it.isInvisible = true
             it.isCollidable = false
-//            val title = globalMessageManager.getMessage(
-//                "shop.title",
-//                color = "<color:#FFB347>"
-//            )
             it.customName(
                 Component.text("七七七七七七七七㈋").color(TextColor.color(255, 255, 255))
             )
