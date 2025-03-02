@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.event
 
+import conditionSystem
 import dev.lrdcxdes.hardcraft.Hardcraft
 import org.bukkit.Material
 import org.bukkit.Tag
@@ -60,6 +61,8 @@ class DamageWithoutInstrumentListen : Listener {
             return
         }
 
+        conditionSystem.addState(player, ConditionType.MUSCLE_STRAIN)
+
         // Create repeating task to damage player
         val taskId = object : BukkitRunnable() {
             override fun run() {
@@ -85,6 +88,8 @@ class DamageWithoutInstrumentListen : Listener {
         if (taskId != null) {
             plugin.server.scheduler.cancelTask(taskId)
         }
+
+        conditionSystem.removeState(player, ConditionType.MUSCLE_STRAIN)
     }
 
     private fun isAppropriateToolForBlock(tool: Material, block: Material): Boolean {

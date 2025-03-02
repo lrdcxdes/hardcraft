@@ -123,6 +123,9 @@ class Hardcraft : JavaPlugin() {
         // ThermometerClickListen
         server.pluginManager.registerEvents(ThermometerClickListen(), this)
 
+        // QuitListener
+        server.pluginManager.registerEvents(QuitListener(), this)
+
         // Chuma
         Chuma()
 

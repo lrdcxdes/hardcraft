@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.event
 
+import conditionSystem
 import dev.lrdcxdes.hardcraft.Hardcraft
 import dev.lrdcxdes.hardcraft.races.Race
 import dev.lrdcxdes.hardcraft.races.getRace
@@ -36,27 +37,60 @@ class TemperatureEffectsHandler {
             val race = player.getRace()
 
             when {
-                temp <= -10 && race != Race.SNOLEM -> player.freezeTicks = 200
+                temp <= -10 && race != Race.SNOLEM -> {
+                    player.freezeTicks = 200
+                    conditionSystem.addState(player, ConditionType.COLD_EXPOSURE, 2)
+                }
                 // Dragonborn immune to high temperature
-                (temp >= 40 && race != Race.DRAGONBORN) || (temp >= 30 && race == Race.SNOLEM) -> applyEffect(
-                    player,
-                    PotionEffectType.WITHER,
-                    200,
-                    0
-                )
+                (temp >= 40 && race != Race.DRAGONBORN) || (temp >= 30 && race == Race.SNOLEM) -> {
+                    applyEffect(
+                        player,
+                        PotionEffectType.WITHER,
+                        200,
+                        0
+                    )
+                    conditionSystem.addState(player, ConditionType.HEAT_EXPOSURE, 4)
+                }
 
-                (temp >= 33 && race != Race.DRAGONBORN) || (temp >= 23 && race == Race.SNOLEM) -> applyEffect(
-                    player,
-                    PotionEffectType.NAUSEA,
-                    201,
-                    0
-                )
+                (temp >= 33 && race != Race.DRAGONBORN) || (temp >= 23 && race == Race.SNOLEM) -> {
+                    applyEffect(
+                        player,
+                        PotionEffectType.NAUSEA,
+                        201,
+                        0
+                    )
+                    conditionSystem.addState(player, ConditionType.HEAT_EXPOSURE, 3)
+                }
             }
 
             // Handle damage
             when {
-                temp < -20 && race != Race.SNOLEM -> applyDamage(player, 1.0)
-                temp < -15 && race != Race.SNOLEM -> applyDamage(player, 0.5)
+                temp < -20 && race != Race.SNOLEM -> {
+                    applyDamage(player, 1.0)
+                    conditionSystem.addState(player, ConditionType.COLD_EXPOSURE, 4)
+                }
+
+                temp < -15 && race != Race.SNOLEM -> {
+                    applyDamage(player, 0.5)
+                    conditionSystem.addState(player, ConditionType.COLD_EXPOSURE, 3)
+                }
+            }
+
+            when {
+                temp < -6 -> {
+                    conditionSystem.addState(player, ConditionType.COLD_EXPOSURE, 1)
+                }
+
+                temp > 20 -> {
+                    conditionSystem.addState(player, ConditionType.HEAT_EXPOSURE, 1)
+                }
+            }
+
+            if (temp > -6) {
+                conditionSystem.removeState(player, ConditionType.COLD_EXPOSURE)
+            }
+            if (temp < 20) {
+                conditionSystem.removeState(player, ConditionType.HEAT_EXPOSURE)
             }
 
             // 8 - +21
@@ -115,7 +149,7 @@ class PlayerTemperatureListener : Listener {
         if (event.entity is Player) {
             if (event.cause == EntityDamageEvent.DamageCause.FREEZE) {
                 event.isCancelled = true
-            // CIBLE immune to fire (cant burn)
+                // CIBLE immune to fire (cant burn)
             } else if (event.cause.name.contains("FIRE") && (event.entity as Player).getRace() == Race.CIBLE) {
                 event.entity.isVisualFire = false
                 event.isCancelled = true

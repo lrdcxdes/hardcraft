@@ -1,5 +1,6 @@
 package dev.lrdcxdes.hardcraft.utils
 
+import conditionSystem
 import dev.lrdcxdes.hardcraft.Hardcraft
 import dev.lrdcxdes.hardcraft.races.Race
 import dev.lrdcxdes.hardcraft.races.getRace
@@ -33,6 +34,7 @@ class Darkphobia : Listener {
     fun onPlayerDeath(event: PlayerDeathEvent) {
         // Reset player's darkphobia state on death
         players.remove(event.entity.name)
+        conditionSystem.removeState(event.player, ConditionType.DARKNESS_FEAR)
     }
 
     private fun updatePlayerState(player: Player) {
@@ -78,21 +80,29 @@ class Darkphobia : Listener {
                     player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0, false, false))
                     player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
                     playSounds(player, state)
+                    conditionSystem.addState(player, ConditionType.DARKNESS_FEAR, 4)
                 }
 
                 this >= 300.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 140, 0, false, false))
                     player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
                     playSounds(player, state)
+                    conditionSystem.addState(player, ConditionType.DARKNESS_FEAR, 3)
                 }
 
                 this >= 180.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
                     playSounds(player, state)
+                    conditionSystem.addState(player, ConditionType.DARKNESS_FEAR, 2)
                 }
 
                 this >= 120.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, 140, 0, false, false))
+                    conditionSystem.addState(player, ConditionType.DARKNESS_FEAR, 1)
+                }
+
+                this == 0.0 -> {
+                    conditionSystem.removeState(player, ConditionType.DARKNESS_FEAR)
                 }
 
                 this < 180.0 -> {
@@ -109,19 +119,27 @@ class Darkphobia : Listener {
                     player.addPotionEffect(PotionEffect(PotionEffectType.WITHER, 140, 0, true, true))
                     player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0, false, false))
                     player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
+                    conditionSystem.addState(player, ConditionType.LIGHT_SENSITIVITY, 4)
                 }
 
                 this >= 300.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.DARKNESS, 140, 0, false, false))
                     player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
+                    conditionSystem.addState(player, ConditionType.LIGHT_SENSITIVITY, 3)
                 }
 
                 this >= 180.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
+                    conditionSystem.addState(player, ConditionType.LIGHT_SENSITIVITY, 2)
                 }
 
                 this >= 120.0 -> {
                     player.addPotionEffect(PotionEffect(PotionEffectType.WEAKNESS, 140, 0, false, false))
+                    conditionSystem.addState(player, ConditionType.LIGHT_SENSITIVITY, 1)
+                }
+
+                this == 0.0 -> {
+                    conditionSystem.removeState(player, ConditionType.LIGHT_SENSITIVITY)
                 }
 
                 else -> {}
