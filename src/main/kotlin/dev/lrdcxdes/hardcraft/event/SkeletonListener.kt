@@ -9,10 +9,12 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.Damageable
 
 class SkeletonListener : Listener {
     private val STEAL_GEAR_CHANCE: Double = 0.1
     private val STEAL_GEAR_ARROW_RANGE: IntRange = 1..8
+    private val STEAL_GEAR_DAMAGE_RANGE: IntRange = 150..380
     private val STEAL_GEAR_COOLDOWN: Int = 1 // seconds
     private val STEAL_GEAR_SUCCESS_SOUND: (Player) -> Unit =
         { _: Player -> }
@@ -39,7 +41,8 @@ class SkeletonListener : Listener {
                     return
                 }
                 val arrows = ItemStack(Material.ARROW, STEAL_GEAR_ARROW_RANGE.random())
-                skeleton.giveGear(player, arrows)
+                val damage = STEAL_GEAR_DAMAGE_RANGE.random()
+                skeleton.giveGear(player, arrows, damage)
                 STEAL_GEAR_SUCCESS_SOUND(player)
             } else {
                 STEAL_GEAR_FAILED_SOUND(player)
@@ -48,8 +51,12 @@ class SkeletonListener : Listener {
     }
 }
 
-fun Skeleton.giveGear(player: Player, arrows: ItemStack) {
-    val bow = this.equipment.itemInMainHand.clone()
+fun Skeleton.giveGear(player: Player, arrows: ItemStack, damage: Int) {
+    val bow = this.equipment.itemInMainHand.clone().apply {
+        this.itemMeta = (this.itemMeta as Damageable).apply {
+            this.damage = damage
+        }
+    }
     this.equipment.setItemInMainHand(null)
 
     this.lootTable = null
