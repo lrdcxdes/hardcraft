@@ -153,7 +153,7 @@ class ConditionSystem(private val plugin: Hardcraft) {
             var finalComponent = components.first()
             for (i in 1 until components.size) {
                 finalComponent = finalComponent.append(components[i])
-                    .append(Component.newline())
+                    .append(dividerComponent)
             }
 
             player.sendActionBar(finalComponent)
@@ -165,6 +165,10 @@ class ConditionSystem(private val plugin: Hardcraft) {
      */
     fun playerQuit(player: Player) {
         playerConditions.remove(player.uniqueId)
+    }
+
+    companion object {
+        private val dividerComponent = Component.text(" ◆ ").color(TextColor.color(0xAAAAAA))
     }
 }
 
