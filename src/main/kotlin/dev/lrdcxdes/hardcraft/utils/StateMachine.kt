@@ -153,7 +153,9 @@ class ConditionSystem(private val plugin: Hardcraft) {
             var finalComponent = components.first()
             for (i in 1 until components.size) {
                 finalComponent = finalComponent.append(components[i])
-                    .append(dividerComponent)
+                if (i < components.size - 1) {
+                    finalComponent = finalComponent.append(dividerComponent)
+                }
             }
 
             player.sendActionBar(finalComponent)
