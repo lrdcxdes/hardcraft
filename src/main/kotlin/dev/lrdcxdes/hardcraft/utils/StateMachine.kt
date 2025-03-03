@@ -150,7 +150,10 @@ class ConditionSystem(private val plugin: Hardcraft) {
 
         // Build the final right-aligned component
         if (components.isNotEmpty()) {
-            var finalComponent = components.first().append(dividerComponent)
+            var finalComponent = components.first()
+            if (components.size > 1) {
+                finalComponent = finalComponent.append(dividerComponent)
+            }
             for (i in 1 until components.size) {
                 finalComponent = finalComponent.append(components[i])
                 if (i < components.size - 1) {
