@@ -15,7 +15,8 @@ enum class ConditionType {
     LIGHT_SENSITIVITY, // Sensitivity to light - weakness, blindness, wither
     MUSCLE_STRAIN,     // Physical fatigue from breaking blocks
     COLD_EXPOSURE,     // Freezing conditions - slowness, damage
-    HEAT_EXPOSURE      // Hot conditions - nausea, wither
+    HEAT_EXPOSURE,     // Hot conditions - nausea, wither
+    SPELUNCAPHOBIA,    // Fear of depths / caves - mining fatigue
 }
 
 /**
@@ -59,6 +60,9 @@ class ConditionSystem(private val plugin: Hardcraft) {
             ConditionLevel("Sweating", TextColor.color(0xFFA07A)),
             ConditionLevel("Heat Exhaustion", TextColor.color(0xFF7F50)),
             ConditionLevel("Heatstroke", TextColor.color(0xFF4500))
+        ),
+        ConditionType.SPELUNCAPHOBIA to listOf(
+            ConditionLevel("Cave Fear", TextColor.color(0x8B4513))
         )
     )
 

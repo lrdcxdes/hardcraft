@@ -1,5 +1,7 @@
 package dev.lrdcxdes.hardcraft.event
 
+import ConditionType
+import conditionSystem
 import dev.lrdcxdes.hardcraft.races.Race
 import dev.lrdcxdes.hardcraft.races.getRace
 import org.bukkit.Material
@@ -29,6 +31,7 @@ class SlowPlayerListener : Listener {
                         false
                     )
                 )
+                conditionSystem.removeState(player, ConditionType.SPELUNCAPHOBIA)
             } else {
                 player.addPotionEffect(
                     PotionEffect(
@@ -40,6 +43,7 @@ class SlowPlayerListener : Listener {
                         false
                     )
                 )
+                conditionSystem.addState(player, ConditionType.SPELUNCAPHOBIA, 1)
             }
         } else {
             val nowEffect = player.getPotionEffect(PotionEffectType.MINING_FATIGUE)
@@ -55,6 +59,7 @@ class SlowPlayerListener : Listener {
                         false
                     )
                 )
+                conditionSystem.removeState(player, ConditionType.SPELUNCAPHOBIA)
             }
             else if (!player.hasPotionEffect(PotionEffectType.MINING_FATIGUE)) {
                 player.addPotionEffect(
