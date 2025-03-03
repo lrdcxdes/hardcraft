@@ -23,7 +23,7 @@ enum class ConditionType {
  * Holds the condition level data with display name and effects
  */
 data class ConditionLevel(
-    val displayName: String,
+    val translateKey: String,
     val color: TextColor
 )
 
@@ -36,10 +36,10 @@ class ConditionSystem(private val plugin: Hardcraft) {
     // Define condition level names and colors
     private val conditionLevels = mapOf(
         ConditionType.DARKNESS_FEAR to listOf(
-            ConditionLevel("Unease", TextColor.color(0xAAAAAA)),
-            ConditionLevel("Paranoia", TextColor.color(0x6A0DAD)),
-            ConditionLevel("Nyctophobia", TextColor.color(0x4B0082)),
-            ConditionLevel("Void Terror", TextColor.color(0x2E0854))
+            ConditionLevel("btn.condition.unease", TextColor.color(0xAAAAAA)),
+            ConditionLevel("btn.condition.paranoia", TextColor.color(0x6A0DAD)),
+            ConditionLevel("btn.condition.nyctophobia", TextColor.color(0x4B0082)),
+            ConditionLevel("btn.condition.void_terror", TextColor.color(0x2E0854))
         ),
         ConditionType.LIGHT_SENSITIVITY to listOf(
             ConditionLevel("Squinting", TextColor.color(0xFFD700)),
@@ -142,7 +142,7 @@ class ConditionSystem(private val plugin: Hardcraft) {
                 ?: continue
 
             val component = Component.text()
-                .append(Component.text(conditionLevel.displayName).color(conditionLevel.color))
+                .append(Component.translatable(conditionLevel.translateKey).color(conditionLevel.color))
                 .build()
 
             components.add(component)
