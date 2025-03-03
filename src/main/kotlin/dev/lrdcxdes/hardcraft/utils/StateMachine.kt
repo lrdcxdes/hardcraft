@@ -42,27 +42,27 @@ class ConditionSystem(private val plugin: Hardcraft) {
             ConditionLevel("btn.condition.void_terror", TextColor.color(0x2E0854))
         ),
         ConditionType.LIGHT_SENSITIVITY to listOf(
-            ConditionLevel("Squinting", TextColor.color(0xFFD700)),
-            ConditionLevel("Eye Strain", TextColor.color(0xFFA500)),
-            ConditionLevel("Solar Blindness", TextColor.color(0xFF4500)),
-            ConditionLevel("Radiation Burn", TextColor.color(0xFF0000))
+            ConditionLevel("btn.condition.squinting", TextColor.color(0xFFD700)),
+            ConditionLevel("btn.condition.eye_strain", TextColor.color(0xFFA500)),
+            ConditionLevel("btn.condition.solar_blindness", TextColor.color(0xFF4500)),
+            ConditionLevel("btn.condition.radiation_burn", TextColor.color(0xFF0000))
         ),
         ConditionType.MUSCLE_STRAIN to listOf(
-            ConditionLevel("Overexertion", TextColor.color(0x8B4513))
+            ConditionLevel("btn.condition.overexertion", TextColor.color(0x8B4513))
         ),
         ConditionType.COLD_EXPOSURE to listOf(
-            ConditionLevel("Chilled", TextColor.color(0x87CEEB)),
-            ConditionLevel("Frostbitten", TextColor.color(0x1E90FF)),
-            ConditionLevel("Hypothermia", TextColor.color(0x0000CD)),
-            ConditionLevel("Frozen Core", TextColor.color(0x00008B))
+            ConditionLevel("btn.condition.chilled", TextColor.color(0x87CEEB)),
+            ConditionLevel("btn.condition.frostbitten", TextColor.color(0x1E90FF)),
+            ConditionLevel("btn.condition.hypothermia", TextColor.color(0x0000CD)),
+            ConditionLevel("btn.condition.frozen_core", TextColor.color(0x00008B))
         ),
         ConditionType.HEAT_EXPOSURE to listOf(
-            ConditionLevel("Sweating", TextColor.color(0xFFA07A)),
-            ConditionLevel("Heat Exhaustion", TextColor.color(0xFF7F50)),
-            ConditionLevel("Heatstroke", TextColor.color(0xFF4500))
+            ConditionLevel("btn.condition.sweating", TextColor.color(0xFFA07A)),
+            ConditionLevel("btn.condition.heat_exhaustion", TextColor.color(0xFF7F50)),
+            ConditionLevel("btn.condition.heatstroke", TextColor.color(0xFF4500))
         ),
         ConditionType.SPELUNCAPHOBIA to listOf(
-            ConditionLevel("Cave Fear", TextColor.color(0x8B4513))
+            ConditionLevel("btn.condition.cave_fear", TextColor.color(0x8B4513))
         )
     )
 
