@@ -38,6 +38,9 @@ commands:
   tpdeny:
     description: Deny teleport request
     usage: /tpdeny
+  weather:
+    aliases: [wea]
+    usage: /weather [tornado]
 #  friends:
 #    description: Manage your friends list
 #    usage: /friends <list|add|remove|accept|deny> [player]

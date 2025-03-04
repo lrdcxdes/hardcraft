@@ -18,6 +18,7 @@ import dev.lrdcxdes.hardcraft.utils.Chuma
 import dev.lrdcxdes.hardcraft.utils.CustomCrafts
 import dev.lrdcxdes.hardcraft.utils.Darkphobia
 import dev.lrdcxdes.hardcraft.utils.TorchAndCampfire
+import dev.lrdcxdes.hardcraft.weather.NaturalDisasters
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.skinsrestorer.api.SkinsRestorer
 import net.skinsrestorer.api.SkinsRestorerProvider
@@ -32,6 +33,7 @@ class Hardcraft : JavaPlugin() {
     private lateinit var entitySpawnListener: EntitySpawnListener
     lateinit var foodListener: FoodListener
     lateinit var seasons: Seasons
+    lateinit var naturalDisasters: NaturalDisasters
     lateinit var cc: CustomCrafts
 
     override fun onEnable() {
@@ -74,6 +76,10 @@ class Hardcraft : JavaPlugin() {
 
         // Seasons
         seasons = Seasons()
+
+        // RealisticWeather
+        naturalDisasters = NaturalDisasters(this)
+        naturalDisasters.onEnable()
 
         // Player freezes by temperature
         server.pluginManager.registerEvents(PlayerTemperatureListener(), this)
@@ -236,6 +242,8 @@ class Hardcraft : JavaPlugin() {
         // Plugin shutdown logic
         shop.onDisable()
         database.disconnect()
+
+        naturalDisasters.onDisable()
     }
 
     fun key(s: String): NamespacedKey {
