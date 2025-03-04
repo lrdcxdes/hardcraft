@@ -1,6 +1,7 @@
 package dev.lrdcxdes.hardcraft.seasons
 
 import dev.lrdcxdes.hardcraft.Hardcraft
+import org.bukkit.Location
 import org.bukkit.block.Biome
 import org.bukkit.block.Block
 import org.bukkit.entity.Player
@@ -8,6 +9,9 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitRunnable
 import org.bukkit.scheduler.BukkitTask
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.math.PI
+import kotlin.math.sin
+
 
 class Seasons {
     private val world = Hardcraft.instance.server.worlds[0]
@@ -87,6 +91,9 @@ class Seasons {
         // Apply light modifications
         temp = applyLightModifiers(temp, player.location.block)
 
+        // Apply beta modifications
+        temp = applyBetaModifications(temp, player.location)
+
         // Calculate nearby heat sources
         temp += calculateHeatSources(player)
 
@@ -114,6 +121,9 @@ class Seasons {
         // Apply light modifications
         temp = applyLightModifiers(temp, block)
 
+        // Apply beta modifications
+        temp = applyBetaModifications(temp, block.location)
+
         // Apply packed_ice or magma if under
         if (block.type.name.contains("PACKED_ICE")) {
             temp = -15
@@ -136,6 +146,22 @@ class Seasons {
 
     private fun getBiomeTemperature(biome: Biome): Int =
         biomeTemperatureCache[biome] ?: seasonTemperature
+
+    private fun applyBetaModifications(baseTemp: Int, loc: Location): Int {
+        var temp = baseTemp
+
+        // Adjust temperature based on altitude
+        val altitude = loc.y - 64 // Sea level adjustment
+        val altitudeAdjustment = -altitude * 0.1 // Temperature decreases 0.1 per block above sea level
+        temp += altitudeAdjustment.toInt()
+
+        // Adjust temperature based on time of day
+        val time = world.time
+        val timeAdjustment = (10 * sin(time * 2 * PI / 24000)).toInt()
+        temp += timeAdjustment
+
+        return temp
+    }
 
     private fun applyLightModifiers(baseTemp: Int, block: Block): Int {
         var temp = baseTemp
