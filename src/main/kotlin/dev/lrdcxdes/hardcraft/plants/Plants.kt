@@ -77,7 +77,6 @@ class FernManager {
 
         val up = fern.getRelative(0, 1, 0)
         if (up.isSolid || up.type == Material.BEDROCK || fern.lightLevel < 11) {
-            plugin.logger.info("Fern at ${fern.location} is not growing: UP - ${up.type}, LIGHT - ${fern.lightLevel}")
             return
         }
 
