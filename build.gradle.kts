@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.10"
-    id("com.gradleup.shadow") version "9.0.0-beta8"
+    id("com.gradleup.shadow") version "9.0.0-beta9"
     id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
     kotlin("plugin.serialization") version "2.1.10" // Added for Kotlin serialization
 }
@@ -43,8 +43,8 @@ kotlin {
     // New compiler options DSL
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
-        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
-        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+        apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1)
+        languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_1)
         freeCompilerArgs.add("-Xjvm-default=all")
     }
 }

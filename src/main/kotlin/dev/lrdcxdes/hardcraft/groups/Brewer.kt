@@ -271,7 +271,7 @@ class Brewer : Listener {
                 // Забрать предмет
                 val x = event.view.getItem(rawSlot)
                 if (x != null && x.type != Material.AIR) {
-                    event.whoClicked.itemOnCursor = x.clone()
+                    event.whoClicked.setItemOnCursor(x.clone())
                     event.view.setItem(rawSlot, null)
 
                     // Планируем проверку: если в слотах появилось 1-3 herb, запускаем варку
@@ -297,11 +297,11 @@ class Brewer : Listener {
             val x = event.view.getItem(rawSlot)
             if (x != null && x.type != Material.AIR) {
                 val new = event.whoClicked.itemOnCursor.clone()
-                event.whoClicked.itemOnCursor = x.clone()
+                event.whoClicked.setItemOnCursor(x.clone())
                 event.view.setItem(rawSlot, new)
             } else {
                 event.view.setItem(rawSlot, event.whoClicked.itemOnCursor.clone())
-                event.whoClicked.itemOnCursor.amount = 0
+                event.whoClicked.setItemOnCursor(null)
             }
 
             (event.whoClicked as Player).updateInventory()

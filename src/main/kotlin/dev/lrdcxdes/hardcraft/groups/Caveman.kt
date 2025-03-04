@@ -106,6 +106,7 @@ class Caveman : Listener {
     // Helper function to check if an item is either usable or edible
     private fun isUsableOrEdible(item: ItemStack): Boolean {
         // check item is usable
+        @Suppress("DEPRECATION")
         return (item.hasData(DataComponentTypes.CONSUMABLE) || item.type.isEdible || item.type.isEmpty || item.hasData(
             DataComponentTypes.EQUIPPABLE
         ) || item.hasData(DataComponentTypes.INSTRUMENT)
