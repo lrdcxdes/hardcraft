@@ -72,6 +72,7 @@ class SlowPlayerListener : Listener {
                         false
                     )
                 )
+                conditionSystem.removeState(player, ConditionType.SPELUNCAPHOBIA)
             }
         }
     }

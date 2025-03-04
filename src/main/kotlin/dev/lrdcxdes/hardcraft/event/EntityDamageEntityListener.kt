@@ -30,10 +30,10 @@ class EntityDamageEntityListener : Listener {
 
         if (damager is Player) {
             // if held item
-            if (damager.inventory.itemInMainHand.type == Material.AIR) {
-                val damage = event.damage
-                event.damage = damage / 2
-            }
+//            if (damager.inventory.itemInMainHand.type == Material.AIR) {
+//                val damage = event.damage
+//                event.damage = damage / 2
+//            }
 
             if (entity is LivingEntity) {
                 val race = damager.getRace()

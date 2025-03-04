@@ -38,8 +38,9 @@ commands:
   tpdeny:
     description: Deny teleport request
     usage: /tpdeny
-  weather:
-    aliases: [wea]
+  tornado:
+    description: Spawn a tornado
+    permission: hardcraft.admin
     usage: /weather [tornado]
 #  friends:
 #    description: Manage your friends list
