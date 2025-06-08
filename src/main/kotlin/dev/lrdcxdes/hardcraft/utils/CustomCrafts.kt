@@ -135,7 +135,7 @@ class CustomCrafts {
             // Добавляем кастомные рецепты
             val addSection: ConfigurationSection = config.getConfigurationSection("add") ?: return
             for (recipeName in addSection.getKeys(false)) {
-                println("Loading recipe $recipeName")
+                // println("Loading recipe $recipeName")
                 val resultSection = addSection.getConfigurationSection("$recipeName.result")
                 if (resultSection == null) {
                     println("Result section is null for $recipeName")
@@ -308,7 +308,7 @@ class CustomCrafts {
 
             val addSection = config.getConfigurationSection("add") ?: return
             for (recipeName in addSection.getKeys(false)) {
-                println("Loading recipe $recipeName")
+                // println("Loading recipe $recipeName")
                 val resultSection = addSection.getConfigurationSection("$recipeName.result")
                 if (resultSection == null) {
                     println("Result section is null for $recipeName")
@@ -411,7 +411,7 @@ class CustomCrafts {
 
             val addSection = config.getConfigurationSection("add") ?: return
             for (recipeName in addSection.getKeys(false)) {
-                println("Loading recipe $recipeName")
+                // println("Loading recipe $recipeName")
                 val resultSection = addSection.getConfigurationSection("$recipeName.result")
                 if (resultSection == null) {
                     println("Result section is null for $recipeName")
@@ -514,7 +514,7 @@ class CustomCrafts {
 
             val addSection = config.getConfigurationSection("add") ?: return
             for (recipeName in addSection.getKeys(false)) {
-                println("Loading recipe $recipeName")
+                // println("Loading recipe $recipeName")
                 val resultSection = addSection.getConfigurationSection("$recipeName.result")
                 if (resultSection == null) {
                     println("Result section is null for $recipeName")
@@ -617,7 +617,7 @@ class CustomCrafts {
 
             val addSection = config.getConfigurationSection("add") ?: return
             for (recipeName in addSection.getKeys(false)) {
-                println("Loading recipe $recipeName")
+                // println("Loading recipe $recipeName")
                 val resultSection = addSection.getConfigurationSection("$recipeName.result")
                 if (resultSection == null) {
                     println("Result section is null for $recipeName")
@@ -720,7 +720,7 @@ class CustomCrafts {
 
             val addSection = config.getConfigurationSection("add") ?: return
             for (recipeName in addSection.getKeys(false)) {
-                println("Loading recipe $recipeName")
+                // println("Loading recipe $recipeName")
                 val resultSection = addSection.getConfigurationSection("$recipeName.result")
                 if (resultSection == null) {
                     println("Result section is null for $recipeName")
@@ -816,7 +816,7 @@ class CustomCrafts {
 
             val addSection = config.getConfigurationSection("add") ?: return
             for (recipeName in addSection.getKeys(false)) {
-                println("Loading recipe $recipeName")
+                // println("Loading recipe $recipeName")
                 val resultSection = addSection.getConfigurationSection("$recipeName.result")
                 if (resultSection == null) {
                     println("Result section is null for $recipeName")

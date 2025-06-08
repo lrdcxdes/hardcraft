@@ -14,7 +14,7 @@ fun MiniMessage.deserialize(
     for (ph in placeholders) {
         t += ":'${ph.second}'"
     }
-    println("deserializing: $color$t>")
+    // println("deserializing: $color$t>")
     return Hardcraft.minimessage.deserialize("$color$t>")
 }
 

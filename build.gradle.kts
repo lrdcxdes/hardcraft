@@ -1,8 +1,8 @@
 plugins {
-    kotlin("jvm") version "2.1.10"
-    id("com.gradleup.shadow") version "9.0.0-beta9"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14"
-    kotlin("plugin.serialization") version "2.1.10" // Added for Kotlin serialization
+    kotlin("jvm") version "2.1.21"
+    id("com.gradleup.shadow") version "9.0.0-beta15"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.16"
+    kotlin("plugin.serialization") version "2.1.21" // Added for Kotlin serialization
 }
 
 group = "dev.lrdcxdes"
@@ -29,9 +29,9 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("reflect")) // Added Kotlin reflection
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8") // Added JDK8 stdlib
-    implementation("net.kyori:adventure-api:4.19.0")
-    implementation("com.zaxxer:HikariCP:6.0.0")
-    compileOnly("net.skinsrestorer:skinsrestorer-api:15.5.3")
+    implementation("net.kyori:adventure-api:4.21.0")
+    implementation("com.zaxxer:HikariCP:6.3.0")
+    compileOnly("net.skinsrestorer:skinsrestorer-api:15.6.5")
     paperweight.paperDevBundle("1.21.4-R0.1-SNAPSHOT")
 }
 
@@ -88,3 +88,5 @@ tasks {
         }
     }
 }
+
+paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.REOBF_PRODUCTION

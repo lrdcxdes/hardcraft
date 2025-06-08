@@ -150,11 +150,11 @@ class Shop : Listener {
         }
 
         fun refreshItemUI(item: ShopItem, lore: List<Component>) {
-            println("[allitems] Refreshing item UI for ${item.material.name}")
+            // println("[allitems] Refreshing item UI for ${item.material.name}")
             // find item in allItemsInv
             for (allItemsInv in allItemsInvs.values) {
                 if (allItemsInv.slotIds.containsKey(item.id)) {
-                    println("[allitems] Found item in allItemsInv for ${item.material.name} at page ${allItemsInv.page}")
+                    // println("[allitems] Found item in allItemsInv for ${item.material.name} at page ${allItemsInv.page}")
                     val slotId = allItemsInv.slotIds[item.id] ?: continue
                     val stack = allItemsInv.inv.getItem(slotId)
                     val meta = stack!!.itemMeta

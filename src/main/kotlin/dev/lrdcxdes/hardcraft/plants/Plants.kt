@@ -6,6 +6,7 @@ import org.bukkit.Material
 import org.bukkit.World
 import org.bukkit.block.Block
 import org.bukkit.block.data.Ageable
+import org.bukkit.block.data.Bisected
 import org.bukkit.craftbukkit.CraftWorld
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -21,6 +22,7 @@ import org.bukkit.metadata.FixedMetadataValue
 import org.bukkit.scheduler.BukkitRunnable
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
+
 
 object Constants {
     val SOIL_TYPES = setOf(
@@ -88,6 +90,15 @@ class FernManager {
             object : BukkitRunnable() {
                 override fun run() {
                     fern.type = Material.LARGE_FERN
+                    val data: Bisected = fern.blockData as Bisected
+                    data.half = Bisected.Half.BOTTOM
+                    fern.blockData = data
+                    // set top block also
+                    val topFern = fern.getRelative(0, 1, 0)
+                    topFern.type = Material.LARGE_FERN
+                    val topData: Bisected = topFern.blockData as Bisected
+                    topData.half = Bisected.Half.TOP
+                    topFern.blockData = topData
                 }
             }.runTask(plugin)
         } else {
