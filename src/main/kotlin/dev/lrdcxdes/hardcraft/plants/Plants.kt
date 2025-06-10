@@ -94,11 +94,11 @@ class FernManager {
                     data.half = Bisected.Half.BOTTOM
                     fern.blockData = data
                     // set top block also
-                    val topFern = fern.getRelative(0, 1, 0)
-                    topFern.type = Material.LARGE_FERN
-                    val topData: Bisected = topFern.blockData as Bisected
-                    topData.half = Bisected.Half.TOP
-                    topFern.blockData = topData
+//                    val topFern = fern.getRelative(0, 1, 0)
+//                    topFern.type = Material.LARGE_FERN
+//                    val topData: Bisected = topFern.blockData as Bisected
+//                    topData.half = Bisected.Half.TOP
+//                    topFern.blockData = topData
                 }
             }.runTask(plugin)
         } else {
